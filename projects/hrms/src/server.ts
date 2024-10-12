@@ -35,7 +35,9 @@ app.get(
 app.get('**', (req, res, next) => {
   angularApp
     .render(req)
-    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
+    .then((response) =>
+      response ? writeResponseToNodeResponse(response, res) : next(),
+    )
     .catch(next);
 });
 
