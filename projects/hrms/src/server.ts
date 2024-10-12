@@ -7,6 +7,7 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { addTRPC } from '@hrms-server/trpc-express';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -35,11 +36,11 @@ app.get(
 app.get('**', (req, res, next) => {
   angularApp
     .render(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
+
+addTRPC(app);
 
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;

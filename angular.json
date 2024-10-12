@@ -95,10 +95,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "projects/hrms/**/*.ts",
-              "projects/hrms/**/*.html"
-            ],
+            "lintFilePatterns": ["projects/hrms/**/*.ts", "projects/hrms/**/*.html"],
             "eslintConfig": "projects/hrms/eslint.config.js"
           }
         }
