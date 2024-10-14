@@ -9,7 +9,10 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:hrms": "node dist/hrms/server/server.mjs",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "drizzle-studio": "source .env &&  npx drizzle-kit studio",
+    "drizzle-migrate": "npx drizzle-kit migrate",
+    "drizzle-generate": "npx drizzle-kit generate"
   },
   "private": true,
   "dependencies": {
@@ -27,7 +30,11 @@
     "@angular/ssr": "^19.0.0-next.10",
     "@trpc/client": "^11.0.0-rc.566",
     "@trpc/server": "^11.0.0-rc.566",
+    "bcryptjs": "^2.4.3",
+    "drizzle-orm": "^0.34.1",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zod": "^3.23.8"
@@ -36,22 +43,28 @@
     "@angular-devkit/build-angular": "^19.0.0-next.10",
     "@angular/cli": "^19.0.0-next.10",
     "@angular/compiler-cli": "^19.0.0-next.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^18.18.0",
+    "@types/pg": "^8.11.10",
     "angular-eslint": "18.3.1",
-    "eslint": "^9.9.1",
+    "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.25.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "eslint": "^9.9.1",
     "jasmine-core": "~5.3.0",
-    "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "prettier": "^3.3.3",
+    "karma-jasmine": "~5.1.0",
+    "karma": "~6.4.0",
     "prettier-eslint": "^16.3.0",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "8.2.0"
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.1",
+    "typescript-eslint": "8.2.0",
+    "typescript": "~5.6.2"
   }
 }

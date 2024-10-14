@@ -7,9 +7,9 @@ services:
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_DB: hrms
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     ports:
       - '5435:5432'
     networks:
@@ -31,3 +31,6 @@ services:
 networks:
   postgres-network:
     driver: bridge
+volumes:
+  pgdata:
+    driver: local
