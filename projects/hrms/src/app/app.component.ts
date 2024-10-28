@@ -15,11 +15,26 @@ export class AppComponent {
   title = 'hrms';
 
   async callServer() {
-    const user = await trpc.login.mutate({ email: 'admin@admin.com', password: '123456' });
+    // const user = await trpc.login.mutate({ email: 'admin@admin.com', password: '123456' });
     // await trpc.login.mutate({
     //   email: 'tt@tt.com',
     //   password: '123',
     // });
-    console.log(user);
+    const tt = await trpc.queryDB.query({
+      or: [
+        {
+          and: [
+            {
+              username: { startsWith: 'John' },
+              age: { lte: 40 },
+            },
+          ],
+        },
+        {
+          username: { startsWith: 'hadi' },
+        },
+      ],
+    });
+    console.log(tt);
   }
 }

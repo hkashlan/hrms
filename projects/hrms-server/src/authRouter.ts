@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { sign } from 'jsonwebtoken';
 import { z } from 'zod';
-import { usersTable } from './db/schema';
+import { users } from './db/schema';
 import { procedure, router } from './trpc';
 
 const generateToken = (userId: number) => {
@@ -26,7 +26,7 @@ export const authRouter = router({
       const { username, email, password } = input;
 
       // Check if email is already in use
-      const query = ctx.db.select().from(usersTable).where(eq(usersTable.email, email));
+      const query = ctx.db.select().from(users).where(eq(users.email, email));
       console.log('query', query.toSQL());
       try {
         const existingUser = await query;
@@ -40,7 +40,7 @@ export const authRouter = router({
         // Hash password and create user
         const passwordHash = await bcrypt.hash(password, 10);
         const [user] = await ctx.db
-          .insert(usersTable)
+          .insert(users)
           .values({
             username,
             email,
@@ -64,10 +64,10 @@ export const authRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const users = await ctx.db.select().from(usersTable).where(eq(usersTable.email, input.email));
+      const users1 = await ctx.db.select().from(users).where(eq(users.email, input.email));
       // const users = await ctx.db.select().from(usersTable);
 
-      const user = users?.[0];
+      const user = users1?.[0];
 
       if (!user || !(await bcrypt.compare(input.password, user.passwordHash))) {
         throw new TRPCError({

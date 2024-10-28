@@ -3,7 +3,10 @@ import { drizzle } from 'drizzle-orm/connect';
 
 export const createContext = async () => {
   console.log('DATABASE_URL', process.env['DATABASE_URL']);
-  const db = await drizzle('node-postgres', process.env['DATABASE_URL']!);
+  const db = await drizzle('node-postgres', {
+    connection: process.env['DATABASE_URL']!,
+    logger: true,
+  });
   // const db = await drizzle('node-postgres',  { logger: true });
   return {
     db,
