@@ -35,6 +35,22 @@ export class AppComponent {
         },
       ],
     });
+
+    await trpc.user.create.mutate({
+      email: 'sd',
+      username: 'sd',
+      passwordHash: 'sd',
+      age: 12,
+    });
+    await trpc.user.update.mutate({
+      id: 1,
+      email: 'sd',
+      username: 'sd',
+      passwordHash: 'sd',
+      age: 12,
+    });
+
+    await trpc.user.delete.mutate({ id: 1 });
     console.log(tt);
   }
 }
