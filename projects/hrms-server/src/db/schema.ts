@@ -1,7 +1,8 @@
+import { InferSelectModel } from 'drizzle-orm';
 import { integer, pgTable, text, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { Filter } from './client-filters';
+import { createFilterSchema } from './zod';
 
 export const users = pgTable('users', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -15,15 +16,7 @@ export const users = pgTable('users', {
 export const insertUserSchema = createInsertSchema(users);
 // Schema for selecting a user - can be used to validate API responses
 export const selectUserSchema = createSelectSchema(users);
+export const updateUserSchema = selectUserSchema.partial().extend({ id: z.number() });
 
-export type tt = z.infer<typeof insertUserSchema>;
-type UserFilter = Filter<tt>;
-
-const userFilter: UserFilter = {
-  or: [{ username: { contains: 'John' } }, { age: { gt: 30 } }],
-  and: [
-    // { isActive: { equals: true } },
-    { age: { lte: 40 } },
-  ],
-  id: { gt: 10 },
-};
+export const userFilterSchema = createFilterSchema<User>(users);
+export type User = InferSelectModel<typeof users>; // This infers the User type based on the Drizzle schema

@@ -20,7 +20,7 @@ export class AppComponent {
     //   email: 'tt@tt.com',
     //   password: '123',
     // });
-    const tt = await trpc.queryDB.query({
+    const tt = await trpc.user.list.query({
       or: [
         {
           and: [
