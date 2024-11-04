@@ -1,17 +1,9 @@
 import { InferSelectModel } from 'drizzle-orm';
-import { integer, pgTable, text, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { DrizzleTableInfo } from '../utils/drizzle-table-info';
-import { createFilterSchema } from './zod';
-
-export const users = pgTable('users', {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  age: integer(),
-  username: varchar('username', { length: 255 }).notNull(),
-  email: varchar('email', { length: 255 }).notNull().unique(),
-  passwordHash: text('password_hash').notNull(),
-});
+import { DrizzleTableInfo } from '../../utils/drizzle-table-info';
+import { createFilterSchema } from '../createFilterSchema';
+import { users } from '../schamas/users';
 
 // Schema for inserting a user - can be used to validate API requests
 export const insertUserSchema = createInsertSchema(users);

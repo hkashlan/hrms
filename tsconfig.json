@@ -6,12 +6,14 @@
     "outDir": "./dist/out-tsc",
     "strict": true,
     "paths": {
-      "@hrms-server/*": ["./projects/hrms-server/src/*"]
+      "@hrms-server/*": ["./projects/hrms-server/src/*"],
+      "createFilterSchema": ["./projects/hrms-server/src/db/createFilterSchema.ts"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "isolatedModules": true,
     "esModuleInterop": true,

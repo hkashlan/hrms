@@ -36,7 +36,7 @@ export type FilterOperators<T> = T extends number
       ? typeof booleanFilterSchema
       : ReturnType<typeof equalsFilterSchema<T>>;
 
-export function createFilterSchema<T extends Record<string, any>>(
+function createFilterSchema<T extends Record<string, any>>(
   drizzleTable: PgTableWithColumns<any>,
 ): ZodType<Filter<T>> {
   const fields: Record<string, ZodTypeAny> = {};
@@ -79,3 +79,7 @@ function mapDrizzleColumnToFilterZod(column: PgColumn<any>): ZodTypeAny {
   }
   throw new Error(`Unsupported column type: ${column.dataType}`);
 }
+
+export const filterSchema = {
+  createFilterSchema,
+};
