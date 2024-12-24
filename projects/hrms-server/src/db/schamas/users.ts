@@ -3,7 +3,7 @@ import { integer, pgTable, text, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { DrizzleTableInfo } from '../../utils/drizzle-table-info';
-import { filterSchema } from '../createFilterSchema.ts';
+import { filterSchema } from '../createFilterSchema';
 
 export const users = pgTable('users', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
