@@ -23,10 +23,12 @@ export const userFilterSchema = filterSchema.createFilterSchema<User>(users);
 export type User = InferSelectModel<typeof users>; // This infers the User type based on the Drizzle schema
 
 export const userTableInfo: DrizzleTableInfo<
+  User,
   typeof insertUserSchema,
   typeof userFilterSchema,
   typeof updateUserSchema
 > = {
+  record: {} as User,
   table: users,
   insertValidation: insertUserSchema,
   selectValidation: userFilterSchema,

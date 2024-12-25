@@ -5,12 +5,14 @@ import { z } from 'zod';
 export type zodAny = z.ZodObject<any, any, any>;
 
 export interface DrizzleTableInfo<
-  T extends zodAny = zodAny,
-  X extends z.ZodTypeAny = z.ZodTypeAny,
-  Y extends zodAny = zodAny,
+  T,
+  X extends zodAny = zodAny,
+  Y extends z.ZodTypeAny = z.ZodTypeAny,
+  Z extends zodAny = zodAny,
 > {
+  record: T;
   table: PgTableWithColumns<any>;
-  insertValidation: T;
-  selectValidation: X;
-  updateValidation: Y;
+  insertValidation: X;
+  selectValidation: Y;
+  updateValidation: Z;
 }
