@@ -3,9 +3,9 @@ import { initTRPC } from '@trpc/server';
 import { drizzle } from 'drizzle-orm/node-postgres';
 
 export const createContext = async () => {
-  console.log('DATABASE_URL', process.env['DATABASE_URL']);
+  // console.log('DATABASE_URL', process.env['DATABASE_URL'], );
   const db = await drizzle({
-    connection: process.env['DATABASE_URL']!,
+    connection: process.env['DATABASE_URL'] ?? 'postgres://myuser:mypassword@127.0.0.1:5435/hrms',
     logger: true,
   });
   // const db = await drizzle('node-postgres',  { logger: true });
