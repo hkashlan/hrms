@@ -1,6 +1,3 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 import {
   AngularNodeAppEngine,
   createNodeRequestHandler,
@@ -18,33 +15,45 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-// Example Express Rest API endpoints
-// app.get('/api/**', (req, res) => { });
+/**
+ * Example Express Rest API endpoints can be defined here.
+ * Uncomment and define endpoints as necessary.
+ *
+ * Example:
+ * ```ts
+ * app.get('/api/**', (req, res) => {
+ *   // Handle API request
+ * });
+ * ```
+ */
 
-// Serve static files from /browser
-app.get(
-  '**',
+/**
+ * Serve static files from /browser
+ */
+app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html',
-    setHeaders: (res) => {
-      const headers = angularApp.getPrerenderHeaders(res.req);
-      for (const [key, value] of headers) {
-        res.setHeader(key, value);
-      }
-    },
+    index: false,
+    redirect: false,
   }),
 );
 
-app.get('**', (req, res, next) => {
+/**
+ * Handle all other requests by rendering the Angular application.
+ */
+app.use('/**', (req, res, next) => {
   angularApp
-    .render(req)
+    .handle(req)
     .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 
 addTRPC(app);
 
+/**
+ * Start the server if this module is the main entry point.
+ * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
+ */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
   app.listen(port, () => {
@@ -52,4 +61,7 @@ if (isMainModule(import.meta.url)) {
   });
 }
 
-export default createNodeRequestHandler(app);
+/**
+ * The request handler used by the Angular CLI (dev-server and during build).
+ */
+export const reqHandler = createNodeRequestHandler(app);
