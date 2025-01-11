@@ -6,9 +6,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Entity } from 'ui-kit';
-import { ZodFirstPartyTypeKind, ZodOptionalDef, ZodTypeDef } from 'zod';
-import { PropertyInputType, PropertyType } from '../../model/property';
 import { zodToAngularForm } from '../../shared/zo-to-form';
 
 @Component({
@@ -16,7 +15,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   template: `
     <form [formGroup]="form()">
       @for (field of fields(); track $index) {
-        @switch (field.property.type) {
+        @switch (field.property.property.type) {
           @case ('boolean') {
             <mat-checkbox [formControlName]="field.key">{{ field.key }}</mat-checkbox>
           }
@@ -31,17 +30,33 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
             </mat-form-field>
           }
 
+          @case ('select') {
+            <mat-form-field>
+              <mat-label>Favorite food</mat-label>
+              <mat-select [formControlName]="field.key">
+                @for (option of field.property.property.options; track option) {
+                  <mat-option [value]="option">{{ option }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
           @default {
             <mat-form-field>
               <mat-label>{{ field.key }}</mat-label>
-              <input matInput [formControlName]="field.key" [type]="field.property.type" />
+              <input matInput [formControlName]="field.key" [type]="field.property.property.type" />
             </mat-form-field>
           }
         }
       }
       <button [disabled]="form().invalid">Submit</button>
     </form>
-    {{ form().value | json }}
+    <div *ngIf="form().invalid && form().touched">
+      <h3>Form Errors:</h3>
+      <ul>
+        <li *ngFor="let error of getFormErrors()">{{ error }}</li>
+      </ul>
+    </div>
   `,
   providers: [provideNativeDateAdapter()],
   imports: [
@@ -52,6 +67,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
     MatDatepickerModule,
     MatCheckboxModule,
     MatInputModule,
+    MatSelectModule,
   ],
   styleUrls: ['./form.component.scss'],
 })
@@ -62,6 +78,33 @@ export class DynamicFormComponent {
 
   fields = computed(() => this.prepareFields());
 
+  getFormErrors() {
+    const errors: string[] = [];
+    Object.keys(this.form().controls).forEach((key) => {
+      const controlErrors = this.form().get(key)?.errors;
+      if (controlErrors) {
+        Object.keys(controlErrors).forEach((errorKey) => {
+          switch (errorKey) {
+            case 'required':
+              errors.push(`${key} is required.`);
+              break;
+            case 'email':
+              errors.push(`${key} must be a valid email.`);
+              break;
+            case 'minlength':
+              const min = controlErrors['minlength'].requiredLength;
+              errors.push(`${key} must be at least ${min} characters long.`);
+              break;
+            default:
+              errors.push(`${key} has an invalid value.`);
+              break;
+          }
+        });
+      }
+    });
+    return errors;
+  }
+
   private prepareFields() {
     return Object.keys(this.entity().properties).map((key) => {
       return {
@@ -69,31 +112,5 @@ export class DynamicFormComponent {
         property: this.entity().properties[key],
       };
     });
-  }
-
-  getFieldType(
-    field: keyof ReturnType<DynamicFormComponent['entity']>['properties'],
-  ): PropertyType | PropertyInputType {
-    type zodType = ZodTypeDef & { typeName: ZodFirstPartyTypeKind };
-    function isZodOptional(x: ZodTypeDef): x is ZodOptionalDef {
-      return 'typeName' in x && x.typeName === ZodFirstPartyTypeKind.ZodOptional;
-    }
-    function isZodNullable(x: ZodTypeDef): x is ZodOptionalDef {
-      return 'typeName' in x && x.typeName === ZodFirstPartyTypeKind.ZodNullable;
-    }
-
-    return this.entity().properties[field as any].type;
-    // let fieldType: zodType =
-    //   this.entity().schema.shape[field as keyof typeof insertUserSchema.shape]?._def;
-
-    // while (isZodOptional(fieldType) || isZodNullable(fieldType)) {
-    //   fieldType = fieldType.innerType?._def;
-    // }
-
-    // console.log('field', field, 'field type ', fieldType?.typeName);
-    // if (fieldType?.typeName === ZodFirstPartyTypeKind.ZodString) return 'text';
-    // if (fieldType?.typeName === ZodFirstPartyTypeKind.ZodNumber) return 'number';
-    // if (fieldType?.typeName === 'ZodBoolean') return 'checkbox';
-    // return 'text';
   }
 }

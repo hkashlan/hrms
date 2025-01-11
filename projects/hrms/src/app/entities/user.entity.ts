@@ -29,6 +29,7 @@ export const userInfo: Entity<User> = generateEntity<User>({
       gender: {
         type: 'select',
         label: 'Gender',
+        options: ['male', 'female'],
       },
       married: {
         type: 'boolean',
