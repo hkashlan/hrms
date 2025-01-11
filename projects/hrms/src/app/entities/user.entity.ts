@@ -26,6 +26,18 @@ export const userInfo: Entity<User> = generateEntity<User>({
         type: 'text',
         label: 'Password',
       },
+      gender: {
+        type: 'select',
+        label: 'Gender',
+      },
+      married: {
+        type: 'boolean',
+        label: 'Married',
+      },
+      birthDate: {
+        type: 'date',
+        label: 'Birth Date',
+      },
     },
   },
 });

@@ -1,9 +1,11 @@
 import { InferSelectModel } from 'drizzle-orm';
-import { integer, pgTable, text, varchar } from 'drizzle-orm/pg-core';
+import { boolean, date, integer, pgEnum, pgTable, text, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { DrizzleTableInfo } from '../../utils/drizzle-table-info';
 import { filterSchema } from '../createFilterSchema';
+
+export const genderEnum = pgEnum('gender', ['male', 'female']);
 
 export const users = pgTable('users', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -11,6 +13,9 @@ export const users = pgTable('users', {
   username: varchar('username', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   passwordHash: text('password_hash').notNull(),
+  married: boolean().default(false),
+  birthDate: date('birth_date'),
+  gender: genderEnum().default('male'),
 });
 
 // Schema for inserting a user - can be used to validate API requests
