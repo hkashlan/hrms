@@ -18,6 +18,7 @@ export const insertUserSchema = createInsertSchema(users);
 // Schema for selecting a user - can be used to validate API responses
 export const selectUserSchema = createSelectSchema(users);
 export const updateUserSchema = selectUserSchema.partial().extend({ id: z.number() });
+export const fullUserSchema = insertUserSchema.extend({ id: z.number() });
 
 export const userFilterSchema = filterSchema.createFilterSchema<User>(users);
 export type User = InferSelectModel<typeof users>; // This infers the User type based on the Drizzle schema
