@@ -1,4 +1,4 @@
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, computed, effect, forwardRef, input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -76,14 +76,19 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    JsonPipe,
     MatFormFieldModule,
     MatDatepickerModule,
     MatCheckboxModule,
     MatInputModule,
     MatSelectModule,
   ],
-  styleUrls: ['./form.component.scss'],
+  styles: `
+    form {
+      display: grid;
+      max-width: 50%;
+      justify-items: center;
+    }
+  `,
 })
 export class DynamicFormComponent<T> implements ControlValueAccessor {
   entity = input.required<Entity<T>>();

@@ -1,4 +1,5 @@
 <lib-dynamic-form [entity]="userInfo" [formControl]="userControl" />
+<lib-data-grid [entity]="userInfo" [data]="users()" />
 <button [disabled]="!userControl.value" (click)="insertUser()">Submit</button>
 
 <!-- {{ userControl.value | json }} -->

@@ -7,10 +7,18 @@ export type PropertyType = 'primary' | 'textarea' | 'autocomplete' | 'date' | 's
 export interface BaseProperty {
   type: PropertyType | PropertyInputType;
   label: string;
-  // validation: ZodType;
+  hooks?: {
+    details?: {
+      hidden?: boolean;
+    };
+    list?: {
+      hidden?: boolean;
+    };
+  };
 }
+// validation: ZodType;
 
-export interface BaseBaseProperty {
+export interface BaseBaseProperty extends BaseProperty {
   type: 'primary' | 'textarea' | 'date' | PropertyInputType;
   label: string;
   // validation: ZodType;
