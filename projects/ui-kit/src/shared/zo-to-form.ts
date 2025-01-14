@@ -12,6 +12,9 @@ export function zodToAngularForm(schema: ZodObject<any>): FormGroup {
   //   return 'typeName' in x && x.typeName === ZodFirstPartyTypeKind.ZodNullable;
   // }
   Object.entries(schema.shape).forEach(([key, zodField]) => {
+    if (key === 'id') {
+      return;
+    }
     const validators = [];
     let isOptional = false;
     let isNullable = false;

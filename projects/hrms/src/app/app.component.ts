@@ -1,5 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterOutlet } from '@angular/router';
 import { User } from '@hrms-server/db/schamas/users';
@@ -17,6 +18,7 @@ import { trpc } from './trpc.client';
     RouterOutlet,
     SignupComponent,
     JsonPipe,
+    ReactiveFormsModule,
     UiKitComponent,
     DynamicFormComponent,
   ],
@@ -26,6 +28,7 @@ export class AppComponent {
   title = 'hrms';
   users: User[] = [];
   userInfo: Entity<User> = userInfo;
+  userControl = new FormControl(null as User | null);
 
   async callServer() {
     // const userInfo: Entity<typeof insertUserSchema.shape> = {
@@ -89,5 +92,11 @@ export class AppComponent {
 
     // await trpc.user.delete.mutate({ id: 1 });
     // console.log(tt);
+  }
+
+  async insertUser() {
+    //       label: 'Password',
+    const user = await trpc.user.create.mutate(this.userControl.value!);
+    console.log(user);
   }
 }

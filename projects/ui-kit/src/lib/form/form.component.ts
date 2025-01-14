@@ -1,12 +1,13 @@
 import { CommonModule, JsonPipe } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, computed, effect, forwardRef, input } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Subscription } from 'rxjs';
 import { Entity } from 'ui-kit';
 import { zodToAngularForm } from '../../shared/zo-to-form';
 
@@ -41,6 +42,13 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
             </mat-form-field>
           }
 
+          @case ('number') {
+            <mat-form-field>
+              <mat-label>{{ field.key }}</mat-label>
+              <input matInput type="number" [formControlName]="field.key" />
+            </mat-form-field>
+          }
+
           @default {
             <mat-form-field>
               <mat-label>{{ field.key }}</mat-label>
@@ -49,7 +57,6 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
           }
         }
       }
-      <button [disabled]="form().invalid">Submit</button>
     </form>
     <div *ngIf="form().invalid && form().touched">
       <h3>Form Errors:</h3>
@@ -58,7 +65,14 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
       </ul>
     </div>
   `,
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    provideNativeDateAdapter(),
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DynamicFormComponent),
+      multi: true,
+    },
+  ],
   imports: [
     ReactiveFormsModule,
     CommonModule,
@@ -71,12 +85,41 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   ],
   styleUrls: ['./form.component.scss'],
 })
-export class DynamicFormComponent {
-  entity = input.required<Entity>();
+export class DynamicFormComponent<T> implements ControlValueAccessor {
+  entity = input.required<Entity<T>>();
 
   form = computed(() => zodToAngularForm(this.entity().schema));
 
   fields = computed(() => this.prepareFields());
+  formSubscription: Subscription | null = null;
+
+  onChange = (value: T | null) => {};
+
+  constructor() {
+    this.listenToFormChanges();
+  }
+  private listenToFormChanges() {
+    effect(() => {
+      if (this.formSubscription) {
+        this.formSubscription.unsubscribe();
+      }
+      this.formSubscription = this.form().valueChanges.subscribe((value) => {
+        if (this.form().invalid) {
+          this.onChange(null);
+        } else {
+          this.onChange(value);
+        }
+      });
+    });
+  }
+
+  writeValue(obj: T): void {
+    this.form().patchValue(obj as any, { emitEvent: false });
+  }
+  registerOnChange(fn: DynamicFormComponent<T>['onChange']): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: any): void {}
 
   getFormErrors() {
     const errors: string[] = [];
@@ -106,11 +149,13 @@ export class DynamicFormComponent {
   }
 
   private prepareFields() {
-    return Object.keys(this.entity().properties).map((key) => {
-      return {
-        key: key,
-        property: this.entity().properties[key],
-      };
-    });
+    return Object.keys(this.entity().properties)
+      .filter((key) => key !== 'id')
+      .map((key) => {
+        return {
+          key: key,
+          property: this.entity().properties[key as keyof T],
+        };
+      });
   }
 }

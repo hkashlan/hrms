@@ -1,4 +1,7 @@
-<lib-dynamic-form [entity]="userInfo" />
+<lib-dynamic-form [entity]="userInfo" [formControl]="userControl" />
+<button [disabled]="!userControl.value" (click)="insertUser()">Submit</button>
+
+<!-- {{ userControl.value | json }} -->
 
 <mat-slide-toggle>Toggle me!</mat-slide-toggle>
 <router-outlet></router-outlet>
