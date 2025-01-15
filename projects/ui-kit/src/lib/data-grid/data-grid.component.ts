@@ -2,10 +2,11 @@ import { JsonPipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { Entity } from '../../model/entity';
+import { ColumnFilterComponent } from './column-filter/column-filter.component';
 
 @Component({
   selector: 'lib-data-grid',
-  imports: [MatTableModule, JsonPipe],
+  imports: [MatTableModule, JsonPipe, ColumnFilterComponent],
   templateUrl: './data-grid.component.html',
   styleUrl: './data-grid.component.css',
 })

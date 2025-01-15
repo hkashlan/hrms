@@ -13,6 +13,11 @@ export const userInfo: Entity<User> = generateEntity<User>({
       age: {
         type: 'number',
         label: 'Age',
+        hooks: {
+          list: {
+            noFilter: true,
+          },
+        },
       },
       username: {
         type: 'text',
@@ -25,6 +30,11 @@ export const userInfo: Entity<User> = generateEntity<User>({
       passwordHash: {
         type: 'text',
         label: 'Password',
+        hooks: {
+          list: {
+            hidden: true,
+          },
+        },
       },
       gender: {
         type: 'select',

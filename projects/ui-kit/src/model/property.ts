@@ -13,6 +13,7 @@ export interface BaseProperty {
     };
     list?: {
       hidden?: boolean;
+      noFilter?: boolean;
     };
   };
 }
