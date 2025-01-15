@@ -15,6 +15,13 @@
       "when": 1730017152298,
       "tag": "0001_military_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736595581577,
+      "tag": "0002_useful_lionheart",
+      "breakpoints": true
     }
   ]
 }
