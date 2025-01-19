@@ -6,6 +6,7 @@ import { RouterOutlet } from '@angular/router';
 import { User } from '@hrms-server/db/schamas/users';
 import { DataGridComponent, DynamicFormComponent, Entity, UiKitComponent } from 'ui-kit';
 import { userInfo } from './entities/user.entity';
+import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { trpc } from './trpc.client';
 
@@ -22,7 +23,8 @@ import { trpc } from './trpc.client';
     UiKitComponent,
     DynamicFormComponent,
     DataGridComponent,
-  ],
+    LoginComponent,
+],
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
@@ -103,9 +105,6 @@ export class AppComponent {
 
   async insertUser() {
     //       label: 'Password',
-    const user = await trpc.user.create.mutate(this.userControl.value!);
-    console.log(user);
 
-    await this.callServer();
   }
 }

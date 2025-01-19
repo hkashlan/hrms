@@ -10,9 +10,6 @@ export const genderEnum = pgEnum('gender', ['male', 'female']);
 export const users = pgTable('users', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   age: integer(),
-  idCard: integer(),
-  firstName: varchar({ length: 255 }).notNull(),
-  lastName: varchar({ length: 255 }).notNull(),
   username: varchar('username', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   passwordHash: text('password_hash').notNull(),
