@@ -1,30 +1,17 @@
-import { JsonPipe } from '@angular/common';
 import { afterNextRender, Component, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { RouterOutlet } from '@angular/router';
 import { User } from '@hrms-server/db/schamas/users';
-import { DataGridComponent, DynamicFormComponent, Entity, UiKitComponent } from 'ui-kit';
+import { Entity } from 'ui-kit';
 import { userInfo } from './entities/user.entity';
 import { LoginComponent } from './pages/login/login.component';
-import { SignupComponent } from './pages/signup/signup.component';
 import { trpc } from './trpc.client';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  imports: [
-    MatSlideToggleModule,
-    RouterOutlet,
-    SignupComponent,
-    JsonPipe,
-    ReactiveFormsModule,
-    UiKitComponent,
-    DynamicFormComponent,
-    DataGridComponent,
-    LoginComponent,
-],
+  imports: [MatSlideToggleModule, ReactiveFormsModule, LoginComponent],
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
@@ -105,6 +92,5 @@ export class AppComponent {
 
   async insertUser() {
     //       label: 'Password',
-
   }
 }

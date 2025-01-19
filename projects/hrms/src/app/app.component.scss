@@ -1,24 +1,28 @@
+@use 'mixins/response_to' as response;
+@use 'mixins/breakpoints' as breakpoints;
+
 .container {
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-left: auto;
-    margin-right: auto;
+  // padding-left: 15px;
+  // padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Small */
+@include response.respond-to(sm) {
+  .container {
+    width: calc(map-get(breakpoints.$breakpoints, sm) - 10px);
   }
-  /* Small */
-  @media (min-width: 768px) {
-    .container {
-      width: 750px;
-    }
+}
+
+/* Medium */
+@include response.respond-to(md) {
+  .container {
+    width: calc(map-get(breakpoints.$breakpoints, md) - 10px);
   }
-  /* Medium */
-  @media (min-width: 992px) {
-    .container {
-      width: 970px;
-    }
+}
+/* Large */
+@include response.respond-to(lg) {
+  .container {
+    width: calc(map-get(breakpoints.$breakpoints, lg) - 10px);
   }
-  /* Large */
-  @media (min-width: 1200px) {
-    .container {
-      width: 1170px;
-    }
-  }
+}
