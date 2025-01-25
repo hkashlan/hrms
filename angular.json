@@ -29,12 +29,15 @@
                 "input": "projects/hrms/public"
               }
             ],
-            "styles": ["projects/hrms/src/styles.scss"],
+            "styles": ["projects/hrms/src/styles.scss", "projects/hrms/src/styles/index1.scss"],
             "scripts": [],
             "server": "projects/hrms/src/main.server.ts",
             "outputMode": "server",
             "ssr": {
               "entry": "projects/hrms/src/server.ts"
+            },
+            "stylePreprocessorOptions": {
+              "includePaths": ["projects/hrms/src/styles"]
             }
           },
           "configurations": {
