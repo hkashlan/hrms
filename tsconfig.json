@@ -7,7 +7,13 @@
     "strict": true,
     "paths": {
       "@hrms-server/*": ["./projects/hrms-server/src/*"],
-      "createFilterSchema": ["./projects/hrms-server/src/db/createFilterSchema.ts"],
+      "createFilterSchema": [
+        "./projects/hrms-server/src/db/createFilterSchema.ts"
+      ],
+      "daisyui": [
+        "./dist/daisyui",
+        "./dist/daisyui"
+      ],
       "ui-kit": ["./projects/ui-kit/src/public-api.ts"]
     },
     "noImplicitOverride": true,
