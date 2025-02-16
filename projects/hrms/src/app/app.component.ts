@@ -1,17 +1,18 @@
 import { afterNextRender, Component, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { RouterOutlet } from '@angular/router';
 import { User } from '@hrms-server/db/schamas/users';
 import { Entity } from 'ui-kit';
 import { userInfo } from './entities/user.entity';
-import { LoginComponent } from './pages/login/login.component';
+import { NavigationComponent } from './shell/navigation/navigation.component';
 import { trpc } from './trpc.client';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  imports: [MatSlideToggleModule, ReactiveFormsModule, LoginComponent],
+  imports: [MatSlideToggleModule, ReactiveFormsModule, RouterOutlet, NavigationComponent],
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
