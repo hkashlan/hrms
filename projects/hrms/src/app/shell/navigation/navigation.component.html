@@ -23,9 +23,9 @@
       >
         <li><a>Item 1</a></li>
         <li>
-          <a>Parent</a>
+          <a [routerLink]="'/login'">login</a>
           <ul class="p-2">
-            <li><a>Submenu 1</a></li>
+            <li><a>Submendfsdfu 1</a></li>
             <li><a>Submenu 2</a></li>
           </ul>
         </li>
@@ -36,17 +36,17 @@
   </div>
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
-      <li><a [routerLink]="'/listing'">listing</a></li>
+      <li><a [routerLink]="'./listing'">listing</a></li>
       <li>
         <details>
-          <summary>Parent</summary>
+          <summary>login</summary>
           <ul class="p-2">
-            <li><a>Submenu 1</a></li>
+            <li><a [routerLink]="'./login'">login</a></li>
             <li><a>Submenu 2</a></li>
           </ul>
         </details>
       </li>
-      <li><a [routerLink]="'/details'">details</a></li>
+      <li><a [routerLink]="'./details'">details</a></li>
     </ul>
   </div>
   <div class="navbar-end">

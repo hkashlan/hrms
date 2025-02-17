@@ -18,7 +18,7 @@ export const routes: Routes = [
     component: ListingPageComponent,
   },
   {
-    path: 'detail',
+    path: 'details',
     component: DetailPageComponent,
   },
 ];

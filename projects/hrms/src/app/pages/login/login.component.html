@@ -2,32 +2,49 @@
   <div class="image">
     <img src="/login.png" alt="" />
   </div>
-  <form action="" [formGroup]="username" class="flex-column">
-    <h1>User Login</h1>
-    <mat-form-field>
-      <mat-label>Email</mat-label>
-      <mat-icon matTextPrefix>email</mat-icon>
-      <input matInput type="email" formControlName="email" />
-      @if (username.controls.email.invalid && username.controls.email.touched) {
-        <mat-error>Fill in the field</mat-error>
-      }
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Password</mat-label>
-      <mat-icon matTextPrefix>lock</mat-icon>
-      <input matInput type="password" placeholder="Password" formControlName="password" />
-      @if (username.controls.password.invalid && username.controls.password.touched) {
-        <mat-error>Enter the Password</mat-error>
-      }
-    </mat-form-field>
-    <button
-      mat-raised-button
-      style="background-color: rgb(77, 209, 77); color: white"
-      (click)="sumbit()"
-      [disabled]="!username.valid"
-    >
-      Login
-    </button>
-    <a href="">Forgot username / Password</a>
+  <form action="" [formGroup]="username" class="flex flex-col gap-4">
+    <h1 class="text-2xl font-bold">User Login</h1>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Email</span>
+      </label>
+      <label class="input-group">
+        <span>Email</span>
+        <input
+          type="email"
+          placeholder="Email"
+          class="input input-bordered"
+          formControlName="email"
+        />
+      </label>
+      <div
+        *ngIf="username.controls.email.invalid && username.controls.email.touched"
+        class="text-red-500"
+      >
+        Fill in the field
+      </div>
+    </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="label-text">Password</span>
+      </label>
+      <label class="input-group">
+        <span>Password</span>
+        <input
+          type="password"
+          placeholder="Password"
+          class="input input-bordered"
+          formControlName="password"
+        />
+      </label>
+      <div
+        *ngIf="username.controls.password.invalid && username.controls.password.touched"
+        class="text-red-500"
+      >
+        Enter the Password
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="sumbit()" [disabled]="!username.valid">Login</button>
+    <a href="" class="link">Forgot username / Password</a>
   </form>
 </div>
