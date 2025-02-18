@@ -5,6 +5,5 @@ import { RouterModule } from '@angular/router';
   selector: 'app-navigation',
   imports: [RouterModule],
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.scss',
 })
 export class NavigationComponent {}
