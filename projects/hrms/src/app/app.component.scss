@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use 'mixins/response_to' as response;
 @use 'mixins/breakpoints' as breakpoints;
 
@@ -10,19 +11,19 @@
 /* Small */
 @include response.respond-to(sm) {
   .container {
-    width: calc(map-get(breakpoints.$breakpoints, sm) - 10px);
+    width: calc(map.get(breakpoints.$breakpoints, sm) - 10px);
   }
 }
 
 /* Medium */
 @include response.respond-to(md) {
   .container {
-    width: calc(map-get(breakpoints.$breakpoints, md) - 10px);
+    width: calc(map.get(breakpoints.$breakpoints, md) - 10px);
   }
 }
 /* Large */
 @include response.respond-to(lg) {
   .container {
-    width: calc(map-get(breakpoints.$breakpoints, lg) - 10px);
+    width: calc(map.get(breakpoints.$breakpoints, lg) - 10px);
   }
 }

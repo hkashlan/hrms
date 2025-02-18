@@ -1,96 +1,12 @@
-import { afterNextRender, Component, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { User } from '@hrms-server/db/schamas/users';
-import { Entity } from 'ui-kit';
-import { userInfo } from './entities/user.entity';
-import { LoginComponent } from './pages/login/login.component';
-import { trpc } from './trpc.client';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { NavigationComponent } from './shell/navigation/navigation.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  imports: [MatSlideToggleModule, ReactiveFormsModule, LoginComponent],
+  imports: [RouterOutlet, NavigationComponent],
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  title = 'hrms';
-  users = signal<User[]>([]);
-  userInfo: Entity<User> = userInfo;
-  userControl = new FormControl(null as User | null);
-
-  constructor() {
-    afterNextRender(() => {
-      this.callServer();
-    });
-  }
-
-  async callServer() {
-    // const userInfo: Entity<typeof insertUserSchema.shape> = {
-    //   name: 'User',
-    //   properties: {
-    //     age: {
-    //       type: 'number',
-    //       label: 'Age',
-    //       validation: insertUserSchema.shape.age,
-    //     },
-    //     username: {
-    //       type: 'text',
-    //       label: 'Username',
-    //     },
-    //     email: {
-    //       type: 'text',
-    //       label: 'Email',
-    //     },
-    //     passwordHash: {
-    //       type: 'text',
-    //       label: 'Password',
-    //     },
-    //   },
-    // };
-    // const user = await trpc.login.mutate({ email: 'admin@admin.com', password: '123456' });
-    // await trpc.login.mutate({
-    //   email: 'tt@tt.com',
-    //   password: '123',
-    // });
-    const users = await trpc.user.list.query({
-      // or: [
-      //   {
-      //     and: [
-      //       {
-      //         username: { startsWith: 'John' },
-      //         age: { lte: 40 },
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     username: { startsWith: 'hadi' },
-      //   },
-      // ],
-    });
-    this.users.set(users);
-    // console.log(this.users);
-
-    // await trpc.user.create.mutate({
-    //   email: 'sd',
-    //   username: 'sd',
-    //   passwordHash: 'sd',
-    //   age: 12,
-    // });
-    // await trpc.user.update.mutate({
-    //   id: 1,
-    //   email: 'sd',
-    //   username: 'sd',
-    //   passwordHash: 'sd',
-    //   age: 12,
-    // });
-
-    // await trpc.user.delete.mutate({ id: 1 });
-    // console.log(tt);
-  }
-
-  async insertUser() {
-    //       label: 'Password',
-  }
-}
+export class AppComponent {}

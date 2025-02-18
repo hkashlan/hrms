@@ -5,6 +5,12 @@
 // Comment out the line below if you want to use the deprecated `color` inputs.
 // @include mat.color-variants-backwards-compatibility($hrms-theme);
 /* You can add global styles to this file, and also import other style files */
+@use 'tailwindcss';
+@plugin "daisyui" {
+  themes:
+    light --default,
+    cupcake;
+}
 
 html,
 body {
