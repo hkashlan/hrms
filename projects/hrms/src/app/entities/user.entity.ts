@@ -12,7 +12,7 @@ export const userInfo: Entity<User> = generateEntity<User>({
       },
       age: {
         type: 'number',
-        label: 'Age',
+        label: 'Agedsfdsf',
         hooks: {
           list: {
             noFilter: true,

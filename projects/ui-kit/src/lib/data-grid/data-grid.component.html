@@ -2,7 +2,7 @@
   @for (column of displayedColumns(); track column) {
     <ng-container [matColumnDef]="column.key">
       <th mat-header-cell *matHeaderCellDef>
-        {{ column.key }}
+        {{ column.property.property.label }}
         @if (!column.property.property.hooks?.list?.noFilter) {
           <lib-column-filter [type]="column.property.property.type" />
         }
