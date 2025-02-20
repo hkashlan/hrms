@@ -1,12 +1,7 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, effect, forwardRef, input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { CheckboxDirective } from 'daisyui';
 import { Subscription } from 'rxjs';
 import { Entity } from 'ui-kit';
 import { zodToAngularForm } from '../../shared/zo-to-form';
@@ -15,55 +10,49 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   selector: 'lib-dynamic-form',
   template: `
     <form [formGroup]="form()">
-      @for (field of fields(); track $index) {
-        @switch (field.property.property.type) {
-          @case ('boolean') {
-            <mat-checkbox [formControlName]="field.key">{{ field.key }}</mat-checkbox>
-          }
+      <fieldset class="fieldset">
+        @for (field of fields(); track $index) {
+          <label class="fieldset-label">{{ field.key }}</label>
+          @switch (field.property.property.type) {
+            @case ('boolean') {
+              <input duiCheckbox [formControlName]="field.key" />
+            }
 
-          @case ('date') {
-            <mat-form-field>
-              <mat-label>Choose a date</mat-label>
-              <input matInput [formControlName]="field.key" [matDatepicker]="picker" />
-              <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          }
+            @case ('date') {
+              <input type="date" class="input" [formControlName]="field.key" />
+            }
 
-          @case ('select') {
-            <mat-form-field>
-              <mat-label>Favorite food</mat-label>
-              <mat-select [formControlName]="field.key">
+            @case ('select') {
+              <select class="select" [formControlName]="field.key">
                 @for (option of field.property.property.options; track option) {
-                  <mat-option [value]="option">{{ option }}</mat-option>
+                  <option [value]="option">{{ option }}</option>
                 }
-              </mat-select>
-            </mat-form-field>
-          }
+              </select>
+            }
 
-          @case ('number') {
-            <mat-form-field>
-              <mat-label>{{ field.key }}</mat-label>
-              <input matInput type="number" [formControlName]="field.key" />
-            </mat-form-field>
-          }
+            @case ('number') {
+              <input type="number" class="input" [formControlName]="field.key" />
+            }
 
-          @default {
-            <mat-form-field>
-              <mat-label>{{ field.key }}</mat-label>
-              <input matInput [formControlName]="field.key" [type]="field.property.property.type" />
-            </mat-form-field>
+            @default {
+              <input
+                [type]="field.property.property.type"
+                class="input"
+                [formControlName]="field.key"
+              />
+            }
           }
         }
-      }
+      </fieldset>
     </form>
-    <div *ngIf="form().invalid && form().touched">
+    @if (form().invalid && form().touched) {
       <h3>Form Errors:</h3>
       <ul>
-        <li *ngFor="let error of getFormErrors()">{{ error }}</li>
+        @for (error of getFormErrors(); track error) {
+          <li>{{ error }}</li>
+        }
       </ul>
-    </div>
+    }
   `,
   providers: [
     provideNativeDateAdapter(),
@@ -73,22 +62,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
       multi: true,
     },
   ],
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    MatFormFieldModule,
-    MatDatepickerModule,
-    MatCheckboxModule,
-    MatInputModule,
-    MatSelectModule,
-  ],
-  styles: `
-    form {
-      display: grid;
-      max-width: 50%;
-      justify-items: center;
-    }
-  `,
+  imports: [ReactiveFormsModule, CheckboxDirective],
 })
 export class DynamicFormComponent<T> implements ControlValueAccessor {
   entity = input.required<Entity<T>>();

@@ -1,0 +1,24 @@
+<p>edit-entity-info works!</p>
+{{ entity() }}
+{{ entityInfo() | json }}
+
+<fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+  <legend class="fieldset-legend">Entity name</legend>
+  <input type="text" class="input" placeholder="entity name" />
+
+  <legend class="fieldset-legend">description</legend>
+  <input type="text" class="input" placeholder="entity name" [value]="entityInfo().name" />
+
+  <ul class="list bg-base-100 rounded-box shadow-md">
+    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Most played songs this week</li>
+
+    @for (property of properties(); track property) {
+      <li class="list-row">
+        <div>
+          {{ property.key }}
+          <img class="size-10 rounded-box" src="" />
+        </div>
+      </li>
+    }
+  </ul>
+</fieldset>
