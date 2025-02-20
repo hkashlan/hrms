@@ -3,5 +3,6 @@
  */
 
 export * from './lib/button.directive';
+export * from './lib/checkbox.directive';
 export * from './lib/daisyui.component';
 export * from './lib/daisyui.service';
