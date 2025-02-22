@@ -5,6 +5,7 @@ export const userInfo: Entity<User> = generateEntity<User>({
   schema: fullUserSchema,
   entity: {
     name: 'User',
+    label: 'user',
     properties: {
       id: {
         type: 'primary',
@@ -12,7 +13,7 @@ export const userInfo: Entity<User> = generateEntity<User>({
       },
       age: {
         type: 'number',
-        label: 'Agedsfdsf',
+        label: 'Age',
         hooks: {
           list: {
             noFilter: true,

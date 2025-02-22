@@ -1,5 +1,5 @@
-import { Component, input } from '@angular/core';
-import { PropertyInputType, PropertyType } from '../../../model/property';
+import { Component, computed, input } from '@angular/core';
+import { PropertyInputType, PropertyType } from '@hrms-server/model/property.schema';
 
 @Component({
   selector: 'lib-column-filter',
@@ -9,4 +9,17 @@ import { PropertyInputType, PropertyType } from '../../../model/property';
 })
 export class ColumnFilterComponent {
   type = input.required<PropertyType | PropertyInputType>();
+  options = computed(() => {
+    const type = this.type();
+    if (type === 'number') {
+      return ['lt', 'gt', 'lte', 'gte', 'equals'];
+    } else if (type === 'date') {
+      return ['lt', 'gt', 'lte', 'gte', 'equals'];
+    } else if (type === 'text') {
+      return ['contains', 'startsWith', 'endsWith', 'equals'];
+    } else if (type === 'boolean') {
+      return ['equals'];
+    }
+    return [];
+  });
 }

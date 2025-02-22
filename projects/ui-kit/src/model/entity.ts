@@ -1,8 +1,10 @@
+import { EntityWithoutValidation } from '@hrms-server/model/entity.schema';
+import { BaseValidateProperty, Property } from '@hrms-server/model/property.schema';
 import { ZodObject, ZodTypeAny } from 'zod';
-import { BaseValidateProperty, Property } from './property';
 
 export interface Entity<T = any> {
   name: string;
+  label: string;
   schema: ZodObject<ZodRawShape1<T>>;
   properties: {
     [K in keyof T]: BaseValidateProperty;
@@ -14,20 +16,12 @@ export interface FormEntity {
   properties: Array<Property & { name: string }>;
 }
 
-type NoValidationProperty = Omit<Property, 'validation'>;
-interface EntityWithoutValidation<T> {
-  name: string;
-  properties: {
-    [K in keyof T]: Property;
-  };
-}
-
 export type ZodRawShape1<T> = {
   [K in keyof T]: ZodTypeAny;
 };
 
 export function generateEntity<T>(config: {
-  entity: EntityWithoutValidation<T>;
+  entity: EntityWithoutValidation;
   schema: ZodObject<ZodRawShape1<T>>;
 }): Entity<T> {
   const entity: Entity<T> = config.entity as unknown as Entity<T>;

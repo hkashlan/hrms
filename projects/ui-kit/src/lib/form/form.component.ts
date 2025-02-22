@@ -23,9 +23,9 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
 
             @case ('select') {
               <select class="select" [formControlName]="field.key">
-                @for (option of field.property.property.options; track option) {
+                <!-- @for (option of field.property.property.options; track option) {
                   <option [value]="option">{{ option }}</option>
-                }
+                } -->
               </select>
             }
 
