@@ -12,13 +12,13 @@ export class ColumnFilterComponent {
   options = computed(() => {
     const type = this.type();
     if (type === 'number') {
-      return ['lt', 'gt', 'lte', 'gte', 'equals'];
+      return ['<', '>', '<=', '>=', '='];
     } else if (type === 'date') {
-      return ['lt', 'gt', 'lte', 'gte', 'equals'];
+      return ['<', '>', '<=', '>=', '='];
     } else if (type === 'text') {
-      return ['contains', 'startsWith', 'endsWith', 'equals'];
+      return ['contains', 'starts with', 'endsWith', '='];
     } else if (type === 'boolean') {
-      return ['equals'];
+      return ['='];
     }
     return [];
   });
