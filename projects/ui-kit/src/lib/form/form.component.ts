@@ -1,6 +1,5 @@
 import { Component, computed, effect, forwardRef, input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { CheckboxDirective } from 'daisyui';
 import { Subscription } from 'rxjs';
 import { Entity } from 'ui-kit';
@@ -55,7 +54,6 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
     }
   `,
   providers: [
-    provideNativeDateAdapter(),
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DynamicFormComponent),

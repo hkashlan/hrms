@@ -29,7 +29,7 @@
                 "input": "projects/hrms/public"
               }
             ],
-            "styles": ["projects/hrms/src/styles.scss", "projects/hrms/src/styles/index1.scss"],
+            "styles": ["projects/hrms/src/styles.scss"],
             "scripts": [],
             "server": "projects/hrms/src/main.server.ts",
             "outputMode": "server",
