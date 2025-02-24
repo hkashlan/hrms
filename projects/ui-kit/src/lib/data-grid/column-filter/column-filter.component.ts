@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { PropertyInputType, PropertyType } from '@hrms-server/model/property.schema';
+import { PropertyInputType, PropertyType } from '@hrms-server/model/property.z';
 
 @Component({
   selector: 'lib-column-filter',

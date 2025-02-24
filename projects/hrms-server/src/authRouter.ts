@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { sign } from 'jsonwebtoken';
 import { z } from 'zod';
-import { users } from './db/schamas/users';
+import { users } from './db/schamas/users.schema';
 import { procedure, router } from './trpc';
 
 const generateToken = (userId: number) => {
