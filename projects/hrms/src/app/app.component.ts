@@ -67,9 +67,9 @@ export class AppComponent {
         },
       },
     };
-    trpc.entity.save.mutate(user).then((res) => {
-      console.log(res);
-    });
+    // trpc.entity.save.mutate(user).then((res) => {
+    //   console.log(res);
+    // });
     // this.callMutation();
   }
 

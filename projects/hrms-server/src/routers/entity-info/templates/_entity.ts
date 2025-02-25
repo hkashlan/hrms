@@ -1,10 +1,10 @@
 import { EntityWithValidation } from '@hrms-server/model/entity.z';
 import { entityUtils, writeFile } from './_utils';
 
-export function entity(schema: EntityWithValidation) {
+export async function entity(schema: EntityWithValidation) {
   const content = entityTemplate(schema);
   const filePath = `projects/hrms/src/app/entities/${schema.name}.entity.ts`;
-  return writeFile(filePath, content);
+  await writeFile(filePath, content);
 }
 
 export function entityTemplate(schema: EntityWithValidation) {
