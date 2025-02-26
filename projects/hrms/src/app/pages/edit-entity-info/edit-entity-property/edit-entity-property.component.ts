@@ -18,21 +18,17 @@ export class EditEntityPropertyComponent {
 
   propertyInfo: Signal<Entity<Partial<BaseBaseProperty>>> = computed(() => {
     const labelProp: BaseValidateProperty = {
-      property: {
-        type: 'text',
-        label: 'Label',
-      },
+      type: 'text',
+      label: 'Label',
     };
     const nameProp: BaseValidateProperty = {
-      property: {
-        type: 'text',
-        label: 'name',
-      },
+      type: 'text',
+      label: 'name',
     };
 
     return {
       name: this.property().key,
-      label: this.property().property.property.label,
+      label: this.property().property.label,
       schema: z.object({
         label: z.string(),
         name: z.string(),

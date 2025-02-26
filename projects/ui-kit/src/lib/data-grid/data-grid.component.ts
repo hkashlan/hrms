@@ -16,9 +16,7 @@ export class DataGridComponent<T> {
 
   private prepareDisplayedColumns() {
     return Object.keys(this.entity().properties)
-      .filter(
-        (key) => this.entity().properties[key as keyof T].property.hooks?.list?.hidden !== true,
-      )
+      .filter((key) => this.entity().properties[key as keyof T].hooks?.list?.hidden !== true)
       .map((key) => {
         return {
           key: key as keyof T,

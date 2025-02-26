@@ -17,18 +17,18 @@
       <div class="text-xl">action</div>
     </li>
 
-    @for (property of properties(); track property) {
+    @for (keyProperty of properties(); track keyProperty) {
       <li class="list-row">
-        <div class="text-xs btn w-25" [ngClass]="type2Color[property.property.property.type]">
-          {{ property.property.property.type }}
+        <div class="text-xs btn w-25" [ngClass]="type2Color[keyProperty.property.type]">
+          {{ keyProperty.property.type }}
         </div>
         <div class="list-col w-40">
-          <div class="text-xl">{{ property.key }}</div>
+          <div class="text-xl">{{ keyProperty.key }}</div>
         </div>
         <div class="list-col-grow">
-          <div class="text-xl">{{ property.property.property.label }}</div>
+          <div class="text-xl">{{ keyProperty.property.label }}</div>
         </div>
-        <app-edit-entity-property class="btn btn-square btn-ghost" [property]="property" />
+        <app-edit-entity-property class="btn btn-square btn-ghost" [property]="keyProperty" />
       </li>
     }
     <li class="list-row">

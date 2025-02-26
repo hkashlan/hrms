@@ -13,7 +13,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
       @for (field of fields(); track $index) {
         <div>
           <label class="fieldset-label">{{ field.key }}</label>
-          @switch (field.property.property.type) {
+          @switch (field.property.type) {
             @case ('boolean') {
               <input duiCheckbox [formControlName]="field.key" />
             }
@@ -24,7 +24,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
 
             @case ('select') {
               <select class="select" [formControlName]="field.key">
-                <!-- @for (option of field.property.property.options; track option) {
+                <!-- @for (option of field.property.options; track option) {
                   <option [value]="option">{{ option }}</option>
                 } -->
               </select>
@@ -35,11 +35,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
             }
 
             @default {
-              <input
-                [type]="field.property.property.type"
-                class="input"
-                [formControlName]="field.key"
-              />
+              <input [type]="field.property.type" class="input" [formControlName]="field.key" />
             }
           }
         </div>
