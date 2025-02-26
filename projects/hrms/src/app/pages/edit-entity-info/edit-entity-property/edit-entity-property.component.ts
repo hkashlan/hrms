@@ -2,6 +2,7 @@ import { Component, computed, ElementRef, input, Signal, viewChild } from '@angu
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   BaseBaseProperty,
+  BasePropertyZ,
   BaseValidateProperty,
   Property,
   SelectProperty,
@@ -47,7 +48,7 @@ export class EditEntityPropertyComponent {
       schema: z.object({
         label: z.string().regex(/^[a-zA-Z0-9_]+$/),
         name: z.string(),
-        type: z.enum(['text', 'number', 'date', 'boolean', 'select', 'textarea', 'autocomplete']),
+        type: BasePropertyZ.shape.type,
       }),
       properties: {
         type: typeProp,
