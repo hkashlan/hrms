@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input, Signal } from '@angular/core';
-import { BaseValidateProperty } from '@hrms-server/model/property.z';
+import { BaseProperty, BaseValidateProperty } from '@hrms-server/model/property.z';
 import allEntities from '../../entities/indext';
 
 interface KeyProperty {
@@ -15,6 +15,16 @@ interface KeyProperty {
   styleUrl: './edit-entity-info.component.scss',
 })
 export class EditEntityInfoComponent {
+  type2Color: Record<BaseProperty['type'], string> = {
+    primary: 'btn-primary',
+    number: 'btn-secondary',
+    select: 'btn-info',
+    boolean: 'btn-secondary',
+    text: 'btn-warning',
+    textarea: 'btn-warning',
+    date: 'btn-success',
+    autocomplete: 'btn-success',
+  };
   entity = input.required<string>();
 
   entityInfo = computed(

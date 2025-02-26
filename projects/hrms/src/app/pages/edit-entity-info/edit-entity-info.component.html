@@ -19,27 +19,8 @@
 
     @for (property of properties(); track property) {
       <li class="list-row">
-        <div [ngSwitch]="property.property.property.type">
-          <button *ngSwitchCase="'primary'" class="text-xs btn btn-primary w-25">
-            {{ property.property.property.type }}
-          </button>
-
-          <div *ngSwitchCase="'number'" class="text-xs btn btn-secondary w-25">
-            {{ property.property.property.type }}
-          </div>
-          <div *ngSwitchCase="'text'" class="text-xs btn btn-accent w-25">
-            {{ property.property.property.type }}
-          </div>
-          <div *ngSwitchCase="'select'" class="text-xs btn btn-info w-25">
-            {{ property.property.property.type }}
-          </div>
-          <div *ngSwitchCase="'boolean'" class="text-xs btn btn-warning w-25">
-            {{ property.property.property.type }}
-          </div>
-          <div *ngSwitchCase="'date'" class="text-xs btn btn-success w-25">
-            {{ property.property.property.type }}
-          </div>
-          <div *ngSwitchDefault class="text-xs btn">{{ property.property.property.type }}</div>
+        <div class="text-xs btn w-25" [ngClass]="type2Color[property.property.property.type]">
+          {{ property.property.property.type }}
         </div>
         <div class="list-col w-40">
           <div class="text-xl">{{ property.key }}</div>
