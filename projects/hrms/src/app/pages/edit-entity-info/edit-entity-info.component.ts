@@ -1,4 +1,4 @@
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, computed, input, Signal } from '@angular/core';
 import { BaseValidateProperty } from '@hrms-server/model/property.z';
 import allEntities from '../../entities/indext';
@@ -10,7 +10,7 @@ interface KeyProperty {
 
 @Component({
   selector: 'app-edit-entity-info',
-  imports: [JsonPipe, CommonModule],
+  imports: [CommonModule],
   templateUrl: './edit-entity-info.component.html',
   styleUrl: './edit-entity-info.component.scss',
 })
