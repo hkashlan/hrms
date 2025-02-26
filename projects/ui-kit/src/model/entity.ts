@@ -1,5 +1,5 @@
-import { EntityWithoutValidation } from '@hrms-server/model/entity.schema';
-import { BaseValidateProperty, Property } from '@hrms-server/model/property.schema';
+import { EntityWithValidation } from '@hrms-server/model/entity.z';
+import { BaseValidateProperty, Property } from '@hrms-server/model/property.z';
 import { ZodObject, ZodTypeAny } from 'zod';
 
 export interface Entity<T = any> {
@@ -21,7 +21,7 @@ export type ZodRawShape1<T> = {
 };
 
 export function generateEntity<T>(config: {
-  entity: EntityWithoutValidation;
+  entity: EntityWithValidation;
   schema: ZodObject<ZodRawShape1<T>>;
 }): Entity<T> {
   const entity: Entity<T> = config.entity as unknown as Entity<T>;

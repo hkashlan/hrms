@@ -1,4 +1,4 @@
-import { fullUserSchema, User } from '@hrms-server/db/schamas/users';
+import { fullUserSchema, User } from '@hrms-server/db/schamas/users.schema';
 import { Entity, generateEntity } from 'ui-kit';
 
 export const userInfo: Entity<User> = generateEntity<User>({

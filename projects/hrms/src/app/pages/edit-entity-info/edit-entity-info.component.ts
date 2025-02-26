@@ -1,6 +1,12 @@
 import { JsonPipe } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, Signal } from '@angular/core';
+import { BaseValidateProperty } from '@hrms-server/model/property.z';
 import allEntities from '../../entities/indext';
+
+interface KeyProperty {
+  key: string;
+  property: BaseValidateProperty;
+}
 
 @Component({
   selector: 'app-edit-entity-info',
@@ -15,12 +21,12 @@ export class EditEntityInfoComponent {
     () => allEntities[this.entity() as unknown as keyof typeof allEntities] ?? { tt: 'tt' },
   );
 
-  properties = computed(() => {
+  properties: Signal<KeyProperty[]> = computed(() => {
     const entityInfo = this.entityInfo();
-    return Object.keys(entityInfo).map((key) => {
+    return Object.keys(entityInfo.properties).map((key) => {
       return {
-        key: key as keyof typeof entityInfo,
-        property: entityInfo[key as keyof typeof entityInfo],
+        key: key as keyof typeof entityInfo.properties,
+        property: entityInfo.properties[key as keyof typeof entityInfo.properties],
       };
     });
   });
