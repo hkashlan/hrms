@@ -2,7 +2,7 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ZodNullable, ZodNumber, ZodObject, ZodOptional, ZodString } from 'zod';
 
-export function zodToAngularForm(schema: ZodObject<any>): FormGroup {
+export function zodToAngularForm(schema?: ZodObject<any>): FormGroup {
   const controls: Record<string, FormControl> = {};
 
   // function isZodOptional(x: ZodTypeDef): x is ZodOptionalDef {
@@ -11,7 +11,7 @@ export function zodToAngularForm(schema: ZodObject<any>): FormGroup {
   // function isZodNullable(x: ZodTypeDef): x is ZodOptionalDef {
   //   return 'typeName' in x && x.typeName === ZodFirstPartyTypeKind.ZodNullable;
   // }
-  Object.entries(schema.shape).forEach(([key, zodField]) => {
+  Object.entries(schema?.shape ?? {}).forEach(([key, zodField]) => {
     if (key === 'id') {
       return;
     }

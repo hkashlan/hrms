@@ -41,7 +41,7 @@ export type BaseBaseProperty = z.infer<typeof BaseBasePropertyZ>;
 
 export const BaseValidatePropertyZ = z.object({
   property: BasePropertyZ,
-  validation: z.instanceof(ZodType),
+  validation: z.instanceof(ZodType).optional(),
 });
 export type BaseValidateProperty = z.infer<typeof BaseValidatePropertyZ>;
 

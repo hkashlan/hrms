@@ -2,15 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input, Signal } from '@angular/core';
 import { BaseProperty, BaseValidateProperty } from '@hrms-server/model/property.z';
 import allEntities from '../../entities/indext';
+import { EditEntityPropertyComponent } from './edit-entity-property/edit-entity-property.component';
 
-interface KeyProperty {
+export interface KeyProperty {
   key: string;
   property: BaseValidateProperty;
 }
 
 @Component({
   selector: 'app-edit-entity-info',
-  imports: [CommonModule],
+  imports: [CommonModule, EditEntityPropertyComponent],
   templateUrl: './edit-entity-info.component.html',
   styleUrl: './edit-entity-info.component.scss',
 })
