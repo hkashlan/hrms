@@ -18,6 +18,18 @@ export function schema(schema: EntityWithValidation) {
   return writeFile(filePath, content);
 }
 
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Given an EntityWithValidation, generate a Drizzle schema for that entity.
+ *
+ * The generated schema will include all properties from the entity, except for 'id'.
+ * The generated schema will also include insert, select, and update validation schemas.
+ * The generated schema will also include a filter schema.
+ *
+ * @param schema The entity with validation
+ * @returns A Drizzle schema string
+ */
+/******  53de0ea6-baa0-4baf-8a29-412d43561607  *******/
 function schemaTemplate(schema: EntityWithValidation) {
   let fields = '';
 
@@ -55,19 +67,19 @@ export const select${capitalized}Schema = createSelectSchema(${plural});
 export const update${capitalized}Schema = select${capitalized}Schema.partial().extend({ id: z.number() });
 export const full${capitalized}Schema = insert${capitalized}Schema.extend({ id: z.number() });
 
-export const userFilterSchema = filterSchema.createFilterSchema<${capitalized}>(${plural});
+export const ${schema.name}FilterSchema = filterSchema.createFilterSchema<${capitalized}>(${plural});
 export type ${capitalized} = InferSelectModel<typeof ${plural}>; // This infers the ${capitalized} type based on the Drizzle schema
 
-export const userTableInfo: DrizzleTableInfo<
+export const ${schema.name}TableInfo: DrizzleTableInfo<
   ${capitalized},
   typeof insert${capitalized}Schema,
-  typeof userFilterSchema,
+  typeof ${schema.name}FilterSchema,
   typeof update${capitalized}Schema
 > = {
   record: {} as ${capitalized},
   table: ${plural},
   insertValidation: insert${capitalized}Schema,
-  selectValidation: userFilterSchema,
+  selectValidation: ${schema.name}FilterSchema,
   updateValidation: update${capitalized}Schema,
 };
 

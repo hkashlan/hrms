@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import { EntityWithValidationZ } from '../../model/entity.z';
 import { t } from '../../trpc';
 import { entity } from './templates/_entity';
+import { router } from './templates/_router';
 import { schema } from './templates/_schema';
 
 export const entityRouter = t.router({
@@ -10,6 +11,8 @@ export const entityRouter = t.router({
     // await rewriteUserSchema(input);
     await schema(input);
     await entity(input);
+    await router(input);
+
     await exec('npm run drizzle-generate', (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing command: ${error.message}`);
