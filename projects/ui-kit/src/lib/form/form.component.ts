@@ -9,9 +9,8 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   selector: 'lib-dynamic-form',
   template: `
     <form [formGroup]="form()">
-      <!-- <fieldset class="fieldset"> -->
-      @for (field of fields(); track $index) {
-        <div>
+      <fieldset class="fieldset ai-style-change-1 block">
+        @for (field of fields(); track $index) {
           <label class="fieldset-label">{{ field.key }}</label>
           @switch (field.property.type) {
             @case ('boolean') {
@@ -38,10 +37,8 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
               <input [type]="field.property.type" class="input" [formControlName]="field.key" />
             }
           }
-        </div>
-        <br />
-      }
-      <!-- </fieldset> -->
+        }
+      </fieldset>
     </form>
     @if (form().invalid && form().touched) {
       <h3>Form Errors:</h3>
