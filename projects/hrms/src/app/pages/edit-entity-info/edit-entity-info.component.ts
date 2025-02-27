@@ -1,7 +1,8 @@
 import { JsonPipe } from '@angular/common';
 import { Component, computed, input, Signal } from '@angular/core';
 import { BaseValidateProperty } from '@hrms-server/model/property.z';
-import allEntities from '../../entities/indext';
+import { EntityKeys } from '../../entities/indext';
+import { entityUtils } from '../../utils/entity.utils';
 
 interface KeyProperty {
   key: string;
@@ -14,12 +15,10 @@ interface KeyProperty {
   templateUrl: './edit-entity-info.component.html',
   styleUrl: './edit-entity-info.component.scss',
 })
-export class EditEntityInfoComponent {
-  entity = input.required<string>();
+export class EditEntityInfoComponent<T> {
+  entity = input.required<EntityKeys>();
 
-  entityInfo = computed(
-    () => allEntities[this.entity() as unknown as keyof typeof allEntities] ?? { tt: 'tt' },
-  );
+  entityInfo = entityUtils.getEntitySignal<T>(this.entity);
 
   properties: Signal<KeyProperty[]> = computed(() => {
     const entityInfo = this.entityInfo();
@@ -27,7 +26,7 @@ export class EditEntityInfoComponent {
       return {
         key: key as keyof typeof entityInfo.properties,
         property: entityInfo.properties[key as keyof typeof entityInfo.properties],
-      };
+      } as KeyProperty;
     });
   });
 }

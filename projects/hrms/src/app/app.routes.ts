@@ -8,7 +8,7 @@ import { LoginComponent } from './pages/login/login.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'listing',
+    redirectTo: 'listing/user',
     pathMatch: 'full',
   },
   {
@@ -16,11 +16,11 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'listing',
+    path: 'listing/:entity',
     component: ListingPageComponent,
   },
   {
-    path: 'details',
+    path: 'details/:entity/:id',
     component: DetailPageComponent,
   },
   {

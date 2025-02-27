@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { userInfo } from './entities/user.entity';
+import { entityInfos } from './entities/indext';
 import { NavigationItem } from './shell/navigation/navigation';
 import { NavigationComponent } from './shell/navigation/navigation.component';
 
@@ -20,15 +20,16 @@ export class AppComponent {
       label: 'edit gui',
       route: './edit-entity/user',
     },
-    {
-      label: 'listing',
-      route: './listing',
-    },
-    {
-      label: userInfo.label,
-      route: `./listing/${userInfo.label}`,
-    },
   ];
+
+  constructor() {
+    Object.values(entityInfos).forEach((entity) => {
+      this.navigationItems.push({
+        label: entity.label,
+        route: `./listing/${entity.name}`,
+      });
+    });
+  }
   // constructor() {
   //   afterNextRender(() => {
   //     this.callServer();
