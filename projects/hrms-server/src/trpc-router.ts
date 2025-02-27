@@ -1,13 +1,7 @@
 import { authRouter } from './authRouter';
+import { entitiesRouter } from './routers/entities';
 import { entityRouter } from './routers/entity-info/entity-info.router';
-import { userRouter } from './routers/user.router';
 import { router, t } from './trpc';
-
-const entitiesRouter = router({
-  user: userRouter,
-  // student: studentRouter,
-  // Add other entity routers here
-});
 
 export const appRouter1 = router({
   entities: entitiesRouter,

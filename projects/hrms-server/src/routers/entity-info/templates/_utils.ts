@@ -13,3 +13,22 @@ export async function writeFile(filePath: string, content: string) {
   console.log(schemaPath);
   await fs.promises.writeFile(schemaPath, content);
 }
+
+export async function addToFileBeforeEndingWith(
+  filePath: string,
+  importStatement: string,
+  entry: string,
+  endWith: string,
+) {
+  let fileContent = fs.readFileSync(filePath, 'utf8');
+
+  // Add import statement
+  if (!fileContent.includes(importStatement)) {
+    fileContent = importStatement + fileContent;
+  }
+
+  // Add router entry
+  const contentUntilEndWith = fileContent.lastIndexOf(endWith);
+  const content = fileContent.slice(0, contentUntilEndWith) + entry + endWith;
+  fs.writeFileSync(filePath, content, 'utf8');
+}
