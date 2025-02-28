@@ -12,10 +12,11 @@
     "serve:ssr:hrms": "node dist/hrms/server/server.mjs",
     "lint": "ng lint",
     "prettier": "npx prettier --write .",
-    "drizzle": "npm run drizzle-migrate && npm run drizzle-generate && npm run prettier",
+    "drizzle": "npm run drizzle-generate && npm run drizzle-migrate && npm run prettier",
     "drizzle-studio": "source .env &&  npx drizzle-kit studio",
     "drizzle-migrate": "npx drizzle-kit migrate",
     "drizzle-generate": "npx drizzle-kit generate",
+    "drizzle-revert": "npx drizzle-kit drop",
     "generate-code": "node --loader ts-node/esm scripts/generate-code.ts"
   },
   "private": true,
