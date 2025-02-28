@@ -13,7 +13,7 @@ export const entityRouter = t.router({
     await entity(input);
     await router(input);
 
-    await exec('npm run drizzle-generate', (error, stdout, stderr) => {
+    await exec('npm run drizzle', (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing command: ${error.message}`);
         return;

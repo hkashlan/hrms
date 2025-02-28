@@ -8,9 +8,8 @@ describe('DataGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DataGridComponent]
-    })
-    .compileComponents();
+      imports: [DataGridComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DataGridComponent);
     component = fixture.componentInstance;

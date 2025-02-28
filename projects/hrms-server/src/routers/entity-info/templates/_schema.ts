@@ -1,5 +1,5 @@
 import { EntityWithValidation } from '@hrms-server/model/entity.z';
-import { entityUtils, writeFile } from './_utils';
+import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
 const type2DBType = {
   text: 'varchar',
@@ -12,13 +12,13 @@ const type2DBType = {
   select: 'pgEnum',
 };
 
-export function schema(schema: EntityWithValidation) {
+export async function schema(schema: EntityWithValidation) {
   const content = schemaTemplate(schema);
   const filePath = `projects/hrms-server/src/db/schamas/${schema.name}s.schema.ts`;
-  return writeFile(filePath, content);
+  await writeFile(filePath, content);
+  await updateIndexTs(schema);
 }
 
-/*************  ✨ Codeium Command ⭐  *************/
 /**
  * Given an EntityWithValidation, generate a Drizzle schema for that entity.
  *
@@ -29,7 +29,6 @@ export function schema(schema: EntityWithValidation) {
  * @param schema The entity with validation
  * @returns A Drizzle schema string
  */
-/******  53de0ea6-baa0-4baf-8a29-412d43561607  *******/
 function schemaTemplate(schema: EntityWithValidation) {
   let fields = '';
 
@@ -85,4 +84,12 @@ export const ${schema.name}TableInfo: DrizzleTableInfo<
 
 
   `;
+}
+
+async function updateIndexTs(schema: EntityWithValidation) {
+  const { plural } = entityUtils(schema);
+  const trpcRouterPath = 'projects/hrms-server/src/db/schamas/index.ts';
+  const importStatement = `export * from './${plural}.schema';\n`;
+  const routerEntry = ``;
+  await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '');
 }

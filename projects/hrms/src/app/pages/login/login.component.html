@@ -6,45 +6,45 @@
     <h1 class="text-2xl font-bold">User Login</h1>
     <div class="form-control">
       <label class="label">
-      <span class="label-text">Email</span>
+        <span class="label-text">Email</span>
       </label>
       <label class="input-group">
         <span>Email</span>
-      <input
-type="email"
-placeholder="Email"
+        <input
+          type="email"
+          placeholder="Email"
           class="input input-bordered"
-formControlName="email"
-/>
-             </label>
+          formControlName="email"
+        />
+      </label>
       <div
         *ngIf="username.controls.email.invalid && username.controls.email.touched"
         class="text-red-500"
       >
-            Fill in the field
+        Fill in the field
       </div>
     </div>
     <div class="form-control">
-    <label class="label">
-      <span class="label-text">Password</span>
+      <label class="label">
+        <span class="label-text">Password</span>
       </label>
       <label class="input-group">
         <span>Password</span>
-      <input
-type="password"
-placeholder="Password"
-class="input input-bordered"
-formControlName="password"
-/>
-             </label>
+        <input
+          type="password"
+          placeholder="Password"
+          class="input input-bordered"
+          formControlName="password"
+        />
+      </label>
       <div
-*ngIf="username.controls.password.invalid && username.controls.password.touched"
-class="text-red-500"
+        *ngIf="username.controls.password.invalid && username.controls.password.touched"
+        class="text-red-500"
       >
-      Enter the Password
+        Enter the Password
       </div>
     </div>
     <button class="btn btn-primary" (click)="sumbit()" [disabled]="!username.valid">Login</button>
-<a href="" class="link">Forgot username / Password</a>
+    <a href="" class="link">Forgot username / Password</a>
   </form>
 </div>

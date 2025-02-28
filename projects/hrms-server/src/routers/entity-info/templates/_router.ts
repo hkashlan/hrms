@@ -1,11 +1,11 @@
 import { EntityWithValidation } from '@hrms-server/model/entity.z';
 import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
-export function router(schema: EntityWithValidation) {
+export async function router(schema: EntityWithValidation) {
   const content = routerTemplate(schema);
   const filePath = `projects/hrms-server/src/routers/entities/${schema.name}.router.ts`;
-  writeFile(filePath, content);
-  updateTrpcRouter(schema.name);
+  await writeFile(filePath, content);
+  await updateTrpcRouter(schema.name);
 }
 
 function routerTemplate(schema: EntityWithValidation) {
@@ -19,10 +19,10 @@ export const ${schema.name}Router = t.router(curd(${schema.name}TableInfo));
   `;
 }
 
-function updateTrpcRouter(routerName: string) {
+async function updateTrpcRouter(routerName: string) {
   const trpcRouterPath = 'projects/hrms-server/src/routers/entities/index.ts';
   const importStatement = `import { ${routerName}Router } from './${routerName}.router';\n`;
   const routerEntry = `  ${routerName}: ${routerName}Router,\n`;
 
-  addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '});');
+  await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '});');
 }

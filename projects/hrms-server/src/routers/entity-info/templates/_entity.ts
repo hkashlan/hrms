@@ -22,10 +22,10 @@ export const ${schema.name}Info: Entity<${capitalized}> = generateEntity<${capit
   `;
 }
 
-function updateEntityInfos(entity: string) {
+async function updateEntityInfos(entity: string) {
   const trpcRouterPath = 'projects/hrms/src/app/entities/indext.ts';
   const importStatement = `import { ${entity}Info } from './${entity}.entity';\n`;
   const routerEntry = ` ${entity}: ${entity}Info,\n`;
 
-  addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '};');
+  await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '};');
 }

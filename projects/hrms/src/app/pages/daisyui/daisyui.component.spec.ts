@@ -8,9 +8,8 @@ describe('DaisyuiComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DaisyuiComponent]
-    })
-    .compileComponents();
+      imports: [DaisyuiComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DaisyuiComponent);
     component = fixture.componentInstance;
