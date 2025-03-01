@@ -10,45 +10,61 @@
   <input type="text" class="input" placeholder="entity name" [value]="entityInfo().name" />
 
   <ul class="list bg-base-100 rounded-box shadow-md">
-    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Most played songs this week</li>
+    <li class="list-row">
+      <div class="w-25 text-center text-xl">type</div>
+      <div class="w-40 text-xl">name</div>
+      <div class="text-xl list-col-grow">name</div>
+      <div class="text-xl">action</div>
+    </li>
 
-    @for (property of properties(); track property) {
+    @for (keyProperty of properties(); track keyProperty) {
       <li class="list-row">
-        <div>
-          {{ property.key }}
+        <div class="text-xs btn w-25" [ngClass]="type2Color[keyProperty.property.type]">
+          {{ keyProperty.property.type }}
         </div>
-        <div>
-          {{ property.property.label }}
+        <div class="list-col w-40">
+          <div class="text-xl">{{ keyProperty.key }}</div>
+        </div>
+        <div class="list-col-grow">
+          <div class="text-xl">{{ keyProperty.property.label }}</div>
         </div>
         <button class="btn btn-square btn-ghost">
-          <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <g
-              stroke-linejoin="round"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
               stroke-linecap="round"
-              stroke-width="2"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path d="M6 3L20 12 6 21 6 3z"></path>
-            </g>
-          </svg>
-        </button>
-        <button class="btn btn-square btn-ghost">
-          <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <g
               stroke-linejoin="round"
-              stroke-linecap="round"
-              stroke-width="2"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path
-                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
-              ></path>
-            </g>
+              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+            />
           </svg>
         </button>
       </li>
     }
+    <li class="list-row">
+      <button class="btn btn-outline w-25">
+        add
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      </button>
+      <div class="text-xl">Add new column For your table</div>
+    </li>
   </ul>
 </fieldset>
