@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { exec, ExecException } from 'child_process';
 import { EntityWithValidationZ } from '../../model/entity.z';
 import { t } from '../../trpc';
 import { entity } from './templates/_entity';
@@ -15,7 +15,11 @@ export const entityRouter = t.router({
     await router(input);
     await pages(input);
 
-    await exec('npm run drizzle', (error, stdout, stderr) => {
+    const callBack: (error: ExecException | null, stdout: string, stderr: string) => void = (
+      error,
+      stdout,
+      stderr,
+    ) => {
       if (error) {
         console.error(`Error executing command: ${error.message}`);
         return;
@@ -25,6 +29,11 @@ export const entityRouter = t.router({
         return;
       }
       console.log(`stdout: ${stdout}`);
+    };
+
+    await exec('npm run drizzle', async (error, stdout, stderr) => {
+      callBack(error, stdout, stderr);
+      await exec('npm run prettier', callBack);
     });
     return input;
   }),

@@ -4,7 +4,7 @@ import { Entity, generateEntity } from 'ui-kit';
 export const userInfo: Entity<User> = generateEntity<User>({
   schema: fullUserSchema,
   entity: {
-    name: 'User',
+    name: 'user',
     label: 'user',
     properties: {
       id: {
