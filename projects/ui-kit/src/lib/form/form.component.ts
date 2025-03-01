@@ -9,7 +9,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   selector: 'lib-dynamic-form',
   template: `
     <form [formGroup]="form()">
-      <fieldset class="fieldset">
+      <fieldset class="fieldset ai-style-change-1 block">
         @for (field of fields(); track $index) {
           @let key = $any(field.key);
           <label class="fieldset-label">{{ field.key }}</label>

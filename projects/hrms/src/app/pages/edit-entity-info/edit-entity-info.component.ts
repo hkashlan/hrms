@@ -3,10 +3,11 @@ import { Component, computed, input, Signal } from '@angular/core';
 import { BaseProperty } from '@hrms-server/model/property.z';
 import { EmptyObject, entityUtils, KeyProperty } from 'ui-kit';
 import { EntityKeys } from '../../entities/indext';
+import { EditEntityPropertyComponent } from './edit-entity-property/edit-entity-property.component';
 
 @Component({
   selector: 'app-edit-entity-info',
-  imports: [CommonModule],
+  imports: [CommonModule, EditEntityPropertyComponent],
   templateUrl: './edit-entity-info.component.html',
   styleUrl: './edit-entity-info.component.scss',
 })
