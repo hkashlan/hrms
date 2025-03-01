@@ -5,7 +5,6 @@ import { trpc } from '../../../../trpc.client';
 import { entityUrlResource } from '../../../../utils/entity-resource';
 
 @Component({
-  selector: 'app-list',
   imports: [DataGridComponent],
   template: `
     <lib-data-grid [entity]="userInfo" [data]="users.value() ?? []" />

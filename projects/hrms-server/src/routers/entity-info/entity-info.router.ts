@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import { EntityWithValidationZ } from '../../model/entity.z';
 import { t } from '../../trpc';
 import { entity } from './templates/_entity';
+import { pages } from './templates/_pages';
 import { router } from './templates/_router';
 import { schema } from './templates/_schema';
 
@@ -12,6 +13,7 @@ export const entityRouter = t.router({
     await schema(input);
     await entity(input);
     await router(input);
+    await pages(input);
 
     await exec('npm run drizzle', (error, stdout, stderr) => {
       if (error) {

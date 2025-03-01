@@ -10,6 +10,12 @@ export function entityUtils(schema: EntityWithValidation) {
 
 export async function writeFile(filePath: string, content: string) {
   const schemaPath = path.resolve(filePath);
+
+  const dir = path.dirname(schemaPath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
   console.log(schemaPath);
   await fs.promises.writeFile(schemaPath, content);
 }

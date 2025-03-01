@@ -26,7 +26,7 @@ export class AppComponent {
     Object.values(entityInfos).forEach((entity) => {
       this.navigationItems.push({
         label: entity.label,
-        route: `./listing/${entity.name}`,
+        route: `./${entity.name}/list`,
       });
     });
   }
