@@ -4,15 +4,15 @@
       <tr>
         @for (column of displayedColumns(); track column) {
           <th>
-            {{ column.property.property.label }}
+            {{ column.property.label }}
           </th>
         }
       </tr>
       <tr>
         @for (column of displayedColumns(); track column) {
           <th class="relative">
-            @if (!column.property.property.hooks?.list?.noFilter) {
-              <lib-column-filter [type]="column.property.property.type" />
+            @if (!column.property.hooks?.list?.noFilter) {
+              <lib-column-filter [type]="column.property.type" />
             }
           </th>
         }

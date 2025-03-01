@@ -1,8 +1,7 @@
 import { afterNextRender, Component, input, Signal, signal } from '@angular/core';
-import { DataGridComponent, Entity } from 'ui-kit';
+import { DataGridComponent, EmptyObject, Entity, entityUtils } from 'ui-kit';
 import { EntityKeys } from '../../entities/indext';
 import { trpc } from '../../trpc.client';
-import { entityUtils } from '../../utils/entity.utils';
 
 @Component({
   imports: [DataGridComponent],
@@ -10,7 +9,7 @@ import { entityUtils } from '../../utils/entity.utils';
     <lib-data-grid [entity]="entityInfo()" [data]="data()" />
   `,
 })
-export class ListingPageComponent<T> {
+export class ListingPageComponent<T extends EmptyObject = EmptyObject> {
   entity = input<EntityKeys>('user');
   data = signal<T[]>([]);
   entityInfo: Signal<Entity<T>> = entityUtils.getEntitySignal(this.entity);
@@ -63,7 +62,7 @@ export class ListingPageComponent<T> {
       //     username: { startsWith: 'hadi' },
       //   },
       // ],
-    })) as T[];
+    })) as unknown as T[];
     this.data.set(users);
     // console.log(this.users);
 

@@ -2,7 +2,7 @@ import { Component, computed, effect, forwardRef, input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxDirective } from 'daisyui';
 import { Subscription } from 'rxjs';
-import { Entity } from 'ui-kit';
+import { EmptyObject, Entity, entityUtils } from 'ui-kit';
 import { zodToAngularForm } from '../../shared/zo-to-form';
 
 @Component({
@@ -11,18 +11,19 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
     <form [formGroup]="form()">
       <fieldset class="fieldset">
         @for (field of fields(); track $index) {
+          @let key = $any(field.key);
           <label class="fieldset-label">{{ field.key }}</label>
-          @switch (field.property.property.type) {
+          @switch (field.property.type) {
             @case ('boolean') {
-              <input duiCheckbox [formControlName]="field.key" />
+              <input duiCheckbox [formControlName]="key" />
             }
 
             @case ('date') {
-              <input type="date" class="input" [formControlName]="field.key" />
+              <input type="date" class="input" [formControlName]="key" />
             }
 
             @case ('select') {
-              <select class="select" [formControlName]="field.key">
+              <select class="select" [formControlName]="key">
                 <!-- @for (option of field.property.property.options; track option) {
                   <option [value]="option">{{ option }}</option>
                 } -->
@@ -30,15 +31,11 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
             }
 
             @case ('number') {
-              <input type="number" class="input" [formControlName]="field.key" />
+              <input type="number" class="input" [formControlName]="key" />
             }
 
             @default {
-              <input
-                [type]="field.property.property.type"
-                class="input"
-                [formControlName]="field.key"
-              />
+              <input [type]="field.property.type" class="input" [formControlName]="key" />
             }
           }
         }
@@ -62,7 +59,9 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   ],
   imports: [ReactiveFormsModule, CheckboxDirective],
 })
-export class DynamicFormComponent<T> implements ControlValueAccessor {
+export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
+  implements ControlValueAccessor
+{
   entity = input.required<Entity<T>>();
 
   form = computed(() => zodToAngularForm(this.entity().schema));
@@ -126,13 +125,8 @@ export class DynamicFormComponent<T> implements ControlValueAccessor {
   }
 
   private prepareFields() {
-    return Object.keys(this.entity().properties)
-      .filter((key) => key !== 'id')
-      .map((key) => {
-        return {
-          key: key,
-          property: this.entity().properties[key as keyof T],
-        };
-      });
+    return entityUtils
+      .getKeyProperties<T>(this.entity())
+      .filter((keyProperty) => keyProperty.key !== 'id');
   }
 }
