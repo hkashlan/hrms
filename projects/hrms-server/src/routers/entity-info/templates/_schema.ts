@@ -1,5 +1,5 @@
 import { EntityWithValidation } from '@hrms-server/model/entity.z';
-import { entityUtils, writeFile } from './_utils';
+import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
 const type2DBType = {
   text: 'varchar',
@@ -12,12 +12,23 @@ const type2DBType = {
   select: 'pgEnum',
 };
 
-export function schema(schema: EntityWithValidation) {
+export async function schema(schema: EntityWithValidation) {
   const content = schemaTemplate(schema);
   const filePath = `projects/hrms-server/src/db/schamas/${schema.name}s.schema.ts`;
-  return writeFile(filePath, content);
+  await writeFile(filePath, content);
+  await updateIndexTs(schema);
 }
 
+/**
+ * Given an EntityWithValidation, generate a Drizzle schema for that entity.
+ *
+ * The generated schema will include all properties from the entity, except for 'id'.
+ * The generated schema will also include insert, select, and update validation schemas.
+ * The generated schema will also include a filter schema.
+ *
+ * @param schema The entity with validation
+ * @returns A Drizzle schema string
+ */
 function schemaTemplate(schema: EntityWithValidation) {
   let fields = '';
 
@@ -55,22 +66,30 @@ export const select${capitalized}Schema = createSelectSchema(${plural});
 export const update${capitalized}Schema = select${capitalized}Schema.partial().extend({ id: z.number() });
 export const full${capitalized}Schema = insert${capitalized}Schema.extend({ id: z.number() });
 
-export const userFilterSchema = filterSchema.createFilterSchema<${capitalized}>(${plural});
+export const ${schema.name}FilterSchema = filterSchema.createFilterSchema<${capitalized}>(${plural});
 export type ${capitalized} = InferSelectModel<typeof ${plural}>; // This infers the ${capitalized} type based on the Drizzle schema
 
-export const userTableInfo: DrizzleTableInfo<
+export const ${schema.name}TableInfo: DrizzleTableInfo<
   ${capitalized},
   typeof insert${capitalized}Schema,
-  typeof userFilterSchema,
+  typeof ${schema.name}FilterSchema,
   typeof update${capitalized}Schema
 > = {
   record: {} as ${capitalized},
   table: ${plural},
   insertValidation: insert${capitalized}Schema,
-  selectValidation: userFilterSchema,
+  selectValidation: ${schema.name}FilterSchema,
   updateValidation: update${capitalized}Schema,
 };
 
 
   `;
+}
+
+async function updateIndexTs(schema: EntityWithValidation) {
+  const { plural } = entityUtils(schema);
+  const trpcRouterPath = 'projects/hrms-server/src/db/schamas/index.ts';
+  const importStatement = `export * from './${plural}.schema';\n`;
+  const routerEntry = ``;
+  await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '');
 }

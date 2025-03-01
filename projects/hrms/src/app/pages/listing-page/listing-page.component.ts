@@ -1,18 +1,18 @@
-import { afterNextRender, Component, signal } from '@angular/core';
-import { User } from '@hrms-server/db/schamas';
-import { DataGridComponent, Entity } from 'ui-kit';
-import { userInfo } from '../../entities/user.entity';
+import { afterNextRender, Component, input, Signal, signal } from '@angular/core';
+import { DataGridComponent, EmptyObject, Entity, entityUtils } from 'ui-kit';
+import { EntityKeys } from '../../entities/indext';
 import { trpc } from '../../trpc.client';
 
 @Component({
   imports: [DataGridComponent],
   template: `
-    <lib-data-grid [entity]="userInfo" [data]="users()" />
+    <lib-data-grid [entity]="entityInfo()" [data]="data()" />
   `,
 })
-export class ListingPageComponent {
-  users = signal<User[]>([]);
-  userInfo: Entity<User> = userInfo;
+export class ListingPageComponent<T extends EmptyObject = EmptyObject> {
+  entity = input<EntityKeys>('user');
+  data = signal<T[]>([]);
+  entityInfo: Signal<Entity<T>> = entityUtils.getEntitySignal(this.entity);
 
   constructor() {
     afterNextRender(() => {
@@ -48,7 +48,7 @@ export class ListingPageComponent {
     //   email: 'tt@tt.com',
     //   password: '123',
     // });
-    const users = await trpc.user.list.query({
+    const users = (await trpc.entities[this.entity()].list.query({
       // or: [
       //   {
       //     and: [
@@ -62,8 +62,8 @@ export class ListingPageComponent {
       //     username: { startsWith: 'hadi' },
       //   },
       // ],
-    });
-    this.users.set(users);
+    })) as unknown as T[];
+    this.data.set(users);
     // console.log(this.users);
 
     // await trpc.user.create.mutate({

@@ -1,13 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input, Signal } from '@angular/core';
-import { BaseProperty, BaseValidateProperty } from '@hrms-server/model/property.z';
-import allEntities from '../../entities/indext';
+import { BaseProperty } from '@hrms-server/model/property.z';
+import { EmptyObject, entityUtils, KeyProperty } from 'ui-kit';
+import { EntityKeys } from '../../entities/indext';
 import { EditEntityPropertyComponent } from './edit-entity-property/edit-entity-property.component';
-
-export interface KeyProperty {
-  key: string;
-  property: BaseValidateProperty;
-}
 
 @Component({
   selector: 'app-edit-entity-info',
@@ -15,7 +11,7 @@ export interface KeyProperty {
   templateUrl: './edit-entity-info.component.html',
   styleUrl: './edit-entity-info.component.scss',
 })
-export class EditEntityInfoComponent {
+export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
   type2Color: Record<BaseProperty['type'], string> = {
     primary: 'btn-primary',
     number: 'btn-secondary',
@@ -26,19 +22,12 @@ export class EditEntityInfoComponent {
     date: 'btn-success',
     autocomplete: 'btn-success',
   };
-  entity = input.required<string>();
+  entity = input.required<EntityKeys>();
 
-  entityInfo = computed(
-    () => allEntities[this.entity() as unknown as keyof typeof allEntities] ?? { tt: 'tt' },
-  );
+  entityInfo = entityUtils.getEntitySignal<T>(this.entity);
 
-  properties: Signal<KeyProperty[]> = computed(() => {
+  properties: Signal<KeyProperty<T>[]> = computed(() => {
     const entityInfo = this.entityInfo();
-    return Object.keys(entityInfo.properties).map((key) => {
-      return {
-        key: key as keyof typeof entityInfo.properties,
-        property: entityInfo.properties[key as keyof typeof entityInfo.properties],
-      };
-    });
+    return entityUtils.getKeyProperties(entityInfo);
   });
 }

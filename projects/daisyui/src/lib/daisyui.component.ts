@@ -4,12 +4,8 @@ import { Component } from '@angular/core';
   selector: 'lib-daisyui',
   imports: [],
   template: `
-    <p>
-      daisyui works!
-    </p>
+    <p>daisyui works!</p>
   `,
-  styles: ``
+  styles: ``,
 })
-export class DaisyuiComponent {
-
-}
+export class DaisyuiComponent {}

@@ -1,10 +1,11 @@
 import { EntityWithValidation } from '@hrms-server/model/entity.z';
-import { entityUtils, writeFile } from './_utils';
+import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
 export async function entity(schema: EntityWithValidation) {
   const content = entityTemplate(schema);
   const filePath = `projects/hrms/src/app/entities/${schema.name}.entity.ts`;
   await writeFile(filePath, content);
+  await updateEntityInfos(schema.name);
 }
 
 export function entityTemplate(schema: EntityWithValidation) {
@@ -19,4 +20,12 @@ export const ${schema.name}Info: Entity<${capitalized}> = generateEntity<${capit
   entity: ${JSON.stringify(schema, null, 2)}
 });
   `;
+}
+
+async function updateEntityInfos(entity: string) {
+  const trpcRouterPath = 'projects/hrms/src/app/entities/indext.ts';
+  const importStatement = `import { ${entity}Info } from './${entity}.entity';\n`;
+  const routerEntry = ` ${entity}: ${entity}Info,\n`;
+
+  await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '};');
 }
