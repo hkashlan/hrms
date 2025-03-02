@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  EnvironmentInjector,
-  inject,
-  input,
-  runInInjectionContext,
-} from '@angular/core';
+import { Component, computed, inject, Injector, input, runInInjectionContext } from '@angular/core';
 import { ButtonDirective } from 'daisyui';
 import { EmptyObject, entityUtils, KeyProperty } from 'ui-kit';
 import { Entity } from '../../model/entity';
@@ -25,10 +18,10 @@ export class DataGridComponent<T extends EmptyObject = EmptyObject> {
 
   displayedColumns = computed(() => this.prepareDisplayedColumns());
 
-  environmentInjector = inject(EnvironmentInjector);
+  injector: Injector = inject(Injector);
 
   doAction(row: T, action: ActionButton<T>) {
-    runInInjectionContext(this.environmentInjector, () => action.action(row));
+    runInInjectionContext(this.injector, () => action.action(row));
   }
 
   private prepareDisplayedColumns(): KeyProperty<T>[] {
