@@ -7,6 +7,9 @@
             {{ column.property.label }}
           </th>
         }
+        @if (actions()?.length) {
+          <th>Action</th>
+        }
       </tr>
       <tr>
         @for (column of displayedColumns(); track column) {
@@ -16,6 +19,9 @@
             }
           </th>
         }
+        @if (actions()?.length) {
+          <th></th>
+        }
       </tr>
     </thead>
 
@@ -24,6 +30,24 @@
         <tr class="hover:bg-base-300">
           @for (column of displayedColumns(); track column) {
             <td>{{ row[column.key] }}</td>
+          }
+
+          @if (actions()?.length) {
+            <td>
+              @for (action of actions(); track action) {
+                <button
+                  duiButton
+                  [ghost]="true"
+                  [responsive]="false"
+                  (click)="doAction(row, action)"
+                >
+                  @if (action.icon) {
+                    <img [src]="action.icon" />
+                  }
+                  {{ action.label }}
+                </button>
+              }
+            </td>
           }
         </tr>
       }

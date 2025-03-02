@@ -17,6 +17,7 @@
     "drizzle-migrate": "npx drizzle-kit migrate",
     "drizzle-generate": "npx drizzle-kit generate",
     "drizzle-revert": "npx drizzle-kit drop",
+    "download-icons": "tsx scripts/download-icons.ts",
     "generate-code": "node --loader ts-node/esm scripts/generate-code.ts"
   },
   "private": true,

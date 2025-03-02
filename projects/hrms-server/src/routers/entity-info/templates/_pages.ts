@@ -17,10 +17,9 @@ function listTemplate(schema: EntityWithValidation) {
 
   return `
 import { Component } from '@angular/core';
-import { DataGridComponent } from 'ui-kit';
+import { DataGridComponent, entityUrlResource } from 'ui-kit';
 import { ${schema.name}Info } from '../../../../entities/${schema.name}.entity';
 import { trpc } from '../../../../trpc.client';
-import { entityUrlResource } from '../../../../utils/entity-resource';
 
 @Component({
   imports: [DataGridComponent],

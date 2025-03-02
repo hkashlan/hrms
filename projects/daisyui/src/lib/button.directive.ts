@@ -6,6 +6,7 @@ import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 export class ButtonDirective implements OnInit {
   @Input() responsive: boolean = true;
   @Input() outline: boolean = false;
+  @Input() ghost: boolean = false;
   @Input() duiButton:
     | 'btn-neutral'
     | 'btn-primary'
@@ -14,7 +15,8 @@ export class ButtonDirective implements OnInit {
     | 'btn-info'
     | 'btn-success'
     | 'btn-warning'
-    | 'btn-error' = 'btn-primary';
+    | 'btn-error'
+    | '' = 'btn-neutral';
 
   constructor(
     private el: ElementRef,
@@ -30,7 +32,13 @@ export class ButtonDirective implements OnInit {
       classes.push('btn-xs', 'sm:btn-sm', 'md:btn-md', 'lg:btn-lg', 'xl:btn-xl');
     }
 
-    classes.push(`${this.duiButton}`);
+    if (this.ghost) {
+      classes.push('btn-ghost');
+    }
+
+    if (this.duiButton) {
+      classes.push(`${this.duiButton}`);
+    }
 
     classes.forEach((c) => this.renderer.addClass(this.el.nativeElement, c));
   }
