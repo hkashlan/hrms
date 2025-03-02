@@ -4,6 +4,17 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyInputType, PropertyType } from '@hrms-server/model/property.z';
 
+const filter2Word = {
+  lt: 'less than',
+  gt: 'greater than',
+  lte: 'less than or equal to',
+  gte: 'greater than or equal to',
+  contains: 'contains',
+  startsWith: 'starts with',
+  endsWith: 'ends with',
+  equal: '=',
+};
+
 @Component({
   selector: 'lib-column-filter',
   imports: [ReactiveFormsModule],
@@ -13,19 +24,20 @@ import { PropertyInputType, PropertyType } from '@hrms-server/model/property.z';
 export class ColumnFilterComponent {
   type = input.required<PropertyType | PropertyInputType>();
   key = input.required<string | number | symbol>();
+  filter2Word = filter2Word;
 
   options = computed(() => {
     const type = this.type();
     if (type === 'number') {
-      return ['lt', 'gt', 'lte', '>=', '='];
+      return ['lt', 'gt', 'lte', 'gte', 'equal'];
     } else if (type === 'date') {
-      return ['<', '>', '<=', '>=', '='];
+      return ['lt', 'gt', 'lte', 'gte', 'equal'];
     } else if (type === 'text') {
-      return ['contains', 'starts with', 'endsWith', '='];
+      return ['contains', 'startsWith', 'endsWith', 'equal'];
     } else if (type === 'boolean') {
-      return ['='];
+      return ['equal'];
     }
-    return [];
+    return ['equal'];
   });
 
   valueCtrl = new FormControl();
@@ -49,5 +61,9 @@ export class ColumnFilterComponent {
         queryParamsHandling: 'merge', // preserve the existing query parameters in the URL
       });
     });
+  }
+
+  getFilterName(option: string) {
+    return this.filter2Word[option as keyof typeof filter2Word];
   }
 }
