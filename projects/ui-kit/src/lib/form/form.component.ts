@@ -10,6 +10,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   template: `
     <form [formGroup]="form()">
 <<<<<<< HEAD
+<<<<<<< HEAD
       <!-- <fieldset class="fieldset"> -->
       @for (field of fields(); track $index) {
         <div>
@@ -18,6 +19,11 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
         @for (field of fields(); track $index) {
           @let key = $any(field.key);
 >>>>>>> main
+=======
+      <fieldset class="fieldset ai-style-change-1 block">
+        @for (field of fields(); track $index) {
+          @let key = $any(field.key);
+>>>>>>> 5a3f46b315d73011ccf29aefd518803b8801b084
           <label class="fieldset-label">{{ field.key }}</label>
           @switch (field.property.type) {
             @case ('boolean') {
@@ -30,12 +36,17 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
 
             @case ('select') {
 <<<<<<< HEAD
+<<<<<<< HEAD
               <select class="select" [formControlName]="field.key">
                 <!-- @for (option of field.property.options; track option) {
 =======
               <select class="select" [formControlName]="key">
                 <!-- @for (option of field.property.property.options; track option) {
 >>>>>>> main
+=======
+              <select class="select" [formControlName]="key">
+                <!-- @for (option of field.property.property.options; track option) {
+>>>>>>> 5a3f46b315d73011ccf29aefd518803b8801b084
                   <option [value]="option">{{ option }}</option>
                 } -->
               </select>
@@ -47,16 +58,18 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
 
             @default {
 <<<<<<< HEAD
+<<<<<<< HEAD
               <input [type]="field.property.type" class="input" [formControlName]="field.key" />
 =======
               <input [type]="field.property.type" class="input" [formControlName]="key" />
 >>>>>>> main
+=======
+              <input [type]="field.property.type" class="input" [formControlName]="key" />
+>>>>>>> 5a3f46b315d73011ccf29aefd518803b8801b084
             }
           }
-        </div>
-        <br />
-      }
-      <!-- </fieldset> -->
+        }
+      </fieldset>
     </form>
     @if (form().invalid && form().touched) {
       <h3>Form Errors:</h3>

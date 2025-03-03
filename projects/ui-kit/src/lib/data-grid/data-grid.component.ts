@@ -25,12 +25,15 @@ export class DataGridComponent<T extends EmptyObject = EmptyObject> {
 
   displayedColumns = computed(() => this.prepareDisplayedColumns());
 
+<<<<<<< HEAD
   environmentInjector = inject(EnvironmentInjector);
 
   doAction(row: T, action: ActionButton<T>) {
     runInInjectionContext(this.environmentInjector, () => action.action(row));
   }
 
+=======
+>>>>>>> 5a3f46b315d73011ccf29aefd518803b8801b084
   private prepareDisplayedColumns(): KeyProperty<T>[] {
     return entityUtils
       .getKeyProperties(this.entity())
