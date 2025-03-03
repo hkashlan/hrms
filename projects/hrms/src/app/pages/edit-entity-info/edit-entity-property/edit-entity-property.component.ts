@@ -2,14 +2,12 @@ import { Component, computed, ElementRef, input, Signal, viewChild } from '@angu
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   BaseBaseProperty,
-  BasePropertyZ,
   BaseValidateProperty,
   Property,
   SelectProperty,
 } from '@hrms-server/model/property.z';
-import { DynamicFormComponent, Entity } from 'ui-kit';
+import { DynamicFormComponent, Entity, KeyProperty } from 'ui-kit';
 import { z } from 'zod';
-import { KeyProperty } from '../edit-entity-info.component';
 
 @Component({
   selector: 'app-edit-entity-property',
@@ -18,7 +16,7 @@ import { KeyProperty } from '../edit-entity-info.component';
   styleUrl: './edit-entity-property.component.scss',
 })
 export class EditEntityPropertyComponent {
-  property = input.required<KeyProperty>();
+  property = input.required<KeyProperty<{}>>();
 
   dlg = viewChild<ElementRef>('editPropertyDlg');
 
@@ -26,11 +24,14 @@ export class EditEntityPropertyComponent {
     const labelProp: BaseValidateProperty = {
       type: 'text',
       label: 'Label',
+      validation: z.string().regex(/^[a-zA-Z0-9_]+$/),
     };
     const nameProp: BaseValidateProperty = {
       type: 'text',
       label: 'name',
+      validation: z.string().regex(/^[a-zA-Z0-9_]+$/),
     };
+
     const typeProp: SelectProperty = {
       type: 'select',
       label: 'type',
@@ -46,16 +47,16 @@ export class EditEntityPropertyComponent {
       name: this.property().key,
       label: this.property().property.label,
       schema: z.object({
-        label: z.string().regex(/^[a-zA-Z0-9_]+$/),
-        name: z.string(),
-        type: BasePropertyZ.shape.type,
+        name: nameProp.validation,
+        label: labelProp.validation,
+        type: z.string(),
       }),
       properties: {
-        type: typeProp,
+        type: typeProp as unknown as BaseValidateProperty,
         label: labelProp,
         name: nameProp,
       },
-    };
+    } as Entity<Partial<BaseBaseProperty>>;
   });
   propertyControl = new FormControl(null as Property | null);
 }

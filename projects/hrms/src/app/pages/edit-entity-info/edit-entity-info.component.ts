@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input, Signal } from '@angular/core';
-<<<<<<< HEAD
 
-=======
->>>>>>> 5a3f46b315d73011ccf29aefd518803b8801b084
 import { BaseProperty } from '@hrms-server/model/property.z';
 import { EmptyObject, entityUtils, KeyProperty } from 'ui-kit';
 import { EntityKeys } from '../../entities/indext';
