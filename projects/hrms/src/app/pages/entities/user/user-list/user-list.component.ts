@@ -1,10 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { User } from '@hrms-server/db/schamas';
-import { DataGridComponent, entityUrlResource } from 'ui-kit';
-import { ActionButton } from '../../../../../../../ui-kit/src/lib/data-grid/data-grid';
+import { Component } from '@angular/core';
+import { curdActions, DataGridComponent, entityUrlResource } from 'ui-kit';
 import { userInfo } from '../../../../entities/user.entity';
-import { HeroIcons } from '../../../../icon';
 import { trpc } from '../../../../trpc.client';
 
 @Component({
@@ -18,21 +14,5 @@ export class UserListComponent {
 
   users = entityUrlResource(trpc.entities.user.list.query);
 
-  actions: ActionButton<User>[] = [
-    {
-      icon: HeroIcons.pencil,
-      action: (row) =>
-        inject(Router).navigate(['../detail', row.id], { relativeTo: inject(ActivatedRoute) }),
-    },
-    {
-      icon: HeroIcons.trash,
-      action: (row) => {
-        console.log('Delete', row);
-      },
-    },
-  ];
-
-  constructor(public activatedRoute: ActivatedRoute) {
-    debugger;
-  }
+  actions = curdActions;
 }

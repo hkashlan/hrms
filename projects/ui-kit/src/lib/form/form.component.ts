@@ -1,4 +1,4 @@
-import { Component, computed, effect, forwardRef, input } from '@angular/core';
+import { Component, computed, effect, forwardRef, input, output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxDirective } from 'daisyui';
 import { Subscription } from 'rxjs';
@@ -63,6 +63,7 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   implements ControlValueAccessor
 {
   entity = input.required<Entity<T>>();
+  entityChanged = output<T | null>();
 
   form = computed(() => zodToAngularForm(this.entity().schema));
 
@@ -74,6 +75,7 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   constructor() {
     this.listenToFormChanges();
   }
+
   private listenToFormChanges() {
     effect(() => {
       if (this.formSubscription) {
@@ -82,8 +84,10 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
       this.formSubscription = this.form().valueChanges.subscribe((value) => {
         if (this.form().invalid) {
           this.onChange(null);
+          this.entityChanged.emit(null);
         } else {
           this.onChange(value);
+          this.entityChanged.emit(value);
         }
       });
     });

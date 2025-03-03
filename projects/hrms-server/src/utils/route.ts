@@ -36,11 +36,12 @@ export function curd<T, X extends zodAny, Y extends z.ZodTypeAny, Z extends zodA
         .returning();
       return deletedPost as T;
     }),
-    getById: t.procedure.input(z.object({ id: z.number() })).query(async ({ input, ctx }) => {
+    getById: t.procedure.input(z.number()).query(async ({ input, ctx }) => {
+      const id = input;
       const post = await ctx.db
         .select()
         .from(tableInfo.table)
-        .where(eq(tableInfo.table['id'], input.id))
+        .where(eq(tableInfo.table['id'], id))
         .limit(1);
       return post[0] as T;
     }),
