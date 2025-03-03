@@ -28,8 +28,8 @@ export function generateEntity<T>(config: {
   entity.schema = config.schema;
   Object.keys(config.schema.shape).forEach((key) => {
     entity.properties[key as keyof T] = {
-      validation: config.schema.shape[key as keyof T],
       ...entity.properties[key as keyof T],
+      validation: config.schema.shape[key as keyof T],
     };
   });
   return entity;
