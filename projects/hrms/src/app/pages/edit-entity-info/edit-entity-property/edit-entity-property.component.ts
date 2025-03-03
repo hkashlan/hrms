@@ -16,7 +16,7 @@ import { z } from 'zod';
   styleUrl: './edit-entity-property.component.scss',
 })
 export class EditEntityPropertyComponent {
-  property = input.required<KeyProperty<{}>>();
+  property = input.required<KeyProperty<any>>();
 
   dlg = viewChild<ElementRef>('editPropertyDlg');
 
