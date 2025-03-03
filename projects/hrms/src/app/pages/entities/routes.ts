@@ -8,6 +8,10 @@ export const entityRoutes: Routes = [
     component: UserListComponent,
   },
   {
+    path: 'user/detail',
+    component: UserDetailComponent,
+  },
+  {
     path: 'user/detail/:id',
     component: UserDetailComponent,
   },

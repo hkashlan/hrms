@@ -15,7 +15,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
           <label class="fieldset-label">{{ field.key }}</label>
           @switch (field.property.type) {
             @case ('boolean') {
-              <input duiCheckbox [formControlName]="key" />
+              <input type="checkbox" duiCheckbox [formControlName]="key" />
             }
 
             @case ('date') {
