@@ -28,7 +28,41 @@
         <div class="list-col-grow">
           <div class="text-xl">{{ keyProperty.property.label }}</div>
         </div>
-        <app-edit-entity-property class="btn btn-square btn-ghost" [property]="keyProperty" />
+        <div>
+          <button class="btn btn-ghost" (click)="upRow(keyProperty)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m9 9 6-6m0 0 6 6m-6-6v12a6 6 0 0 1-12 0v-3"
+              />
+            </svg>
+          </button>
+          <button class="btn btn-ghost" (click)="downRow(keyProperty)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m15 15-6 6m0 0-6-6m6 6V9a6 6 0 0 1 12 0v3"
+              />
+            </svg>
+          </button>
+          <app-edit-entity-property class="btn btn-square btn-ghost" [property]="keyProperty" />
+        </div>
       </li>
     }
     <li class="list-row">
