@@ -2,12 +2,12 @@ import * as fs from 'fs';
 import * as https from 'https';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { HeroIcons } from '../projects/hrms/src/app/icon';
+// import { HeroIcons } from '../projects/hrms/src/app/icon';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(path.dirname(__filename));
 // Paths
-const iconsTsPath = path.join(__dirname, 'projects/hrms/src/app/icon.ts');
+const iconsTsPath = path.join(__dirname, 'projects/ui-kit/src/model/icons.ts');
 const outputDir = path.join(__dirname, 'projects/hrms/public/icons');
 
 // Heroicons GitHub base URL
@@ -21,9 +21,8 @@ if (!fs.existsSync(outputDir)) {
 
 // Read icons.ts file
 const content = fs.readFileSync(iconsTsPath, 'utf-8');
-
 // Extract icon types (solid/outline) and names using RegEx
-const matches = [...content.matchAll(/"(icons\/(solid|outline)\/(.*?))"/g)];
+const matches = [...content.matchAll(/'(icons\/(solid|outline)\/(.*?))'/g)];
 
 // Define an interface for the extracted icons
 interface IconData {
@@ -32,7 +31,7 @@ interface IconData {
 }
 
 // Extract icon data
-const icons: IconData[] = Object.entries(HeroIcons)
+const icons: IconData[] = matches
   .map(([key, value]) => {
     const match = value.match(/icons\/(solid|outline)\/(.+)/);
     return match ? { type: match[1], name: match[2] } : null;
