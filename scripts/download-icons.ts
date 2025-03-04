@@ -23,7 +23,7 @@ if (!fs.existsSync(outputDir)) {
 const content = fs.readFileSync(iconsTsPath, 'utf-8');
 
 // Extract icon types (solid/outline) and names using RegEx
-const matches = [...content.matchAll(/"(assets\/icons\/(solid|outline)\/(.*?))"/g)];
+const matches = [...content.matchAll(/"(icons\/(solid|outline)\/(.*?))"/g)];
 
 // Define an interface for the extracted icons
 interface IconData {
@@ -34,7 +34,7 @@ interface IconData {
 // Extract icon data
 const icons: IconData[] = Object.entries(HeroIcons)
   .map(([key, value]) => {
-    const match = value.match(/assets\/icons\/(solid|outline)\/(.+)/);
+    const match = value.match(/icons\/(solid|outline)\/(.+)/);
     return match ? { type: match[1], name: match[2] } : null;
   })
   .filter(Boolean) as unknown as IconData[];
@@ -49,8 +49,8 @@ if (fs.existsSync(outputDir)) {
  */
 const downloadSvg = async (icon: IconData): Promise<void> => {
   const { type, name } = icon;
-  const url = `${HEROICONS_BASE_URL}/${type}/${name}.svg`;
-  const filePath = path.join(outputDir, type, `${name}.svg`);
+  const url = `${HEROICONS_BASE_URL}/${type}/${name}`;
+  const filePath = path.join(outputDir, type, `${name}`);
 
   // Ensure the directory exists for the icon type (solid/outline)
   if (!fs.existsSync(path.join(outputDir, type))) {
