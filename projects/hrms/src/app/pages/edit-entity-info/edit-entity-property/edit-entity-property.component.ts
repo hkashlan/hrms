@@ -37,7 +37,21 @@ export class EditEntityPropertyComponent {
       label: 'type',
       options: ['text', 'number', 'date', 'boolean', 'select', 'textarea', 'autocomplete'],
     };
-
+    const notNullProp: BaseValidateProperty = {
+      type: 'boolean',
+      label: 'required',
+      validation: z.boolean(),
+    };
+    const minProp: BaseValidateProperty = {
+      type: 'number',
+      label: 'min value',
+      validation: z.number(),
+    };
+    const maxProp: BaseValidateProperty = {
+      type: 'number',
+      label: 'min value',
+      validation: z.number(),
+    };
     // notNull
     // min
     // max
@@ -50,11 +64,17 @@ export class EditEntityPropertyComponent {
         name: nameProp.validation,
         label: labelProp.validation,
         type: z.string(),
+        notNull: notNullProp.validation,
+        min: minProp.validation,
+        max: maxProp.validation,
       }),
       properties: {
         type: typeProp as unknown as BaseValidateProperty,
         label: labelProp,
         name: nameProp,
+        notNull: notNullProp,
+        min: minProp,
+        max: maxProp,
       },
     } as Entity<Partial<BaseBaseProperty>>;
   });
