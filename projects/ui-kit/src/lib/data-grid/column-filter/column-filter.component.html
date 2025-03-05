@@ -1,8 +1,8 @@
 <!-- todo Omar: do input depneds on type -->
 <div>
-  <select class="select">
+  <select class="select" [formControl]="optionCtrl">
     @for (option of options(); track option) {
-      <option>{{ option }}</option>
+      <option [value]="option">{{ getFilterName(option) }}</option>
     }
   </select>
 </div>
@@ -16,7 +16,7 @@
       <input type="date" class="input" />
     }
     @case ('number') {
-      <input type="number" class="input" />
+      <input type="number" class="input" [formControl]="valueCtrl" />
     }
     @case ('primary') {
       <input type="number" class="input" />

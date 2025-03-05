@@ -15,7 +15,7 @@
         @for (column of displayedColumns(); track column) {
           <th class="relative">
             @if (!column.property.hooks?.list?.noFilter) {
-              <lib-column-filter [type]="column.property.type" />
+              <lib-column-filter [key]="column.key" [type]="column.property.type" />
             }
           </th>
         }

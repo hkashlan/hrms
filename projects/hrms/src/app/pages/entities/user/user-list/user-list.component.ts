@@ -21,10 +21,8 @@ export class UserListComponent {
   actions: ActionButton<User>[] = [
     {
       icon: HeroIcons.pencil,
-      action: (row) => {
-        const activatedRoute = inject(ActivatedRoute);
-        inject(Router).navigate(['./detail', row.id], { relativeTo: activatedRoute });
-      },
+      action: (row) =>
+        inject(Router).navigate(['../detail', row.id], { relativeTo: inject(ActivatedRoute) }),
     },
     {
       icon: HeroIcons.trash,
@@ -33,4 +31,8 @@ export class UserListComponent {
       },
     },
   ];
+
+  constructor(public activatedRoute: ActivatedRoute) {
+    debugger;
+  }
 }
