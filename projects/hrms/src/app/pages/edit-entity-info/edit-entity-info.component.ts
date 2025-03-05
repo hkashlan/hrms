@@ -31,6 +31,7 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
     const entityInfo = this.entityInfo();
     return entityUtils.getKeyProperties(entityInfo);
   });
+
   selectProp = linkedSignal<KeyProperty<T>[]>(() => this.properties());
   upRow(pkey: KeyProperty<any>) {
     let props = this.selectProp();
