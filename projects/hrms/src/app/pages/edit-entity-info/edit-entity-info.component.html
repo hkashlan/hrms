@@ -17,7 +17,7 @@
       <div class="text-xl">action</div>
     </li>
 
-    @for (keyProperty of properties(); track keyProperty) {
+    @for (keyProperty of properties(); track keyProperty; let index = $index) {
       <li class="list-row">
         <div class="text-xs btn w-25" [ngClass]="type2Color[keyProperty.property.type]">
           {{ keyProperty.property.type }}
@@ -29,7 +29,7 @@
           <div class="text-xl">{{ keyProperty.property.label }}</div>
         </div>
         <div>
-          <button class="btn btn-ghost" (click)="upRow(keyProperty)">
+          <button class="btn btn-ghost" (click)="upRow(index)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -45,7 +45,7 @@
               />
             </svg>
           </button>
-          <button class="btn btn-ghost" (click)="downRow(keyProperty)">
+          <button class="btn btn-ghost" (click)="downRow(index)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

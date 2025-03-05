@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input, linkedSignal, Signal } from '@angular/core';
 
 import { BaseProperty } from '@hrms-server/model/property.z';
-import { EmptyObject, entityUtils, KeyProperty } from 'ui-kit';
+import { EmptyObject, Entity, entityUtils, KeyProperty } from 'ui-kit';
 import { EntityKeys } from '../../entities/indext';
 import { EditEntityPropertyComponent } from './edit-entity-property/edit-entity-property.component';
 
@@ -33,28 +33,23 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
   });
 
   selectProp = linkedSignal<KeyProperty<T>[]>(() => this.properties());
-  upRow(pkey: KeyProperty<any>) {
-    let props = this.selectProp();
-    const index: number = props.findIndex((item) => item.key == pkey.key);
-
-    if (index != 0) {
-      const template = props[index];
-      props[index] = props[index - 1];
-      props[index - 1] = template;
-    } else {
-      props.shift();
-    }
+  upRow(index: number) {
+    const properties = this.properties();
+    const [property] = properties.splice(index, 1);
+    properties.splice(index - 1, 0, property);
+    this.updateEntityInfos(properties);
   }
-  downRow(pkey: KeyProperty<any>) {
-    let props = this.selectProp();
-    const index = props.findIndex((i: KeyProperty<any>) => i.key == pkey.key);
-    if (index != this.selectProp().length - 1) {
-      const template = props[index];
-      props[index] = props[index + 1];
-      props[index + 1] = template;
-      this.selectProp.set(props);
-    } else {
-      props.pop();
-    }
+
+  downRow(index: number) {
+    this.upRow(index + 1);
+  }
+
+  private updateEntityInfos(properties: KeyProperty<T>[]) {
+    const entityInfos = this.entityInfo();
+    entityInfos.properties = properties.reduce(
+      (acc, prop) => ({ ...acc, [prop.key]: prop.property }),
+      {} as Entity<T>['properties'],
+    );
+    this.entityInfo.set(entityInfos);
   }
 }
