@@ -1,6 +1,7 @@
 import { Signal } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
-export interface IDetailComponent<T> extends ControlValueAccessor {
+export interface IDetailComponent<T> {
   record: Signal<T>;
+  formControl: Signal<FormControl>;
 }

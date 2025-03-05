@@ -1,4 +1,4 @@
-import { NgComponentOutlet } from '@angular/common';
+import { JsonPipe, NgComponentOutlet } from '@angular/common';
 import { Component, computed, effect, forwardRef, input, output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxDirective } from 'daisyui';
@@ -10,6 +10,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
 @Component({
   selector: 'lib-dynamic-form',
   template: `
+    {{ form().value | json }}
     <form [formGroup]="form()">
       <fieldset class="fieldset">
         @for (field of fields(); track $index) {
@@ -18,7 +19,10 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
           @if (field.property.hooks?.details?.component; as component) {
             <ng-container
               [ngComponentOutlet]="ageComponent"
-              [ngComponentOutletInputs]="{ record: form().value, formControlName: key }"
+              [ngComponentOutletInputs]="{
+                record: form().value,
+                formControl: form().controls[key],
+              }"
             ></ng-container>
           } @else {
             @switch (field.property.type) {
@@ -66,7 +70,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
       multi: true,
     },
   ],
-  imports: [ReactiveFormsModule, CheckboxDirective, NgComponentOutlet],
+  imports: [ReactiveFormsModule, CheckboxDirective, NgComponentOutlet, JsonPipe],
 })
 export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   implements ControlValueAccessor
