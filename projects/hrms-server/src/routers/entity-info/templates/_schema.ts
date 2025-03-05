@@ -42,7 +42,7 @@ function schemaTemplate(schema: EntityWithValidation) {
     const notNull = propertyInfo.notNull && propertyInfo.type !== 'select' ? '.notNull()' : '';
     const suffix = propertyInfo.type === 'select' ? '()' : '';
     fields += `
-  ${property}: ${type2DBType[propertyInfo.type]}('${property}'${length}${selectOptions})${suffix}${notNull},`;
+  ${property}: ${type2DBType[propertyInfo.type as keyof typeof type2DBType]}('${property}'${length}${selectOptions})${suffix}${notNull},`;
   }
 
   const { plural, capitalized } = entityUtils(schema);
