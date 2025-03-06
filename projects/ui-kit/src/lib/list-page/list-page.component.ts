@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Entity } from '../../model/entity';
 import { HeroIcons } from '../../model/icons';
@@ -27,4 +27,10 @@ export class ListPageComponent<T> {
   data = entityUrlResource(this.fn);
 
   actions = curdActions;
+
+  constructor() {
+    effect(() => {
+      console.log(this.fn());
+    });
+  }
 }

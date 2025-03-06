@@ -18,7 +18,7 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
           <label class="fieldset-label">{{ field.key }}</label>
           @if (field.property.hooks?.details?.component; as component) {
             <ng-container
-              [ngComponentOutlet]="ageComponent"
+              [ngComponentOutlet]="component"
               [ngComponentOutletInputs]="{
                 record: form().value,
                 formControl: form().controls[key],

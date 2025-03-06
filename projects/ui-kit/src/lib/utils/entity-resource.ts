@@ -5,7 +5,9 @@ export function entityUrlResource<T>(fn: () => (x: any) => Promise<T[]>) {
   const query = urlQuery();
   return resource({
     request: () => ({ query: query() }),
-    loader: ({ request }) => fn()(request.query),
+    loader: ({ request }) => {
+      return fn()(request.query);
+    },
   });
 }
 
