@@ -20,6 +20,7 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
     textarea: 'btn-warning',
     date: 'btn-success',
     autocomplete: 'btn-success',
+    json: 'btn-danger',
   };
   entity = input.required<EntityKeys>();
 

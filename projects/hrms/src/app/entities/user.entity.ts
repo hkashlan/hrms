@@ -1,5 +1,6 @@
 import { fullUserSchema, User } from '@hrms-server/db/schamas/users.schema';
 import { Entity, generateEntity } from 'ui-kit';
+import { AgeComponent } from '../pages/entities/user/detail/age/age.component';
 
 export const userInfo: Entity<User> = generateEntity<User>({
   schema: fullUserSchema,
@@ -14,6 +15,11 @@ export const userInfo: Entity<User> = generateEntity<User>({
       age: {
         type: 'number',
         label: 'Age',
+        hooks: {
+          details: {
+            component: AgeComponent,
+          },
+        },
       },
       username: {
         type: 'text',

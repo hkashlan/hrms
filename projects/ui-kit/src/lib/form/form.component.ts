@@ -1,41 +1,54 @@
-import { Component, computed, effect, forwardRef, input } from '@angular/core';
+import { JsonPipe, NgComponentOutlet } from '@angular/common';
+import { Component, computed, effect, forwardRef, input, output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxDirective } from 'daisyui';
 import { Subscription } from 'rxjs';
 import { EmptyObject, Entity, entityUtils } from 'ui-kit';
+import { AgeComponent } from '../../../../hrms/src/app/pages/entities/user/detail/age/age.component';
 import { zodToAngularForm } from '../../shared/zo-to-form';
 
 @Component({
   selector: 'lib-dynamic-form',
   template: `
+    {{ form().value | json }}
     <form [formGroup]="form()">
       <fieldset class="fieldset">
         @for (field of fields(); track $index) {
           @let key = $any(field.key);
           <label class="fieldset-label">{{ field.key }}</label>
-          @switch (field.property.type) {
-            @case ('boolean') {
-              <input duiCheckbox [formControlName]="key" />
-            }
+          @if (field.property.hooks?.details?.component; as component) {
+            <ng-container
+              [ngComponentOutlet]="ageComponent"
+              [ngComponentOutletInputs]="{
+                record: form().value,
+                formControl: form().controls[key],
+              }"
+            ></ng-container>
+          } @else {
+            @switch (field.property.type) {
+              @case ('boolean') {
+                <input type="checkbox" duiCheckbox [formControlName]="key" />
+              }
 
-            @case ('date') {
-              <input type="date" class="input" [formControlName]="key" />
-            }
+              @case ('date') {
+                <input type="date" class="input" [formControlName]="key" />
+              }
 
-            @case ('select') {
-              <select class="select" [formControlName]="key">
-                <!-- @for (option of field.property.property.options; track option) {
-                  <option [value]="option">{{ option }}</option>
-                } -->
-              </select>
-            }
+              @case ('select') {
+                <select class="select" [formControlName]="key">
+                  <!-- @for (option of field.property.property.options; track option) {
+                    <option [value]="option">{{ option }}</option>
+                  } -->
+                </select>
+              }
 
-            @case ('number') {
-              <input type="number" class="input" [formControlName]="key" />
-            }
+              @case ('number') {
+                <input type="number" class="input" [formControlName]="key" />
+              }
 
-            @default {
-              <input [type]="field.property.type" class="input" [formControlName]="key" />
+              @default {
+                <input [type]="field.property.type" class="input" [formControlName]="key" />
+              }
             }
           }
         }
@@ -57,16 +70,24 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
       multi: true,
     },
   ],
-  imports: [ReactiveFormsModule, CheckboxDirective],
+  imports: [ReactiveFormsModule, CheckboxDirective, NgComponentOutlet, JsonPipe],
 })
 export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   implements ControlValueAccessor
 {
+  ageComponent = AgeComponent;
   entity = input.required<Entity<T>>();
+  entityChanged = output<T | null>();
 
-  form = computed(() => zodToAngularForm(this.entity().schema));
+  form = computed(() => {
+    const tt = zodToAngularForm(this.entity().schema);
+    return tt;
+  });
 
-  fields = computed(() => this.prepareFields());
+  fields = computed(() => {
+    const tt = this.prepareFields();
+    return tt;
+  });
   formSubscription: Subscription | null = null;
 
   onChange = (value: T | null) => {};
@@ -74,6 +95,7 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   constructor() {
     this.listenToFormChanges();
   }
+
   private listenToFormChanges() {
     effect(() => {
       if (this.formSubscription) {
@@ -82,8 +104,10 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
       this.formSubscription = this.form().valueChanges.subscribe((value) => {
         if (this.form().invalid) {
           this.onChange(null);
+          this.entityChanged.emit(null);
         } else {
           this.onChange(value);
+          this.entityChanged.emit(value);
         }
       });
     });

@@ -29,7 +29,7 @@ export class ButtonDirective implements OnInit {
       classes.push('btn-outline');
     }
     if (this.responsive) {
-      classes.push('btn-xs', 'sm:btn-sm', 'md:btn-md', 'lg:btn-lg', 'xl:btn-xl');
+      classes.push('btn-xs', 'sm:btn-sm', 'md:btn-md');
     }
 
     if (this.ghost) {

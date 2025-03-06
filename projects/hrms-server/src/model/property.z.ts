@@ -1,3 +1,4 @@
+import { Type } from '@angular/core';
 import { z, ZodType } from 'zod';
 
 export const PropertyInputTypeZ = z.enum(['number', 'text']);
@@ -10,6 +11,7 @@ export const PropertyTypeZ = z.enum([
   'date',
   'select',
   'boolean',
+  'json',
 ]);
 export type PropertyType = z.infer<typeof PropertyTypeZ>;
 
@@ -21,12 +23,14 @@ export const BasePropertyZ = z.object({
       details: z
         .object({
           hidden: z.boolean().optional(),
+          component: z.custom<Type<any>>().optional(),
         })
         .optional(),
       list: z
         .object({
           hidden: z.boolean().optional(),
           noFilter: z.boolean().optional(),
+          component: z.string().optional(),
         })
         .optional(),
     })
@@ -35,7 +39,7 @@ export const BasePropertyZ = z.object({
 export type BaseProperty = z.infer<typeof BasePropertyZ>;
 
 export const BaseBasePropertyZ = BasePropertyZ.extend({
-  type: z.enum(['primary', 'textarea', 'date']).or(PropertyInputTypeZ),
+  type: z.enum(['primary', 'textarea', 'date', 'json']).or(PropertyInputTypeZ),
 });
 export type BaseBaseProperty = z.infer<typeof BaseBasePropertyZ>;
 
