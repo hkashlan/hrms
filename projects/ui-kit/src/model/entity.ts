@@ -5,7 +5,7 @@ import { ZodObject, ZodTypeAny } from 'zod';
 export interface Entity<T = any> {
   name: string;
   label: string;
-  schema: ZodObject<ZodRawShape1<T>>;
+  schema?: ZodObject<ZodRawShape1<T>>;
   properties: {
     [K in keyof T]: BaseValidateProperty;
   };
