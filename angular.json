@@ -29,7 +29,9 @@
                 "input": "projects/hrms/public"
               }
             ],
-            "styles": ["projects/hrms/src/styles.scss"],
+            "styles": [
+              "projects/hrms/src/styles.scss"
+            ],
             "scripts": [],
             "server": "projects/hrms/src/main.server.ts",
             "outputMode": "server",
@@ -37,7 +39,9 @@
               "entry": "projects/hrms/src/server.ts"
             },
             "stylePreprocessorOptions": {
-              "includePaths": ["projects/hrms/src/styles"]
+              "includePaths": [
+                "projects/hrms/src/styles"
+              ]
             }
           },
           "configurations": {
@@ -91,14 +95,19 @@
                 "input": "projects/hrms/public"
               }
             ],
-            "styles": ["projects/hrms/src/styles.scss"],
+            "styles": [
+              "projects/hrms/src/styles.scss"
+            ],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/hrms/**/*.ts", "projects/hrms/**/*.html"],
+            "lintFilePatterns": [
+              "projects/hrms/**/*.ts",
+              "projects/hrms/**/*.html"
+            ],
             "eslintConfig": "projects/hrms/eslint.config.js"
           }
         }
@@ -129,14 +138,61 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/ui-kit/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/ui-kit/**/*.ts", "projects/ui-kit/**/*.html"],
+            "lintFilePatterns": [
+              "projects/ui-kit/**/*.ts",
+              "projects/ui-kit/**/*.html"
+            ],
             "eslintConfig": "projects/ui-kit/eslint.config.mjs"
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "styles": [
+              "projects/hrms/src/styles.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/hrms/src/styles"
+              ]
+            },
+
+            "configDir": "projects/ui-kit/.storybook",
+            "browserTarget": "ui-kit:build",
+            "compodoc": true,
+            "compodocArgs": [
+              "-e",
+              "json",
+              "-d",
+              "projects/ui-kit"
+            ],
+            "experimentalZoneless": true,
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": "projects/ui-kit/.storybook",
+            "browserTarget": "ui-kit:build",
+            "compodoc": true,
+            "compodocArgs": [
+              "-e",
+              "json",
+              "-d",
+              "projects/ui-kit"
+            ],
+            "experimentalZoneless": true,
+            "outputDir": "dist/storybook/ui-kit"
           }
         }
       }
@@ -166,13 +222,19 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/daisyui/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/daisyui/**/*.ts", "projects/daisyui/**/*.html"],
+            "lintFilePatterns": [
+              "projects/daisyui/**/*.ts",
+              "projects/daisyui/**/*.html"
+            ],
             "eslintConfig": "projects/daisyui/eslint.config.mjs"
           }
         }
@@ -180,7 +242,9 @@
     }
   },
   "cli": {
-    "schematicCollections": ["@angular-eslint/schematics"],
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
     "analytics": false,
     "cache": {
       "enabled": false

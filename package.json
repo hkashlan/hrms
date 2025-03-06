@@ -18,7 +18,9 @@
     "drizzle-generate": "npx drizzle-kit generate",
     "drizzle-revert": "npx drizzle-kit drop",
     "download-icons": "tsx scripts/download-icons.ts",
-    "generate-code": "node --loader ts-node/esm scripts/generate-code.ts"
+    "generate-code": "node --loader ts-node/esm scripts/generate-code.ts",
+    "storybook": "ng run  ui-kit:storybook",
+    "storybook:build": "ng run ui-kit:build-storybook"
   },
   "private": true,
   "dependencies": {
@@ -52,6 +54,15 @@
     "@angular/build": "^19.2.0",
     "@angular/cli": "^19.2.0",
     "@angular/compiler-cli": "^19.2.0",
+    "@chromatic-com/storybook": "^3.2.5",
+    "@compodoc/compodoc": "^1.1.26",
+    "@storybook/addon-docs": "^8.6.4",
+    "@storybook/addon-essentials": "^8.6.4",
+    "@storybook/addon-interactions": "^8.6.4",
+    "@storybook/addon-onboarding": "^8.6.4",
+    "@storybook/angular": "^8.6.4",
+    "@storybook/blocks": "^8.6.4",
+    "@storybook/test": "^8.6.4",
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.0",
     "@types/jasmine": "~5.1.7",
@@ -65,6 +76,7 @@
     "eslint": "^9.21.0",
     "eslint-config-prettier": "^10.0.2",
     "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-storybook": "^0.11.4",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
@@ -74,9 +86,15 @@
     "ng-packagr": "^19.2.0",
     "prettier": "^3.5.3",
     "prettier-eslint": "^16.3.0",
+    "storybook": "^8.6.4",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
     "typescript": "~5.7.3",
     "typescript-eslint": "8.25.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
   }
 }
