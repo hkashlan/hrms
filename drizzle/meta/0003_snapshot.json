@@ -1,5 +1,5 @@
 {
-  "id": "48b3e4e4-f81e-4aa8-a631-a28c937bb943",
+  "id": "9fca16d7-a557-4d47-8313-994d4e2953c2",
   "prevId": "1cad3945-a340-45a8-9428-793434bf2e9d",
   "version": "7",
   "dialect": "postgresql",
@@ -25,6 +25,18 @@
             "cycle": false
           }
         },
+        "author_id": {
+          "name": "author_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "author_name": {
+          "name": "author_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "content": {
           "name": "content",
           "type": "varchar",
@@ -33,7 +45,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "blogs_author_id_users_id_fk": {
+          "name": "blogs_author_id_users_id_fk",
+          "tableFrom": "blogs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

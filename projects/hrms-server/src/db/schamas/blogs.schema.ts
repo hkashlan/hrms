@@ -1,13 +1,15 @@
 import { InferSelectModel } from 'drizzle-orm';
-import { boolean, date, integer, pgEnum, pgTable, text, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { DrizzleTableInfo } from '../../utils/drizzle-table-info';
 import { filterSchema } from '../createFilterSchema';
+import { users } from './users.schema';
 
 export const blogs = pgTable('blogs', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-
+  authorId: integer('author_id').references(() => users.id),
+  authorName: varchar('author_name'),
   content: varchar('content'),
 });
 export const insertBlogSchema = createInsertSchema(blogs);

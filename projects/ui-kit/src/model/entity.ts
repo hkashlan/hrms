@@ -20,8 +20,8 @@ export type ZodRawShape1<T> = {
   [K in keyof T]: ZodTypeAny;
 };
 
-export function generateEntity<T>(config: {
-  entity: EntityWithValidation;
+export function generateEntity<T extends Record<string, any>>(config: {
+  entity: EntityWithValidation<T>;
   schema: ZodObject<ZodRawShape1<T>>;
 }): Entity<T> {
   const entity: Entity<T> = config.entity as unknown as Entity<T>;
