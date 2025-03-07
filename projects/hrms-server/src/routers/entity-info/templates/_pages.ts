@@ -17,23 +17,23 @@ function listTemplate(schema: EntityWithValidation) {
 
   return `
 import { Component } from '@angular/core';
-import { DataGridComponent, entityUrlResource } from 'ui-kit';
+import { ListPageComponent } from 'ui-kit';
 import { ${schema.name}Info } from '../../../../entities/${schema.name}.entity';
 import { trpc } from '../../../../trpc.client';
 
 @Component({
-  imports: [DataGridComponent],
+  imports: [ListPageComponent],
   template: \`
-    <lib-data-grid [entity]="${schema.name}Info" [data]="${plural}.value() ?? []" />
+    <lib-list-page [entity]="${schema.name}Info" [fn]="fn" />
   \`,
 })
 export class ${capitalized}ListComponent {
   ${schema.name}Info = ${schema.name}Info;
-
-  ${plural} = entityUrlResource(trpc.entities.${schema.name}.list.query);
+  fn = trpc.entities.${schema.name}.list.query;
 }
   `;
 }
+
 function detailTemplate(schema: EntityWithValidation) {
   const { capitalized } = entityUtils(schema);
 
