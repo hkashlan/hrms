@@ -11,5 +11,5 @@ import { trpc } from '../../../../trpc.client';
 })
 export class UserListComponent {
   userInfo = userInfo;
-  fn = trpc.entities.user.list.query;
+  fn = trpc.entities.users.list.query;
 }

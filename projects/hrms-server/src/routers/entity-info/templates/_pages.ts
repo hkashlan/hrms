@@ -54,9 +54,9 @@ export class ${capitalized}DetailComponent {
   id = input(undefined, { transform: numberAttribute });
   config: DetailPageConfig<${capitalized}> = {
     entity: ${schema.name}Info,
-    update: trpc.entities.${schema.name}.update.mutate,
-    create: trpc.entities.${schema.name}.create.mutate,
-    getById: trpc.entities.${schema.name}.getById.query,
+    update: trpc.entities.${schema.name}s.update.mutate,
+    create: trpc.entities.${schema.name}s.create.mutate,
+    getById: trpc.entities.${schema.name}s.getById.query,
   };
 }
 
@@ -73,15 +73,15 @@ import { ${capitalized}ListComponent } from './${schema.name}/${schema.name}-lis
   `;
   const routerEntry = `
     {
-      path: '${schema.name}/list',
+      path: '${schema.name}s/list',
       component: ${capitalized}ListComponent,
     },
     {
-      path: '${schema.name}/detail',
+      path: '${schema.name}s/detail',
       component: ${capitalized}DetailComponent,
     },
     {
-      path: '${schema.name}/detail/:id',
+      path: '${schema.name}s/detail/:id',
       component: ${capitalized}DetailComponent,
     },
   `;

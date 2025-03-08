@@ -7,28 +7,28 @@ import { UserListComponent } from './user/user-list/user-list.component';
 
 export const entityRoutes: Routes = [
   {
-    path: 'user/list',
+    path: 'users/list',
     component: UserListComponent,
   },
   {
-    path: 'user/detail',
+    path: 'users/detail',
     component: UserDetailComponent,
   },
   {
-    path: 'user/detail/:id',
+    path: 'users/detail/:id',
     component: UserDetailComponent,
   },
 
   {
-    path: 'blog/list',
+    path: 'blogs/list',
     component: BlogListComponent,
   },
   {
-    path: 'blog/detail',
+    path: 'blogs/detail',
     component: BlogDetailComponent,
   },
   {
-    path: 'blog/detail/:id',
+    path: 'blogs/detail/:id',
     component: BlogDetailComponent,
   },
 ];

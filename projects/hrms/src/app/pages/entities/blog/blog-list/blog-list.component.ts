@@ -11,5 +11,5 @@ import { trpc } from '../../../../trpc.client';
 })
 export class BlogListComponent {
   blogInfo = blogInfo;
-  fn = trpc.entities.blog.list.query;
+  fn = trpc.entities.blogs.list.query;
 }

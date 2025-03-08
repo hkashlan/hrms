@@ -22,7 +22,7 @@ export const ${schema.name}Router = t.router(curd(${schema.name}TableInfo));
 async function updateTrpcRouter(routerName: string) {
   const trpcRouterPath = 'projects/hrms-server/src/routers/entities/index.ts';
   const importStatement = `import { ${routerName}Router } from './${routerName}.router';\n`;
-  const routerEntry = `  ${routerName}: ${routerName}Router,\n`;
+  const routerEntry = `  ${routerName}s: ${routerName}Router,\n`;
 
   await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '});');
 }

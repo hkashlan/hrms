@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { sign } from 'jsonwebtoken';
 import { z } from 'zod';
-import { users } from './db/schamas/users.schema';
+import { users } from './db/schemas/users.schema';
 import { procedure, router } from './trpc';
 
 const generateToken = (userId: number) => {
@@ -67,16 +67,16 @@ export const authRouter = router({
       const users1 = await ctx.db.select().from(users).where(eq(users.email, input.email));
       // const users = await ctx.db.select().from(usersTable);
 
-      const user = users1?.[0];
+      const userRecord = users1?.[0];
 
-      if (!user || !(await bcrypt.compare(input.password, user.passwordHash))) {
+      if (!userRecord || !(await bcrypt.compare(input.password, userRecord.passwordHash))) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Invalid email or password',
         });
       }
 
-      const token = generateToken(user.id);
+      const token = generateToken(userRecord.id);
 
       return { token };
     }),

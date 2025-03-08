@@ -14,7 +14,7 @@ const type2DBType = {
 
 export async function schema(schema: EntityWithValidation) {
   const content = schemaTemplate(schema);
-  const filePath = `projects/hrms-server/src/db/schamas/${schema.name}s.schema.ts`;
+  const filePath = `projects/hrms-server/src/db/schemas/${schema.name}s.schema.ts`;
   await writeFile(filePath, content);
   await updateIndexTs(schema);
 }
@@ -88,7 +88,7 @@ export const ${schema.name}TableInfo: DrizzleTableInfo<
 
 async function updateIndexTs(schema: EntityWithValidation) {
   const { plural } = entityUtils(schema);
-  const trpcRouterPath = 'projects/hrms-server/src/db/schamas/index.ts';
+  const trpcRouterPath = 'projects/hrms-server/src/db/schemas/index.ts';
   const importStatement = `export * from './${plural}.schema';\n`;
   const routerEntry = ``;
   await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '');

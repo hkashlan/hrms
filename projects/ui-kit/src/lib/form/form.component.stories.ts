@@ -1,6 +1,6 @@
 import { Component, forwardRef, input } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { User } from '@hrms-server/db/schamas';
+import { User } from '@hrms-server/db/schemas';
 import { IDetailComponent } from '@hrms-server/model/icomponent';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { moduleMetadata } from '@storybook/angular';

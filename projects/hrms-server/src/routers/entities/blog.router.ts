@@ -1,4 +1,4 @@
-import { blogTableInfo } from '../../db/schamas/blogs.schema';
+import { blogTableInfo } from '../../db/schemas/blogs.schema';
 import { t } from '../../trpc';
 import { curd } from '../../utils/route';
 

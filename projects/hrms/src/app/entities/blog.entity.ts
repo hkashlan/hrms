@@ -1,10 +1,10 @@
-import { Blog, fullBlogSchema } from '@hrms-server/db/schamas/blogs.schema';
+import { Blog, fullBlogSchema } from '@hrms-server/db/schemas/blogs.schema';
 import { Entity, generateEntity } from 'ui-kit';
 
 export const blogInfo: Entity<Blog> = generateEntity<Blog>({
   schema: fullBlogSchema,
   entity: {
-    name: 'blog',
+    name: 'blogs',
     label: 'blog description',
     properties: {
       id: {
@@ -23,15 +23,19 @@ export const blogInfo: Entity<Blog> = generateEntity<Blog>({
       authorName: {
         type: 'text',
         label: 'author name',
-      },
-      authorId: {
-        type: 'number',
-        label: 'author id',
         hooks: {
           list: {
-            noFilter: true,
+            hidden: true,
+          },
+          details: {
+            hidden: true,
           },
         },
+      },
+      authorId: {
+        type: 'autocomplete',
+        label: 'author id',
+        entity: 'blogs',
       },
     },
   },

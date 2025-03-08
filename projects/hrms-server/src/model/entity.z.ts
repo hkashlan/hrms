@@ -1,8 +1,13 @@
 import { z } from 'zod';
+import * as schemas from '../db/schemas';
 import { PropertyWithValidation, PropertyWithValidationZ, PropertyZ } from './property.z'; // You'll need to create this as well
 
+// Get the keys of the schemas
+type SchemaKey = keyof typeof schemas;
+const schemaKeys = Object.keys(schemas) as SchemaKey[];
+
 export const EntityWithoutValidationZ = z.object({
-  name: z.string(),
+  name: z.literal<SchemaKey>(schemaKeys[0]),
   label: z.string(),
   properties: z.record(PropertyZ),
 });
