@@ -12,47 +12,47 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
   template: `
     {{ form().value | json }}
     <form [formGroup]="form()">
-      <fieldset class="fieldset">
-        @for (field of fields(); track $index) {
-          @let key = $any(field.key);
-          <label class="fieldset-label">{{ field.key }}</label>
-          @if (field.property.hooks?.details?.component; as component) {
-            <ng-container
-              [ngComponentOutlet]="component"
-              [ngComponentOutletInputs]="{
-                record: form().value,
-                formControl: form().controls[key],
-              }"
-            ></ng-container>
-          } @else {
-            @switch (field.property.type) {
-              @case ('boolean') {
-                <input type="checkbox" duiCheckbox [formControlName]="key" />
-              }
+      <!-- <fieldset class="fieldset"> -->
+      @for (field of fields(); track $index) {
+        @let key = $any(field.key);
+        <label class="fieldset-label">{{ field.key }}</label>
+        @if (field.property.hooks?.details?.component; as component) {
+          <ng-container
+            [ngComponentOutlet]="component"
+            [ngComponentOutletInputs]="{
+              record: form().value,
+              formControl: form().controls[key],
+            }"
+          ></ng-container>
+        } @else {
+          @switch (field.property.type) {
+            @case ('boolean') {
+              <input type="checkbox" duiCheckbox [formControlName]="key" />
+            }
 
-              @case ('date') {
-                <input type="date" class="input" [formControlName]="key" />
-              }
+            @case ('date') {
+              <input type="date" class="input" [formControlName]="key" />
+            }
 
-              @case ('select') {
-                <select class="select" [formControlName]="key">
-                  <!-- @for (option of field.property.property.options; track option) {
+            @case ('select') {
+              <select class="select" [formControlName]="key">
+                <!-- @for (option of field.property.property.options; track option) {
                     <option [value]="option">{{ option }}</option>
                   } -->
-                </select>
-              }
+              </select>
+            }
 
-              @case ('number') {
-                <input type="number" class="input" [formControlName]="key" />
-              }
+            @case ('number') {
+              <input type="number" class="input" [formControlName]="key" />
+            }
 
-              @default {
-                <input [type]="field.property.type" class="input" [formControlName]="key" />
-              }
+            @default {
+              <input [type]="field.property.type" class="input" [formControlName]="key" />
             }
           }
         }
-      </fieldset>
+      }
+      <!-- </fieldset> -->
     </form>
     @if (form().invalid && form().touched) {
       <h3>Form Errors:</h3>
