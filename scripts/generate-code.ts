@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Directory where your Zod schemas are located
-const SCHEMA_DIRECTORY = path.join(__dirname, '../projects/hrms-server/src/db/schamas');
+const SCHEMA_DIRECTORY = path.join(__dirname, '../projects/hrms-server/src/db/schemas');
 
 async function loadSchemas(directory: string) {
   const files = fs.readdirSync(directory);
