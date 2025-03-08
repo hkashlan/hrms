@@ -1,6 +1,7 @@
 import { JsonPipe, NgComponentOutlet } from '@angular/common';
 import { Component, computed, effect, forwardRef, input, output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { BaseValidateProperty, SelectProperty } from '@hrms-server/model/property.z';
 import { CheckboxDirective } from 'daisyui';
 import { Subscription } from 'rxjs';
 import { EmptyObject, Entity, entityUtils } from 'ui-kit';
@@ -36,9 +37,9 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
 
             @case ('select') {
               <select class="select" [formControlName]="key">
-                <!-- @for (option of field.property.property.options; track option) {
-                    <option [value]="option">{{ option }}</option>
-                  } -->
+                @for (option of asSelectProperty(field.property).options; track option) {
+                  <option [value]="option">{{ option }}</option>
+                }
               </select>
             }
 
@@ -91,6 +92,10 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   formSubscription: Subscription | null = null;
 
   onChange = (value: T | null) => {};
+
+  asSelectProperty(prop: BaseValidateProperty): SelectProperty {
+    return prop as unknown as SelectProperty;
+  }
 
   constructor() {
     this.listenToFormChanges();
