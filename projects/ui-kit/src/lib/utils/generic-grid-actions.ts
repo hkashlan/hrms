@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeroIcons } from '../../model/icons';
-import { ActionButton } from '../data-grid/data-grid';
+import { ActionButton } from '../components/data-grid/data-grid';
 
 export const curdActions: ActionButton<any>[] = [
   {

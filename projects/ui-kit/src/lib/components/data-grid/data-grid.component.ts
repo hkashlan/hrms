@@ -1,7 +1,7 @@
 import { Component, computed, inject, Injector, input, runInInjectionContext } from '@angular/core';
 import { ButtonDirective } from 'daisyui';
 import { EmptyObject, entityUtils, KeyProperty } from 'ui-kit';
-import { Entity } from '../../model/entity';
+import { Entity } from '../../../model/entity';
 import { ColumnFilterComponent } from './column-filter/column-filter.component';
 import { ActionButton } from './data-grid';
 

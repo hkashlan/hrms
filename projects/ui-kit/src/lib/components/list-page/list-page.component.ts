@@ -1,10 +1,10 @@
 import { Component, effect, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Entity } from '../../model/entity';
-import { HeroIcons } from '../../model/icons';
+import { Entity } from '../../../model/entity';
+import { HeroIcons } from '../../../model/icons';
+import { entityUrlResource } from '../../utils/entity-resource';
+import { curdActions } from '../../utils/generic-grid-actions';
 import { DataGridComponent } from '../data-grid/data-grid.component';
-import { entityUrlResource } from '../utils/entity-resource';
-import { curdActions } from '../utils/generic-grid-actions';
 
 @Component({
   selector: 'lib-list-page',

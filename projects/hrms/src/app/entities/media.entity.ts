@@ -27,6 +27,11 @@ export const mediaInfo: Entity<Media> = generateEntity<Media>({
         type: 'number',
         label: 'folder name',
       },
+      folderId: {
+        type: 'autocomplete',
+        label: 'parent folder',
+        entity: 'folders',
+      },
     },
   },
 });

@@ -1,4 +1,4 @@
-import { Entity } from '../../model/entity';
+import { Entity } from '../../../model/entity';
 
 export interface DetailPageConfig<T> {
   entity: Entity<T>;

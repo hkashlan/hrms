@@ -4,8 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@a
 import { CheckboxDirective } from 'daisyui';
 import { Subscription } from 'rxjs';
 import { EmptyObject, Entity, entityUtils } from 'ui-kit';
-import { AgeComponent } from '../../../../hrms/src/app/pages/entities/user/detail/age/age.component';
-import { zodToAngularForm } from '../../shared/zo-to-form';
+import { zodToAngularForm } from '../../../shared/zo-to-form';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 
 @Component({
@@ -86,7 +85,6 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   implements ControlValueAccessor
 {
-  ageComponent = AgeComponent;
   entity = input.required<Entity<T>>();
   entityChanged = output<T | null>();
 
