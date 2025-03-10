@@ -1,3 +1,6 @@
+import { FolderDetailComponent } from './folder/folder-detail/folder-detail.component';
+import { FolderListComponent } from './folder/folder-list/folder-list.component';
+
 import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 
@@ -30,5 +33,18 @@ export const entityRoutes: Routes = [
   {
     path: 'blogs/detail/:id',
     component: BlogDetailComponent,
+  },
+
+  {
+    path: 'folders/list',
+    component: FolderListComponent,
+  },
+  {
+    path: 'folders/detail',
+    component: FolderDetailComponent,
+  },
+  {
+    path: 'folders/detail/:id',
+    component: FolderDetailComponent,
   },
 ];

@@ -48,7 +48,7 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
               }
 
               @case ('autocomplete') {
-                <app-autocomplete></app-autocomplete>
+                <!-- <app-autocomplete></app-autocomplete> -->
               }
 
               @default {
