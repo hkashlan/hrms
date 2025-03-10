@@ -1,3 +1,4 @@
+import { mediaRouter } from './media.router';
 import { folderRouter } from './folder.router';
 import { router } from '../../trpc';
 import { blogRouter } from './blog.router';
@@ -7,4 +8,5 @@ export const entitiesRouter = router({
   users: userRouter,
   blogs: blogRouter,
   folders: folderRouter,
+  medias: mediaRouter,
 });

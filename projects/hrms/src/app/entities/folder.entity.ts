@@ -1,11 +1,11 @@
-import { fullFolderSchema, Folder } from '@hrms-server/db/schemas/folders.schema';
+import { Folder, fullFolderSchema } from '@hrms-server/db/schemas/folders.schema';
 import { Entity, generateEntity } from 'ui-kit';
 
 export const folderInfo: Entity<Folder> = generateEntity<Folder>({
   schema: fullFolderSchema,
   entity: {
     name: 'folders',
-    label: 'blog description',
+    label: 'folders',
     properties: {
       id: {
         type: 'primary',
@@ -14,6 +14,11 @@ export const folderInfo: Entity<Folder> = generateEntity<Folder>({
       name: {
         type: 'text',
         label: 'folder name',
+      },
+      parentId: {
+        type: 'autocomplete',
+        label: 'parent folder',
+        entity: 'folders',
       },
     },
   },

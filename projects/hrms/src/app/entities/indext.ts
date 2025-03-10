@@ -1,3 +1,4 @@
+import { mediaInfo } from './media.entity';
 import { folderInfo } from './folder.entity';
 import { Entity } from 'ui-kit';
 import { trpc } from '../trpc.client';
@@ -10,4 +11,5 @@ export const entityInfos: Record<EntityKeys, Entity<any>> = {
   users: userInfo,
   blogs: blogInfo,
   folders: folderInfo,
+  medias: mediaInfo,
 };

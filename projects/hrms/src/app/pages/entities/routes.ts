@@ -1,3 +1,6 @@
+import { MediaDetailComponent } from './media/media-detail/media-detail.component';
+import { MediaListComponent } from './media/media-list/media-list.component';
+
 import { FolderDetailComponent } from './folder/folder-detail/folder-detail.component';
 import { FolderListComponent } from './folder/folder-list/folder-list.component';
 
@@ -46,5 +49,18 @@ export const entityRoutes: Routes = [
   {
     path: 'folders/detail/:id',
     component: FolderDetailComponent,
+  },
+
+  {
+    path: 'medias/list',
+    component: MediaListComponent,
+  },
+  {
+    path: 'medias/detail',
+    component: MediaDetailComponent,
+  },
+  {
+    path: 'medias/detail/:id',
+    component: MediaDetailComponent,
   },
 ];
