@@ -1,0 +1,2 @@
+ALTER TABLE "folders" ADD COLUMN "parentId" integer;--> statement-breakpoint
+ALTER TABLE "folders" ADD CONSTRAINT "parent_fk" FOREIGN KEY ("parentId") REFERENCES "public"."folders"("id") ON DELETE cascade ON UPDATE cascade;

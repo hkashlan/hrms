@@ -1,14 +1,28 @@
 import { InferSelectModel } from 'drizzle-orm';
-import { integer, pgTable, varchar } from 'drizzle-orm/pg-core';
+import { foreignKey, integer, pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { DrizzleTableInfo } from '../../utils/drizzle-table-info';
 import { filterSchema } from '../createFilterSchema';
 
-export const folders = pgTable('folders', {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar('name'),
-});
+export const folders = pgTable(
+  'folders',
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    name: varchar('name'),
+    parentId: integer(),
+  },
+  (table) => [
+    foreignKey({
+      name: 'parent_fk',
+      columns: [table.parentId],
+      foreignColumns: [table.id],
+    })
+      .onDelete('cascade')
+      .onUpdate('cascade'),
+  ],
+);
+
 export const insertFolderSchema = createInsertSchema(folders);
 
 export const selectFolderSchema = createSelectSchema(folders);
