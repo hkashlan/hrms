@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { EmptyObject, Entity, entityUtils } from 'ui-kit';
 import { AgeComponent } from '../../../../hrms/src/app/pages/entities/user/detail/age/age.component';
 import { zodToAngularForm } from '../../shared/zo-to-form';
+import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 
 @Component({
   selector: 'lib-dynamic-form',
@@ -46,6 +47,10 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
                 <input type="number" class="input" [formControlName]="key" />
               }
 
+              @case ('autocomplete') {
+                <app-autocomplete></app-autocomplete>
+              }
+
               @default {
                 <input [type]="field.property.type" class="input" [formControlName]="key" />
               }
@@ -70,7 +75,13 @@ import { zodToAngularForm } from '../../shared/zo-to-form';
       multi: true,
     },
   ],
-  imports: [ReactiveFormsModule, CheckboxDirective, NgComponentOutlet, JsonPipe],
+  imports: [
+    ReactiveFormsModule,
+    CheckboxDirective,
+    NgComponentOutlet,
+    JsonPipe,
+    AutocompleteComponent,
+  ],
 })
 export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   implements ControlValueAccessor
