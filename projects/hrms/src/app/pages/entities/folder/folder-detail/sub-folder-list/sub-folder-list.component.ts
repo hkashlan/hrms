@@ -1,10 +1,10 @@
-import { Component, input, resource } from '@angular/core';
-import { ButtonDirective } from 'daisyui';
-import { FolderDialogComponent } from '../add-folder/folder-dialog.component';
-import { trpc } from './../../../../../trpc.client';
+import { Component, input, resource } from "@angular/core";
+import { ButtonDirective } from "daisyui";
+import { FolderDialogComponent } from "../add-folder/folder-dialog.component";
+import { trpc } from "./../../../../../trpc.client";
 
 @Component({
-  selector: 'app-sub-folder-list',
+  selector: "app-sub-folder-list",
   imports: [FolderDialogComponent, ButtonDirective],
   template: `
     <section class="mb-8">
@@ -12,18 +12,21 @@ import { trpc } from './../../../../../trpc.client';
         Folders
         <button class="btn" (click)="folderDlg.showModal()">add modal</button>
       </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      >
         @for (item of folderResources.value(); track $index) {
-          <div class="card w-full bg-base-100 shadow-xl">
-            <div class="card-body">
-              <h2 class="card-title">{{ item.name }}</h2>
-              <p>Contains files and subfolders.</p>
-              <div class="card-actions justify-end">
-                <button [duiButton]="'btn-primary'">Open</button>
-                <button [duiButton]="'btn-error'">delete</button>
-              </div>
+        <div class="card w-full bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">{{ item.name }}</h2>
+            <p>Contains files and subfolders.</p>
+            <div class="card-actions justify-end">
+              <button [duiButton]="'btn-primary'">Open</button>
+              <!-- <button [duiButton]="'btn-error'" (click)="deleteFolder(item.id, item.name)">delete</button> -->
+              <button (click)="deleteFolder(item.id, item.name)">delete</button>
             </div>
           </div>
+        </div>
         }
       </div>
     </section>
@@ -44,7 +47,9 @@ export class SubFolderListComponent {
       if (!request.parentId) {
         return trpc.entities.folders.list.query({});
       } else {
-        return trpc.entities.folders.list.query({ parentId: { equals: request.parentId } });
+        return trpc.entities.folders.list.query({
+          parentId: { equals: request.parentId },
+        });
       }
     },
   });
@@ -54,5 +59,14 @@ export class SubFolderListComponent {
     if (shouldRefresh) {
       this.folderResources.reload();
     }
+  }
+  deleteFolder(id: number, name: string | null) {
+    const folderName = name ?? "Unnamed Folder";
+
+    // if (confirm(`Are you sure you want to delete "${folderName}"?`)) {
+    trpc.entities.folders.delete.mutate({ id }).then(() => {
+      this.folderResources.reload();
+    });
+    // }
   }
 }
