@@ -5,6 +5,7 @@ import { mediaInfo } from '../../../../entities/media.entity';
 import { trpc } from '../../../../trpc.client';
 
 @Component({
+  selector: 'app-media-detail',
   imports: [DetailPageComponent],
   template: `
     <lib-detial-page [id]="id()" [config]="config" />
