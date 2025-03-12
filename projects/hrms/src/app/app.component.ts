@@ -9,6 +9,9 @@ import { NavigationComponent } from './shell/navigation/navigation.component';
   templateUrl: './app.component.html',
   imports: [NavigationComponent],
   styleUrl: './app.component.scss',
+  host: {
+    class: 'min-h-screen bg-base-200',
+  },
 })
 export class AppComponent {
   navigationItems: NavigationItem[] = [

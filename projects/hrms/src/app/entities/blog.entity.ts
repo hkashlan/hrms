@@ -11,6 +11,10 @@ export const blogInfo: Entity<Blog> = generateEntity<Blog>({
         type: 'primary',
         label: 'ID',
       },
+      name: {
+        type: 'text',
+        label: 'title',
+      },
       content: {
         type: 'text',
         label: 'firstname',

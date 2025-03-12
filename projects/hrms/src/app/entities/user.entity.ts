@@ -21,7 +21,7 @@ export const userInfo: Entity<User> = generateEntity<User>({
           },
         },
       },
-      username: {
+      name: {
         type: 'text',
         label: 'Username',
       },

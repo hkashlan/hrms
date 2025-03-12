@@ -42,7 +42,7 @@ export const authRouter = router({
         const [user] = await ctx.db
           .insert(users)
           .values({
-            username,
+            name: username,
             email,
             passwordHash,
           })

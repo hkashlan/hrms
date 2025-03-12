@@ -66,6 +66,11 @@ const entity: Entity<Record> = {
     email: {
       type: 'text',
       label: 'Email',
+      hooks: {
+        details: {
+          hidden: true,
+        },
+      },
       validation: z.string().optional(),
     },
     options: {
@@ -73,7 +78,7 @@ const entity: Entity<Record> = {
       label: 'Phone',
       hooks: {
         details: {
-          component: OptionsComponent,
+          hidden: true,
         },
       },
       validation: z.array(z.string()).optional(),

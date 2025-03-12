@@ -1,5 +1,5 @@
 import { Component, input, numberAttribute } from '@angular/core';
-import { Blog } from '@hrms-server/db/schemas';
+import { Blog } from '@hrms-server/db/schemas/blogs.schema';
 import { DetailPageComponent, DetailPageConfig } from 'ui-kit';
 import { blogInfo } from '../../../../entities/blog.entity';
 import { trpc } from '../../../../trpc.client';

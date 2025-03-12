@@ -3,9 +3,9 @@
     <span class="label">URL</span>
     <input type="text" placeholder="id" [formControl]="searchControl" />
   </label>
-  @if (filteredSuggestions.length > 0 && showSuggestions) {}
+  @if (suggestions.value()?.length && showSuggestions) {}
   <ul class="menu bg-base-200 w-full rounded-box z-10 absolute">
-    @for (option of filteredSuggestions; track option) {
+    @for (option of suggestions.value(); track option) {
       <li>
         <a (click)="selectOption(option)">{{ option.name }}</a>
       </li>

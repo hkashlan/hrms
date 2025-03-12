@@ -8,6 +8,7 @@ import { users } from './users.schema';
 
 export const blogs = pgTable('blogs', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: varchar('name').notNull(),
   authorId: integer('author_id').references(() => users.id),
   authorName: varchar('author_name'),
   content: varchar('content'),

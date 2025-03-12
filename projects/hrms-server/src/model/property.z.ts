@@ -1,10 +1,8 @@
 import { Type } from '@angular/core';
+import { SchemaKey, schemaKeys } from '@hrms-server/db/schemas/schema-keys';
 import { z, ZodType } from 'zod';
-import * as schemas from '../db/schemas';
 
 // Get the keys of the schemas
-type SchemaKey = keyof typeof schemas;
-const schemaKeys = Object.keys(schemas) as SchemaKey[];
 
 export const PropertyInputTypeZ = z.enum(['number', 'text']);
 export type PropertyInputType = z.infer<typeof PropertyInputTypeZ>;

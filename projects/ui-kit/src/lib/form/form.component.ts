@@ -48,7 +48,11 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
               }
 
               @case ('autocomplete') {
-                <app-autocomplete></app-autocomplete>
+                <app-autocomplete
+                  [formControlId]="$any(form().controls[key])"
+                  [formControlName]="$any(form().controls[key.slice(0, -2) + 'Name'])"
+                  [property]="$any(field.property)"
+                />
               }
 
               @default {

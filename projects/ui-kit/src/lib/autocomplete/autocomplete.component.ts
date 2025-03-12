@@ -1,6 +1,9 @@
-import { Component, input, output } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, input, resource, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { AutoCompleteProperty } from '@hrms-server/model/property.z';
+import { debounceTime } from 'rxjs/operators';
+import { trpc } from '../../../../hrms/src/app/trpc.client';
 import { OptionValue } from './autocomplete';
 
 @Component({
@@ -9,49 +12,30 @@ import { OptionValue } from './autocomplete';
   templateUrl: './autocomplete.component.html',
   styleUrls: ['./autocomplete.component.css'],
 })
-export class AutocompleteComponent implements ControlValueAccessor {
-  suggestions = input.required<OptionValue[]>();
-  textChanged = output<string | null>();
-  currentValue: OptionValue | null = null;
-  onChange: (value: OptionValue) => void = () => {};
+export class AutocompleteComponent {
+  searchControl = new FormControl('');
+  formControlId = input.required<FormControl<number | null>>();
+  formControlName = input.required<FormControl<string | null>>();
+  property = input.required<AutoCompleteProperty>();
+
+  suggestions = resource({
+    request: () => this.textChanged()(),
+    loader: ({ request }) => this.fetchData(request),
+  });
+
   //  search = signal<string>('');
   // @Output() valueChange = new EventEmitter<string>();
 
-  searchControl = new FormControl('');
-  filteredSuggestions: OptionValue[] = [];
   showSuggestions: boolean = false;
 
-  constructor() {
-    this.searchControl.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe((value) => this.textChanged.emit(value));
-  }
-  writeValue(obj: OptionValue): void {
-    this.selectOption(obj);
-  }
-
-  registerOnChange(fn: AutocompleteComponent['onChange']): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {}
-
-  setDisabledState?(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.searchControl.disable();
-    } else {
-      this.searchControl.enable();
-    }
-  }
-
   selectOption(option: OptionValue) {
-    this.onChange(option);
-    this.resetSearch(option);
+    this.resetSearch();
+    this.formControlId().setValue(option.id);
+    this.formControlName().setValue(option.name);
+    this.searchControl.setValue(option.name, { emitEvent: false });
   }
 
-  private resetSearch(option: OptionValue | null) {
-    this.searchControl.setValue(option?.name ?? '', { emitEvent: false });
-    this.filteredSuggestions = [];
+  private resetSearch() {
     this.showSuggestions = false;
   }
 
@@ -60,5 +44,20 @@ export class AutocompleteComponent implements ControlValueAccessor {
     setTimeout(() => {
       this.showSuggestions = false;
     }, 100);
+  }
+
+  private textChanged(): Signal<string | null | undefined> {
+    return toSignal(this.searchControl.valueChanges.pipe(debounceTime(300)));
+  }
+
+  private fetchData(text: string | null | undefined) {
+    if (text && this.showSuggestions) {
+      return trpc.entities[this.property().entity].list
+        .query({
+          name: { contains: text },
+        })
+        .then((res) => res.map((r) => ({ id: r.id, name: r.name }) as OptionValue));
+    }
+    return Promise.resolve([]) as Promise<OptionValue[]>;
   }
 }
