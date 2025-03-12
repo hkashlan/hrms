@@ -1,4 +1,11 @@
-import { afterNextRender, Component, computed, input, numberAttribute } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  input,
+  numberAttribute,
+  output,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonDirective } from 'daisyui';
@@ -27,6 +34,8 @@ import { DetailPageConfig } from './detail-page';
 })
 export class DetailPageComponent<T extends { id: number }> {
   id = input(undefined, { transform: numberAttribute });
+  saved = output<T | null>();
+  canceled = output<void>();
   config = input.required<DetailPageConfig<T>>();
 
   validId = computed(() => this.id() !== undefined && !Number.isNaN(this.id()));
@@ -57,8 +66,9 @@ export class DetailPageComponent<T extends { id: number }> {
       user.id = id!;
       this.config()
         .update(user)
-        .then(() => {
+        .then((record) => {
           this.recordForm.markAsPristine();
+          this.saved.emit(record);
         });
     } else {
       const { id, ...newUser } = user;
@@ -66,6 +76,7 @@ export class DetailPageComponent<T extends { id: number }> {
         .create(newUser)
         .then(() => {
           this.recordForm.markAsPristine();
+          this.canceled.emit();
         });
     }
   }
