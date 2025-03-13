@@ -1,14 +1,25 @@
-<div class="w-full">
-  <label class="input">
-    <span class="label">URL</span>
-    <input type="text" placeholder="id" [formControl]="searchControl" />
-  </label>
-  @if (suggestions.value()?.length && showSuggestions) {}
-  <ul class="menu bg-base-200 w-full rounded-box z-10 absolute">
-    @for (option of suggestions.value(); track option) {
-      <li>
+<label class="input dropdown dropdown-right">
+  <span class="label min-w-1/5">{{ id().value }}</span>
+  <input
+    type="text"
+    placeholder="id"
+    [formControl]="searchControl"
+    (keydown.arrowdown)="navigate(1)"
+    (keydown.arrowup)="navigate(-1)"
+    (keydown.enter)="selectOption(suggestions.value()?.[selectedIndex()])"
+    (blur)="hideDropdown()"
+  />
+</label>
+@if (!searchControl.pristine) {
+  <ul class="menu bg-base-200 rounded-box z-10 absolute custom-width">
+    @for (option of suggestions.value(); track option; let i = $index) {
+      <li [class.bg-base-300]="i === selectedIndex()">
         <a (click)="selectOption(option)">{{ option.name }}</a>
       </li>
     }
+
+    @if (!suggestions.value()?.length) {
+      <li>no results</li>
+    }
   </ul>
-</div>
+}

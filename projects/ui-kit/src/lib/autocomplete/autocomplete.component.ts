@@ -1,5 +1,14 @@
-import { Component, input, resource, Signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  afterNextRender,
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  linkedSignal,
+  resource,
+  Signal,
+} from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteProperty } from '@hrms-server/model/property.z';
 import { debounceTime } from 'rxjs/operators';
@@ -14,36 +23,57 @@ import { OptionValue } from './autocomplete';
 })
 export class AutocompleteComponent {
   searchControl = new FormControl('');
-  formControlId = input.required<FormControl<number | null>>();
-  formControlName = input.required<FormControl<string | null>>();
+  textChangeSignal = this.textChanged();
+  id = input.required<FormControl<number | null>>();
+  name = input.required<FormControl<string | null>>();
   property = input.required<AutoCompleteProperty>();
 
   suggestions = resource({
-    request: () => this.textChanged()(),
+    request: () => this.textChangeSignal(),
     loader: ({ request }) => this.fetchData(request),
   });
 
-  //  search = signal<string>('');
-  // @Output() valueChange = new EventEmitter<string>();
+  selectedIndex = linkedSignal({
+    source: this.suggestions.value,
+    computation: () => -1,
+  });
+  destroyRef = inject(DestroyRef);
 
-  showSuggestions: boolean = false;
+  constructor() {
+    afterNextRender(() => {
+      this.name()
+        .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((value) => {
+          this.searchControl.setValue(value ?? '', { emitEvent: false });
+        });
+    });
+  }
 
-  selectOption(option: OptionValue) {
+  selectOption(option: OptionValue | undefined) {
+    if (!option) return;
     this.resetSearch();
-    this.formControlId().setValue(option.id);
-    this.formControlName().setValue(option.name);
+    this.id().setValue(option.id);
+    this.name().setValue(option.name);
     this.searchControl.setValue(option.name, { emitEvent: false });
+    this.searchControl.markAsPristine();
   }
 
-  private resetSearch() {
-    this.showSuggestions = false;
+  resetSearch() {
+    this.searchControl.markAsPristine();
   }
 
-  onBlur() {
-    // Delay hiding suggestions to allow click event to fire
-    setTimeout(() => {
-      this.showSuggestions = false;
-    }, 100);
+  navigate(direction: number) {
+    if (this.searchControl.pristine) return;
+
+    const selectedIndex = Math.min(
+      Math.max(this.selectedIndex() + direction, 0),
+      this.suggestions.value()?.length ?? 0 - 1,
+    );
+    this.selectedIndex.set(selectedIndex);
+  }
+
+  hideDropdown() {
+    setTimeout(() => this.resetSearch(), 200);
   }
 
   private textChanged(): Signal<string | null | undefined> {
@@ -51,7 +81,7 @@ export class AutocompleteComponent {
   }
 
   private fetchData(text: string | null | undefined) {
-    if (text && this.showSuggestions) {
+    if (text && !this.searchControl.pristine) {
       return trpc.entities[this.property().entity].list
         .query({
           name: { contains: text },

@@ -48,9 +48,10 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
               }
 
               @case ('autocomplete') {
+                {{ key.slice(0, -2) + 'Name' }}
                 <app-autocomplete
-                  [formControlId]="$any(form().controls[key])"
-                  [formControlName]="$any(form().controls[key.slice(0, -2) + 'Name'])"
+                  [id]="$any(form().controls[key])"
+                  [name]="$any(form().controls[key.slice(0, -2) + 'Name'])"
                   [property]="$any(field.property)"
                 />
               }
@@ -166,6 +167,8 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   private prepareFields() {
     return entityUtils
       .getKeyProperties<T>(this.entity())
-      .filter((keyProperty) => keyProperty.key !== 'id');
+      .filter(
+        (keyProperty) => keyProperty.key !== 'id' && !keyProperty.property.hooks?.details?.hidden,
+      );
   }
 }

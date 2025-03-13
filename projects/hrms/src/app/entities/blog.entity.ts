@@ -39,7 +39,7 @@ export const blogInfo: Entity<Blog> = generateEntity<Blog>({
       authorId: {
         type: 'autocomplete',
         label: 'author id',
-        entity: 'blogs',
+        entity: 'users',
       },
     },
   },
