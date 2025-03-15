@@ -8,6 +8,7 @@ import {
 } from '@hrms-server/model/property.z';
 import { DynamicFormComponent, Entity, KeyProperty } from 'ui-kit';
 import { z } from 'zod';
+import { OptionsComponent } from './options/options.component';
 
 @Component({
   selector: 'app-edit-entity-property',
@@ -52,6 +53,17 @@ export class EditEntityPropertyComponent {
       label: 'min value',
       validation: z.number(),
     };
+
+    const selectProp: BaseValidateProperty = {
+      type: 'select',
+      label: 'options',
+      hooks: {
+        details: {
+          component: OptionsComponent,
+        },
+      },
+      validation: z.array(z.string()),
+    };
     // notNull
     // min
     // max
@@ -67,6 +79,7 @@ export class EditEntityPropertyComponent {
         notNull: notNullProp.validation,
         min: minProp.validation,
         max: maxProp.validation,
+        options: selectProp.validation,
       }),
       properties: {
         type: typeProp as unknown as BaseValidateProperty,
@@ -75,6 +88,7 @@ export class EditEntityPropertyComponent {
         notNull: notNullProp,
         min: minProp,
         max: maxProp,
+        options: selectProp,
       },
     } as Entity<Partial<BaseBaseProperty>>;
   });
