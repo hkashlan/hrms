@@ -19,7 +19,6 @@ import { OptionValue } from './autocomplete';
   selector: 'app-autocomplete',
   imports: [ReactiveFormsModule],
   templateUrl: './autocomplete.component.html',
-  styleUrls: ['./autocomplete.component.css'],
 })
 export class AutocompleteComponent {
   id = input.required<FormControl<number | null>>();
