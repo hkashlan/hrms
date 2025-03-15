@@ -130,7 +130,7 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   }
 
   writeValue(obj: T): void {
-    this.form().patchValue(obj as any, { emitEvent: false });
+    this.form().patchValue(obj as any);
   }
   registerOnChange(fn: DynamicFormComponent<T>['onChange']): void {
     this.onChange = fn;

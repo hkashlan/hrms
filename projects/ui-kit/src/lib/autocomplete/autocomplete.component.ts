@@ -1,17 +1,17 @@
 import {
-  afterNextRender,
   Component,
   DestroyRef,
+  effect,
   inject,
   input,
   linkedSignal,
   resource,
-  Signal,
+  signal,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteProperty } from '@hrms-server/model/property.z';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, startWith } from 'rxjs/operators';
 import { trpc } from '../../../../hrms/src/app/trpc.client';
 import { OptionValue } from './autocomplete';
 
@@ -22,11 +22,11 @@ import { OptionValue } from './autocomplete';
   styleUrls: ['./autocomplete.component.css'],
 })
 export class AutocompleteComponent {
-  searchControl = new FormControl('');
-  textChangeSignal = this.textChanged();
   id = input.required<FormControl<number | null>>();
+  searchControl = new FormControl<string | null>(null);
   name = input.required<FormControl<string | null>>();
   property = input.required<AutoCompleteProperty>();
+  textChangeSignal = signal<string>('');
 
   suggestions = resource({
     request: () => this.textChangeSignal(),
@@ -40,11 +40,17 @@ export class AutocompleteComponent {
   destroyRef = inject(DestroyRef);
 
   constructor() {
-    afterNextRender(() => {
+    this.searchControl.valueChanges
+      .pipe(debounceTime(300), takeUntilDestroyed())
+      .subscribe((value) => {
+        this.textChangeSignal.set(value ?? '');
+      });
+
+    effect(() => {
       this.name()
-        .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+        .valueChanges.pipe(startWith(this.name().value), takeUntilDestroyed(this.destroyRef))
         .subscribe((value) => {
-          this.searchControl.setValue(value ?? '', { emitEvent: false });
+          this.searchControl.setValue(value, { emitEvent: false });
         });
     });
   }
@@ -54,11 +60,11 @@ export class AutocompleteComponent {
     this.resetSearch();
     this.id().setValue(option.id);
     this.name().setValue(option.name);
-    this.searchControl.setValue(option.name, { emitEvent: false });
     this.searchControl.markAsPristine();
   }
 
   resetSearch() {
+    this.searchControl.reset();
     this.searchControl.markAsPristine();
   }
 
@@ -74,10 +80,6 @@ export class AutocompleteComponent {
 
   hideDropdown() {
     setTimeout(() => this.resetSearch(), 200);
-  }
-
-  private textChanged(): Signal<string | null | undefined> {
-    return toSignal(this.searchControl.valueChanges.pipe(debounceTime(300)));
   }
 
   private fetchData(text: string | null | undefined) {
