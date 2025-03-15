@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { User } from '@hrms-server/db/schamas';
+import { User } from '@hrms-server/db/schemas';
 import { DynamicFormComponent, Entity } from 'ui-kit';
 import { userInfo } from '../../entities/user.entity';
 

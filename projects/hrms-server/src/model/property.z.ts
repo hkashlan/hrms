@@ -1,5 +1,8 @@
 import { Type } from '@angular/core';
+import { SchemaKey, schemaKeys } from '@hrms-server/db/schemas/schema-keys';
 import { z, ZodType } from 'zod';
+
+// Get the keys of the schemas
 
 export const PropertyInputTypeZ = z.enum(['number', 'text']);
 export type PropertyInputType = z.infer<typeof PropertyInputTypeZ>;
@@ -56,7 +59,7 @@ export type InputProperty = z.infer<typeof InputPropertyZ>;
 
 export const AutoCompletePropertyZ = BasePropertyZ.extend({
   type: z.literal('autocomplete'),
-  options: z.array(z.string()),
+  entity: z.literal<SchemaKey>(schemaKeys[0]),
 });
 export type AutoCompleteProperty = z.infer<typeof AutoCompletePropertyZ>;
 

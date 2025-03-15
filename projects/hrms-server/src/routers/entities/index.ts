@@ -1,6 +1,8 @@
 import { router } from '../../trpc';
+import { blogRouter } from './blog.router';
 import { userRouter } from './user.router';
 
 export const entitiesRouter = router({
-  user: userRouter,
+  users: userRouter,
+  blogs: blogRouter,
 });
