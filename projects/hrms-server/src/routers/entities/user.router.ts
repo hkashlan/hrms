@@ -1,4 +1,4 @@
-import { userTableInfo } from '../../db/schamas/users.schema';
+import { userTableInfo } from '../../db/schemas/users.schema';
 import { t } from '../../trpc';
 import { curd } from '../../utils/route';
 

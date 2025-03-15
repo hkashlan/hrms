@@ -3,6 +3,8 @@
  */
 
 export * from './lib/data-grid/data-grid.component';
+export * from './lib/detail-page/detail-page';
+export * from './lib/detail-page/detail-page.component';
 export * from './lib/form/form.component';
 export * from './lib/list-page/list-page.component';
 export * from './lib/ui-kit.component';

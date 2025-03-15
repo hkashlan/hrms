@@ -13,8 +13,9 @@ const type2DBType = {
 };
 
 export async function schema(schema: EntityWithValidation) {
+  const { singular, capitalized } = entityUtils(schema);
   const content = schemaTemplate(schema);
-  const filePath = `projects/hrms-server/src/db/schamas/${schema.name}s.schema.ts`;
+  const filePath = `projects/hrms-server/src/db/schemas/${singular}s.schema.ts`;
   await writeFile(filePath, content);
   await updateIndexTs(schema);
 }
@@ -45,7 +46,7 @@ function schemaTemplate(schema: EntityWithValidation) {
   ${property}: ${type2DBType[propertyInfo.type as keyof typeof type2DBType]}('${property}'${length}${selectOptions})${suffix}${notNull},`;
   }
 
-  const { plural, capitalized } = entityUtils(schema);
+  const { singular, capitalized } = entityUtils(schema);
 
   return `
 import { InferSelectModel } from 'drizzle-orm';
@@ -55,30 +56,30 @@ import { z } from 'zod';
 import { DrizzleTableInfo } from '../../utils/drizzle-table-info';
 import { filterSchema } from '../createFilterSchema';
 
-export const ${plural} = pgTable('${plural}', {
+export const ${schema.name} = pgTable('${schema.name}', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
   ${fields}
 });
-export const insert${capitalized}Schema = createInsertSchema(${plural});
+export const insert${capitalized}Schema = createInsertSchema(${schema.name});
 
-export const select${capitalized}Schema = createSelectSchema(${plural});
+export const select${capitalized}Schema = createSelectSchema(${schema.name});
 export const update${capitalized}Schema = select${capitalized}Schema.partial().extend({ id: z.number() });
 export const full${capitalized}Schema = insert${capitalized}Schema.extend({ id: z.number() });
 
-export const ${schema.name}FilterSchema = filterSchema.createFilterSchema<${capitalized}>(${plural});
-export type ${capitalized} = InferSelectModel<typeof ${plural}>; // This infers the ${capitalized} type based on the Drizzle schema
+export const ${singular}FilterSchema = filterSchema.createFilterSchema<${capitalized}>(${schema.name});
+export type ${capitalized} = InferSelectModel<typeof ${schema.name}>; // This infers the ${capitalized} type based on the Drizzle schema
 
-export const ${schema.name}TableInfo: DrizzleTableInfo<
+export const ${singular}TableInfo: DrizzleTableInfo<
   ${capitalized},
   typeof insert${capitalized}Schema,
-  typeof ${schema.name}FilterSchema,
+  typeof ${singular}FilterSchema,
   typeof update${capitalized}Schema
 > = {
   record: {} as ${capitalized},
-  table: ${plural},
+  table: ${schema.name},
   insertValidation: insert${capitalized}Schema,
-  selectValidation: ${schema.name}FilterSchema,
+  selectValidation: ${singular}FilterSchema,
   updateValidation: update${capitalized}Schema,
 };
 
@@ -87,9 +88,8 @@ export const ${schema.name}TableInfo: DrizzleTableInfo<
 }
 
 async function updateIndexTs(schema: EntityWithValidation) {
-  const { plural } = entityUtils(schema);
-  const trpcRouterPath = 'projects/hrms-server/src/db/schamas/index.ts';
-  const importStatement = `export * from './${plural}.schema';\n`;
+  const trpcRouterPath = 'projects/hrms-server/src/db/schemas/index.ts';
+  const importStatement = `export * from './${schema.name}.schema';\n`;
   const routerEntry = ``;
   await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '');
 }

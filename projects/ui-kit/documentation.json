@@ -3,12 +3,12 @@
     "interfaces": [
         {
             "name": "Record",
-            "id": "interface-Record-feb172b306e4fb3a3422764b76e5b83f584bad6a28efac6ded23b0c5dc54890973b73123e83d28d5734517d3450a0629c5c22be198104df5ccfc9182f900b4ad",
+            "id": "interface-Record-8883a02dfca51fff4b7288ca021f0881534e81b90299794771adbcc3b002c0f583334064c336713075d059bc317c44aae82706118acd9a040c5d77c72107fac1",
             "file": "projects/ui-kit/src/lib/form/form.component.stories.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
-            "sourceCode": "import { Component, forwardRef, input } from '@angular/core';\nimport { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';\nimport { User } from '@hrms-server/db/schamas';\nimport { IDetailComponent } from '@hrms-server/model/icomponent';\nimport type { Meta, StoryObj } from '@storybook/angular';\nimport { moduleMetadata } from '@storybook/angular';\nimport { DynamicFormComponent, Entity } from 'ui-kit';\nimport { z } from 'zod';\n\ninterface Record {\n  id: number;\n  name: string;\n  email: string;\n  options: string[];\n}\n\n@Component({\n  imports: [ReactiveFormsModule],\n  template: `\n    <textarea [formControl]=\"textControl\"></textarea>\n  `,\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => OptionsComponent),\n      multi: true,\n    },\n  ],\n})\nexport class OptionsComponent implements IDetailComponent<User> {\n  record = input.required<User>();\n  formControl = input.required<FormControl<string[] | null>>();\n\n  textControl = new FormControl('');\n  constructor() {\n    this.textControl.valueChanges.subscribe((value) => {\n      if (value) {\n        this.formControl().setValue(value.split('\\n'));\n      } else {\n        this.formControl().setValue(null);\n      }\n    });\n  }\n}\n\nconst entity: Entity<Record> = {\n  label: 'Record',\n  name: 'record',\n  schema: z.object({\n    id: z.number(),\n    name: z.string(),\n    email: z.string(),\n    options: z.array(z.string()),\n  }),\n  properties: {\n    id: {\n      type: 'number',\n      label: 'ID',\n      validation: z.number().optional(),\n    },\n    name: {\n      type: 'text',\n      label: 'Name',\n      validation: z.string().optional(),\n    },\n    email: {\n      type: 'text',\n      label: 'Email',\n      validation: z.string().optional(),\n    },\n    options: {\n      type: 'text',\n      label: 'Phone',\n      hooks: {\n        details: {\n          component: OptionsComponent,\n        },\n      },\n      validation: z.array(z.string()).optional(),\n    },\n  },\n};\n\nconst meta: Meta<DynamicFormComponent<Record>> = {\n  title: 'Form Page',\n  component: DynamicFormComponent,\n  tags: ['autodocs'],\n  decorators: [\n    moduleMetadata({\n      imports: [DynamicFormComponent, OptionsComponent],\n    }),\n  ],\n  argTypes: {\n    entity: {\n      control: 'object',\n      description: 'Array of items to display in the list.',\n    },\n  },\n};\n\nexport default meta;\ntype Story = StoryObj<DynamicFormComponent<Record>>;\n\nexport const Default: Story = {\n  args: {\n    entity: entity,\n  },\n};\n",
+            "sourceCode": "import { Component, forwardRef, input } from '@angular/core';\nimport { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';\nimport { User } from '@hrms-server/db/schemas';\nimport { IDetailComponent } from '@hrms-server/model/icomponent';\nimport type { Meta, StoryObj } from '@storybook/angular';\nimport { moduleMetadata } from '@storybook/angular';\nimport { DynamicFormComponent, Entity } from 'ui-kit';\nimport { z } from 'zod';\n\ninterface Record {\n  id: number;\n  name: string;\n  email: string;\n  options: string[];\n}\n\n@Component({\n  imports: [ReactiveFormsModule],\n  template: `\n    <textarea [formControl]=\"textControl\" rows=\"7\"></textarea>\n  `,\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => OptionsComponent),\n      multi: true,\n    },\n  ],\n})\nexport class OptionsComponent implements IDetailComponent<User> {\n  record = input.required<User>();\n  formControl = input.required<FormControl<string[] | null>>();\n\n  textControl = new FormControl('');\n  constructor() {\n    this.textControl.valueChanges.subscribe((value) => {\n      if (value) {\n        this.formControl().setValue(value.split('\\n'));\n      } else {\n        this.formControl().setValue(null);\n      }\n    });\n  }\n}\n\nconst entity: Entity<Record> = {\n  label: 'Record',\n  name: 'record',\n  schema: z.object({\n    id: z.number(),\n    name: z.string(),\n    email: z.string(),\n    options: z.array(z.string()),\n  }),\n  properties: {\n    id: {\n      type: 'number',\n      label: 'ID',\n      validation: z.number().optional(),\n    },\n    name: {\n      type: 'text',\n      label: 'Name',\n      validation: z.string().optional(),\n    },\n    email: {\n      type: 'text',\n      label: 'Email',\n      validation: z.string().optional(),\n    },\n    options: {\n      type: 'text',\n      label: 'Phone',\n      hooks: {\n        details: {\n          component: OptionsComponent,\n        },\n      },\n      validation: z.array(z.string()).optional(),\n    },\n  },\n};\n\nconst meta: Meta<DynamicFormComponent<Record>> = {\n  title: 'Form Page',\n  component: DynamicFormComponent,\n  tags: ['autodocs'],\n  decorators: [\n    moduleMetadata({\n      imports: [DynamicFormComponent, OptionsComponent],\n    }),\n  ],\n  argTypes: {\n    entity: {\n      control: 'object',\n      description: 'Array of items to display in the list.',\n    },\n  },\n};\n\nexport default meta;\ntype Story = StoryObj<DynamicFormComponent<Record>>;\n\nexport const Default: Story = {\n  args: {\n    entity: entity,\n  },\n};\n",
             "properties": [
                 {
                     "name": "email",
@@ -123,7 +123,7 @@
     "components": [
         {
             "name": "OptionsComponent",
-            "id": "component-OptionsComponent-feb172b306e4fb3a3422764b76e5b83f584bad6a28efac6ded23b0c5dc54890973b73123e83d28d5734517d3450a0629c5c22be198104df5ccfc9182f900b4ad",
+            "id": "component-OptionsComponent-8883a02dfca51fff4b7288ca021f0881534e81b90299794771adbcc3b002c0f583334064c336713075d059bc317c44aae82706118acd9a040c5d77c72107fac1",
             "file": "projects/ui-kit/src/lib/form/form.component.stories.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -137,7 +137,7 @@
             ],
             "styleUrls": [],
             "styles": [],
-            "template": "<textarea [formControl]=\"textControl\"></textarea>\n",
+            "template": "<textarea [formControl]=\"textControl\" rows=\"7\"></textarea>\n",
             "templateUrl": [],
             "viewProviders": [],
             "hostDirectives": [],
@@ -205,7 +205,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, forwardRef, input } from '@angular/core';\nimport { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';\nimport { User } from '@hrms-server/db/schamas';\nimport { IDetailComponent } from '@hrms-server/model/icomponent';\nimport type { Meta, StoryObj } from '@storybook/angular';\nimport { moduleMetadata } from '@storybook/angular';\nimport { DynamicFormComponent, Entity } from 'ui-kit';\nimport { z } from 'zod';\n\ninterface Record {\n  id: number;\n  name: string;\n  email: string;\n  options: string[];\n}\n\n@Component({\n  imports: [ReactiveFormsModule],\n  template: `\n    <textarea [formControl]=\"textControl\"></textarea>\n  `,\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => OptionsComponent),\n      multi: true,\n    },\n  ],\n})\nexport class OptionsComponent implements IDetailComponent<User> {\n  record = input.required<User>();\n  formControl = input.required<FormControl<string[] | null>>();\n\n  textControl = new FormControl('');\n  constructor() {\n    this.textControl.valueChanges.subscribe((value) => {\n      if (value) {\n        this.formControl().setValue(value.split('\\n'));\n      } else {\n        this.formControl().setValue(null);\n      }\n    });\n  }\n}\n\nconst entity: Entity<Record> = {\n  label: 'Record',\n  name: 'record',\n  schema: z.object({\n    id: z.number(),\n    name: z.string(),\n    email: z.string(),\n    options: z.array(z.string()),\n  }),\n  properties: {\n    id: {\n      type: 'number',\n      label: 'ID',\n      validation: z.number().optional(),\n    },\n    name: {\n      type: 'text',\n      label: 'Name',\n      validation: z.string().optional(),\n    },\n    email: {\n      type: 'text',\n      label: 'Email',\n      validation: z.string().optional(),\n    },\n    options: {\n      type: 'text',\n      label: 'Phone',\n      hooks: {\n        details: {\n          component: OptionsComponent,\n        },\n      },\n      validation: z.array(z.string()).optional(),\n    },\n  },\n};\n\nconst meta: Meta<DynamicFormComponent<Record>> = {\n  title: 'Form Page',\n  component: DynamicFormComponent,\n  tags: ['autodocs'],\n  decorators: [\n    moduleMetadata({\n      imports: [DynamicFormComponent, OptionsComponent],\n    }),\n  ],\n  argTypes: {\n    entity: {\n      control: 'object',\n      description: 'Array of items to display in the list.',\n    },\n  },\n};\n\nexport default meta;\ntype Story = StoryObj<DynamicFormComponent<Record>>;\n\nexport const Default: Story = {\n  args: {\n    entity: entity,\n  },\n};\n",
+            "sourceCode": "import { Component, forwardRef, input } from '@angular/core';\nimport { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';\nimport { User } from '@hrms-server/db/schemas';\nimport { IDetailComponent } from '@hrms-server/model/icomponent';\nimport type { Meta, StoryObj } from '@storybook/angular';\nimport { moduleMetadata } from '@storybook/angular';\nimport { DynamicFormComponent, Entity } from 'ui-kit';\nimport { z } from 'zod';\n\ninterface Record {\n  id: number;\n  name: string;\n  email: string;\n  options: string[];\n}\n\n@Component({\n  imports: [ReactiveFormsModule],\n  template: `\n    <textarea [formControl]=\"textControl\" rows=\"7\"></textarea>\n  `,\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => OptionsComponent),\n      multi: true,\n    },\n  ],\n})\nexport class OptionsComponent implements IDetailComponent<User> {\n  record = input.required<User>();\n  formControl = input.required<FormControl<string[] | null>>();\n\n  textControl = new FormControl('');\n  constructor() {\n    this.textControl.valueChanges.subscribe((value) => {\n      if (value) {\n        this.formControl().setValue(value.split('\\n'));\n      } else {\n        this.formControl().setValue(null);\n      }\n    });\n  }\n}\n\nconst entity: Entity<Record> = {\n  label: 'Record',\n  name: 'record',\n  schema: z.object({\n    id: z.number(),\n    name: z.string(),\n    email: z.string(),\n    options: z.array(z.string()),\n  }),\n  properties: {\n    id: {\n      type: 'number',\n      label: 'ID',\n      validation: z.number().optional(),\n    },\n    name: {\n      type: 'text',\n      label: 'Name',\n      validation: z.string().optional(),\n    },\n    email: {\n      type: 'text',\n      label: 'Email',\n      validation: z.string().optional(),\n    },\n    options: {\n      type: 'text',\n      label: 'Phone',\n      hooks: {\n        details: {\n          component: OptionsComponent,\n        },\n      },\n      validation: z.array(z.string()).optional(),\n    },\n  },\n};\n\nconst meta: Meta<DynamicFormComponent<Record>> = {\n  title: 'Form Page',\n  component: DynamicFormComponent,\n  tags: ['autodocs'],\n  decorators: [\n    moduleMetadata({\n      imports: [DynamicFormComponent, OptionsComponent],\n    }),\n  ],\n  argTypes: {\n    entity: {\n      control: 'object',\n      description: 'Array of items to display in the list.',\n    },\n  },\n};\n\nexport default meta;\ntype Story = StoryObj<DynamicFormComponent<Record>>;\n\nexport const Default: Story = {\n  args: {\n    entity: entity,\n  },\n};\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -330,6 +330,16 @@
                 "name": "meta",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "projects/ui-kit/src/lib/form/form.component.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<DynamicFormComponent<Record>>",
+                "defaultValue": "{\n  title: 'Form Page',\n  component: DynamicFormComponent,\n  tags: ['autodocs'],\n  decorators: [\n    moduleMetadata({\n      imports: [DynamicFormComponent, OptionsComponent],\n    }),\n  ],\n  argTypes: {\n    entity: {\n      control: 'object',\n      description: 'Array of items to display in the list.',\n    },\n  },\n}"
+            },
+            {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "projects/ui-kit/src/stories/button.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
@@ -360,16 +370,6 @@
                 "name": "meta",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "projects/ui-kit/src/lib/form/form.component.stories.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "Meta<DynamicFormComponent<Record>>",
-                "defaultValue": "{\n  title: 'Form Page',\n  component: DynamicFormComponent,\n  tags: ['autodocs'],\n  decorators: [\n    moduleMetadata({\n      imports: [DynamicFormComponent, OptionsComponent],\n    }),\n  ],\n  argTypes: {\n    entity: {\n      control: 'object',\n      description: 'Array of items to display in the list.',\n    },\n  },\n}"
-            },
-            {
-                "name": "meta",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
                 "file": "projects/ui-kit/src/lib/list-page/list-page.component.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
@@ -384,7 +384,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "Preview",
-                "defaultValue": "{\n  parameters: {\n    controls: {\n      matchers: {\n       color: /(background|color)$/i,\n       date: /Date$/i,\n      },\n    },\n  },\n}"
+                "defaultValue": "{\n  parameters: {\n    controls: {\n      matchers: {\n        color: /(background|color)$/i,\n        date: /Date$/i,\n      },\n    },\n  },\n}"
             },
             {
                 "name": "Primary",
@@ -433,6 +433,17 @@
                 "name": "Story",
                 "ctype": "miscellaneous",
                 "subtype": "typealias",
+                "rawtype": "StoryObj<DynamicFormComponent<Record>>",
+                "file": "projects/ui-kit/src/lib/form/form.component.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 183
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
                 "rawtype": "StoryObj<ButtonComponent>",
                 "file": "projects/ui-kit/src/stories/button.stories.ts",
                 "deprecated": false,
@@ -457,17 +468,6 @@
                 "subtype": "typealias",
                 "rawtype": "StoryObj<PageComponent>",
                 "file": "projects/ui-kit/src/stories/page.stories.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "description": "",
-                "kind": 183
-            },
-            {
-                "name": "Story",
-                "ctype": "miscellaneous",
-                "subtype": "typealias",
-                "rawtype": "StoryObj<DynamicFormComponent<Record>>",
-                "file": "projects/ui-kit/src/lib/form/form.component.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
                 "description": "",
@@ -696,13 +696,26 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "Preview",
-                    "defaultValue": "{\n  parameters: {\n    controls: {\n      matchers: {\n       color: /(background|color)$/i,\n       date: /Date$/i,\n      },\n    },\n  },\n}"
+                    "defaultValue": "{\n  parameters: {\n    controls: {\n      matchers: {\n        color: /(background|color)$/i,\n        date: /Date$/i,\n      },\n    },\n  },\n}"
                 }
             ]
         },
         "groupedFunctions": {},
         "groupedEnumerations": {},
         "groupedTypeAliases": {
+            "projects/ui-kit/src/lib/form/form.component.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<DynamicFormComponent<Record>>",
+                    "file": "projects/ui-kit/src/lib/form/form.component.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 183
+                }
+            ],
             "projects/ui-kit/src/stories/button.stories.ts": [
                 {
                     "name": "Story",
@@ -736,19 +749,6 @@
                     "subtype": "typealias",
                     "rawtype": "StoryObj<PageComponent>",
                     "file": "projects/ui-kit/src/stories/page.stories.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "description": "",
-                    "kind": 183
-                }
-            ],
-            "projects/ui-kit/src/lib/form/form.component.stories.ts": [
-                {
-                    "name": "Story",
-                    "ctype": "miscellaneous",
-                    "subtype": "typealias",
-                    "rawtype": "StoryObj<DynamicFormComponent<Record>>",
-                    "file": "projects/ui-kit/src/lib/form/form.component.stories.ts",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "description": "",

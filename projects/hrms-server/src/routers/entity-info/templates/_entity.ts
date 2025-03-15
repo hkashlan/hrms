@@ -2,20 +2,21 @@ import { EntityWithValidation } from '@hrms-server/model/entity.z';
 import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
 export async function entity(schema: EntityWithValidation) {
+  const { singular, capitalized } = entityUtils(schema);
   const content = entityTemplate(schema);
-  const filePath = `projects/hrms/src/app/entities/${schema.name}.entity.ts`;
+  const filePath = `projects/hrms/src/app/entities/${singular}.entity.ts`;
   await writeFile(filePath, content);
-  await updateEntityInfos(schema.name);
+  await updateEntityInfos(singular);
 }
 
 export function entityTemplate(schema: EntityWithValidation) {
-  const { plural, capitalized } = entityUtils(schema);
+  const { singular, capitalized } = entityUtils(schema);
 
   return `
-import { full${capitalized}Schema, ${capitalized} } from '@hrms-server/db/schamas/${plural}.schema';
+import { full${capitalized}Schema, ${capitalized} } from '@hrms-server/db/schemas/${schema.name}.schema';
 import { Entity, generateEntity } from 'ui-kit';
 
-export const ${schema.name}Info: Entity<${capitalized}> = generateEntity<${capitalized}>({
+export const ${singular}Info: Entity<${capitalized}> = generateEntity<${capitalized}>({
   schema: full${capitalized}Schema,
   entity: ${JSON.stringify(schema, null, 2)}
 });
@@ -25,7 +26,7 @@ export const ${schema.name}Info: Entity<${capitalized}> = generateEntity<${capit
 async function updateEntityInfos(entity: string) {
   const trpcRouterPath = 'projects/hrms/src/app/entities/indext.ts';
   const importStatement = `import { ${entity}Info } from './${entity}.entity';\n`;
-  const routerEntry = ` ${entity}: ${entity}Info,\n`;
+  const routerEntry = ` ${entity}s: ${entity}Info,\n`;
 
   await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '};');
 }

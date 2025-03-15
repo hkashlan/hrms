@@ -3,7 +3,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { DrizzleTableInfo } from '../../utils/drizzle-table-info';
 import { createFilterSchema } from '../createFilterSchema';
-import { users } from '../schamas/users.schema';
+import { users } from '../schemas/users.schema';
 
 // Schema for inserting a user - can be used to validate API requests
 export const insertUserSchema = createInsertSchema(users);

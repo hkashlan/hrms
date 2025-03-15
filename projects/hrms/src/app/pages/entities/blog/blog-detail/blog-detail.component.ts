@@ -1,7 +1,7 @@
 import { Component, input, numberAttribute } from '@angular/core';
-import { User } from '@hrms-server/db/schemas/users.schema';
+import { Blog } from '@hrms-server/db/schemas/blogs.schema';
 import { DetailPageComponent, DetailPageConfig } from 'ui-kit';
-import { userInfo } from '../../../../entities/user.entity';
+import { blogInfo } from '../../../../entities/blog.entity';
 import { trpc } from '../../../../trpc.client';
 
 @Component({
@@ -10,12 +10,12 @@ import { trpc } from '../../../../trpc.client';
     <lib-detial-page [id]="id()" [config]="config" />
   `,
 })
-export class UserDetailComponent {
+export class BlogDetailComponent {
   id = input(undefined, { transform: numberAttribute });
-  config: DetailPageConfig<User> = {
-    entity: userInfo,
-    update: trpc.entities.users.update.mutate,
-    create: trpc.entities.users.create.mutate,
-    getById: trpc.entities.users.getById.query,
+  config: DetailPageConfig<Blog> = {
+    entity: blogInfo,
+    update: trpc.entities.blogs.update.mutate,
+    create: trpc.entities.blogs.create.mutate,
+    getById: trpc.entities.blogs.getById.query,
   };
 }
