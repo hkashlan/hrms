@@ -1,8 +1,8 @@
-import { EntityWithValidation } from '@hrms-server/model/entity.z';
+import { EntityInfo } from '@hrms-server/model/entity.z';
 import fs from 'fs';
 import path from 'path';
 
-export function entityUtils(schema: EntityWithValidation) {
+export function entityUtils(schema: EntityInfo) {
   const singular = schema.name.slice(0, -1);
   const capitalized = singular.charAt(0).toUpperCase() + singular.slice(1);
   return { singular, capitalized };

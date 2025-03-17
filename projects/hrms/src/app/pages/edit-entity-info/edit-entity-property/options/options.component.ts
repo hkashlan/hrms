@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IDetailComponent } from '@hrms-server/model/icomponent';
-import { BaseValidateProperty } from '@hrms-server/model/property.z';
+import { BaseProperty } from '@hrms-server/model/property.z';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -9,8 +9,8 @@ import { BaseValidateProperty } from '@hrms-server/model/property.z';
     <textarea class="textarea" [formControl]="textControl" rows="7"></textarea>
   `,
 })
-export class OptionsComponent implements IDetailComponent<BaseValidateProperty> {
-  record = input.required<BaseValidateProperty>();
+export class OptionsComponent implements IDetailComponent<BaseProperty> {
+  record = input.required<BaseProperty>();
   formControl = input.required<FormControl<string[] | null>>();
 
   textControl = new FormControl('');

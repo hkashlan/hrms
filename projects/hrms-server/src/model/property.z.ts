@@ -21,6 +21,8 @@ export type PropertyType = z.infer<typeof PropertyTypeZ>;
 export const BasePropertyZ = z.object({
   type: z.union([PropertyTypeZ, PropertyInputTypeZ]),
   label: z.string(),
+  validation: z.instanceof(ZodType).optional(),
+  notNull: z.boolean().default(true).optional(),
   hooks: z
     .object({
       details: z
@@ -44,16 +46,15 @@ export type BaseProperty = z.infer<typeof BasePropertyZ>;
 export const BaseBasePropertyZ = BasePropertyZ.extend({
   type: z.enum(['primary', 'textarea', 'date', 'json']).or(PropertyInputTypeZ),
 });
+
 export type BaseBaseProperty = z.infer<typeof BaseBasePropertyZ>;
-
-export const BaseValidatePropertyZ = BasePropertyZ.extend({
-  validation: z.instanceof(ZodType),
-});
-
-export type BaseValidateProperty = z.infer<typeof BaseValidatePropertyZ>;
 
 export const InputPropertyZ = BasePropertyZ.extend({
   type: PropertyInputTypeZ,
+  length: z.number().optional(),
+
+  min: z.number().optional(),
+  max: z.number().optional(),
 });
 export type InputProperty = z.infer<typeof InputPropertyZ>;
 
@@ -82,23 +83,16 @@ export const PropertyZ = z.union([
 ]);
 export type Property = z.infer<typeof PropertyZ>;
 
-export const ValidationSchema = z.object({
-  length: z.number().optional(),
-  notNull: z.boolean().default(true).optional(),
-  min: z.number().optional(),
-  max: z.number().optional(),
-});
+// const AutoCompletePropertyWithValidationZ = AutoCompletePropertyZ.extend(ValidationSchema.shape);
+// export const SelectPropertyWithValidationZ = SelectPropertyZ.extend(ValidationSchema.shape);
+// const BooleanPropertyWithValidationZ = BooleanPropertyZ.extend(ValidationSchema.shape);
+// const BaseBasePropertyWithValidationZ = BaseBasePropertyZ.extend(ValidationSchema.shape);
 
-const AutoCompletePropertyWithValidationZ = AutoCompletePropertyZ.extend(ValidationSchema.shape);
-export const SelectPropertyWithValidationZ = SelectPropertyZ.extend(ValidationSchema.shape);
-const BooleanPropertyWithValidationZ = BooleanPropertyZ.extend(ValidationSchema.shape);
-const BaseBasePropertyWithValidationZ = BaseBasePropertyZ.extend(ValidationSchema.shape);
+// export const PropertyWithValidationZ = z.union([
+//   AutoCompletePropertyWithValidationZ,
+//   SelectPropertyWithValidationZ,
+//   BooleanPropertyWithValidationZ,
+//   BaseBasePropertyWithValidationZ,
+// ]);
 
-export const PropertyWithValidationZ = z.union([
-  AutoCompletePropertyWithValidationZ,
-  SelectPropertyWithValidationZ,
-  BooleanPropertyWithValidationZ,
-  BaseBasePropertyWithValidationZ,
-]);
-
-export type PropertyWithValidation = z.infer<typeof PropertyWithValidationZ>;
+// export type PropertyWithValidation = z.infer<typeof PropertyWithValidationZ>;

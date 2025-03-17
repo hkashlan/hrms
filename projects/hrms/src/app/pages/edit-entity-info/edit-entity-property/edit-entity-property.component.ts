@@ -2,7 +2,7 @@ import { Component, computed, ElementRef, input, Signal, viewChild } from '@angu
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   BaseBaseProperty,
-  BaseValidateProperty,
+  BaseProperty,
   Property,
   SelectProperty,
 } from '@hrms-server/model/property.z';
@@ -22,12 +22,12 @@ export class EditEntityPropertyComponent {
   dlg = viewChild<ElementRef>('editPropertyDlg');
 
   propertyInfo: Signal<Entity<Partial<BaseBaseProperty>>> = computed(() => {
-    const labelProp: BaseValidateProperty = {
+    const labelProp: BaseProperty = {
       type: 'text',
       label: 'Label',
       validation: z.string().regex(/^[a-zA-Z0-9_]+$/),
     };
-    const nameProp: BaseValidateProperty = {
+    const nameProp: BaseProperty = {
       type: 'text',
       label: 'name',
       validation: z.string().regex(/^[a-zA-Z0-9_]+$/),
@@ -37,24 +37,25 @@ export class EditEntityPropertyComponent {
       type: 'select',
       label: 'type',
       options: ['text', 'number', 'date', 'boolean', 'select', 'textarea', 'autocomplete'],
+      validation: z.string(),
     };
-    const notNullProp: BaseValidateProperty = {
+    const notNullProp: BaseProperty = {
       type: 'boolean',
       label: 'required',
       validation: z.boolean(),
     };
-    const minProp: BaseValidateProperty = {
+    const minProp: BaseProperty = {
       type: 'number',
       label: 'min value',
       validation: z.number(),
     };
-    const maxProp: BaseValidateProperty = {
+    const maxProp: BaseProperty = {
       type: 'number',
       label: 'min value',
       validation: z.number(),
     };
 
-    const selectProp: BaseValidateProperty = {
+    const selectProp: BaseProperty = {
       type: 'select',
       label: 'options',
       hooks: {
@@ -73,16 +74,16 @@ export class EditEntityPropertyComponent {
       name: this.property().key,
       label: this.property().property.label,
       schema: z.object({
-        name: nameProp.validation,
-        label: labelProp.validation,
-        type: z.string(),
-        notNull: notNullProp.validation,
-        min: minProp.validation,
-        max: maxProp.validation,
-        options: selectProp.validation,
+        name: nameProp.validation!,
+        label: labelProp.validation!,
+        type: labelProp.validation!,
+        notNull: notNullProp.validation!,
+        min: minProp.validation!,
+        max: maxProp.validation!,
+        options: selectProp.validation!,
       }),
       properties: {
-        type: typeProp as unknown as BaseValidateProperty,
+        type: typeProp as unknown as BaseProperty,
         label: labelProp,
         name: nameProp,
         notNull: notNullProp,

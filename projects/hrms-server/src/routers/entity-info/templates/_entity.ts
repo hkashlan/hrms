@@ -1,7 +1,7 @@
-import { EntityWithValidation } from '@hrms-server/model/entity.z';
+import { EntityInfo } from '@hrms-server/model/entity.z';
 import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
-export async function entity(schema: EntityWithValidation) {
+export async function entity(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
   const content = entityTemplate(schema);
   const filePath = `projects/hrms/src/app/entities/${singular}.entity.ts`;
@@ -9,7 +9,7 @@ export async function entity(schema: EntityWithValidation) {
   await updateEntityInfos(singular);
 }
 
-export function entityTemplate(schema: EntityWithValidation) {
+export function entityTemplate(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
 
   return `

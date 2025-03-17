@@ -1,5 +1,17 @@
 import { Blog, fullBlogSchema } from '@hrms-server/db/schemas/blogs.schema';
+import { Property } from '@hrms-server/model/property.z';
 import { Entity, generateEntity } from 'ui-kit';
+
+const t: Property = {
+  type: 'autocomplete',
+  label: 'title',
+  entity: 'users',
+  hooks: {
+    list: {
+      noFilter: true,
+    },
+  },
+};
 
 export const blogInfo: Entity<Blog> = generateEntity<Blog>({
   schema: fullBlogSchema,
@@ -8,7 +20,7 @@ export const blogInfo: Entity<Blog> = generateEntity<Blog>({
     label: 'blog description',
     properties: {
       id: {
-        type: 'primary',
+        type: 'text',
         label: 'ID',
       },
       name: {

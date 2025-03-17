@@ -1,13 +1,13 @@
 import { exec, ExecException } from 'child_process';
 import { z } from 'zod';
-import { EntityWithValidation, EntityWithValidationZ } from '../../model/entity.z';
+import { EntityInfo, EntityInfoZ } from '../../model/entity.z';
 import { t } from '../../trpc';
 import { entity } from './templates/_entity';
 import { pages } from './templates/_pages';
 import { router } from './templates/_router';
 import { schema } from './templates/_schema';
 
-const validation = EntityWithValidationZ().extend({
+const validation = EntityInfoZ().extend({
   name: z.string(),
 });
 
@@ -35,7 +35,7 @@ console.log('tttt ', JSON.stringify(tttt));
 
 export const entityRouter = t.router({
   save: t.procedure.input(validation).mutation(async ({ input }) => {
-    const entityInto: EntityWithValidation = input as unknown as EntityWithValidation;
+    const entityInto: EntityInfo = input as unknown as EntityInfo;
     // console.log(input);
     // await rewriteUserSchema(input);
     await schema(entityInto);

@@ -1,5 +1,5 @@
 import { computed, Signal } from '@angular/core';
-import { BaseValidateProperty } from '@hrms-server/model/property.z';
+import { BaseProperty } from '@hrms-server/model/property.z';
 import { Entity } from 'ui-kit';
 import { entityInfos, EntityKeys } from '../../../../hrms/src/app/entities/indext';
 
@@ -7,7 +7,7 @@ export type EmptyObject = {};
 
 export interface KeyProperty<T extends {}> {
   key: keyof T;
-  property: BaseValidateProperty;
+  property: BaseProperty;
 }
 
 export const entityUtils = {

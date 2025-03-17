@@ -1,5 +1,5 @@
-import { EntityWithValidation } from '@hrms-server/model/entity.z';
-import { BaseValidateProperty, Property } from '@hrms-server/model/property.z';
+import { EntityInfo } from '@hrms-server/model/entity.z';
+import { BaseProperty, Property } from '@hrms-server/model/property.z';
 import { ZodObject, ZodTypeAny } from 'zod';
 
 export interface Entity<T = any> {
@@ -7,7 +7,7 @@ export interface Entity<T = any> {
   label: string;
   schema?: ZodObject<ZodRawShape1<T>>;
   properties: {
-    [K in keyof T]: BaseValidateProperty;
+    [K in keyof T]: BaseProperty;
   };
 }
 
@@ -20,8 +20,17 @@ export type ZodRawShape1<T> = {
   [K in keyof T]: ZodTypeAny;
 };
 
-export function generateEntity<T extends Record<string, any>>(config: {
-  entity: EntityWithValidation<T>;
+type EnforceValidProperties<T> = Omit<EntityInfo<T>, 'properties'> & {
+  properties: {
+    [K in keyof T]: Property;
+  };
+  // & {
+  //   [K: string]: never;
+  // };
+};
+
+export function generateEntity<T>(config: {
+  entity: EnforceValidProperties<T>;
   schema: ZodObject<ZodRawShape1<T>>;
 }): Entity<T> {
   const entity: Entity<T> = config.entity as unknown as Entity<T>;

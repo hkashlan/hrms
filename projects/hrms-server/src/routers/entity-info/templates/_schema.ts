@@ -1,4 +1,5 @@
-import { EntityWithValidation } from '@hrms-server/model/entity.z';
+import { EntityInfo } from '@hrms-server/model/entity.z';
+import { Property } from '@hrms-server/model/property.z';
 import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
 const type2DBType = {
@@ -12,7 +13,7 @@ const type2DBType = {
   select: 'pgEnum',
 };
 
-export async function schema(schema: EntityWithValidation) {
+export async function schema(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
   const content = schemaTemplate(schema);
   const filePath = `projects/hrms-server/src/db/schemas/${singular}s.schema.ts`;
@@ -30,12 +31,14 @@ export async function schema(schema: EntityWithValidation) {
  * @param schema The entity with validation
  * @returns A Drizzle schema string
  */
-function schemaTemplate(schema: EntityWithValidation) {
+function schemaTemplate(schema: EntityInfo) {
   let fields = '';
 
   for (const property of Object.keys(schema.properties).filter((property) => property !== 'id')) {
-    const propertyInfo = schema.properties[property];
-    const length = propertyInfo.length ? `, { length: ${propertyInfo.length} }` : '';
+    const propertyInfo = schema.properties[property as keyof typeof schema.properties] as Property;
+    const length = propertyInfo['length' as keyof typeof propertyInfo]
+      ? `, { length: ${propertyInfo['length' as keyof typeof propertyInfo]} }`
+      : '';
     const selectOptions =
       propertyInfo.type === 'select'
         ? `, [${propertyInfo.options.map((p) => `'${p}'`).join(',')}]`
@@ -87,7 +90,7 @@ export const ${singular}TableInfo: DrizzleTableInfo<
   `;
 }
 
-async function updateIndexTs(schema: EntityWithValidation) {
+async function updateIndexTs(schema: EntityInfo) {
   const trpcRouterPath = 'projects/hrms-server/src/db/schemas/index.ts';
   const importStatement = `export * from './${schema.name}.schema';\n`;
   const routerEntry = ``;

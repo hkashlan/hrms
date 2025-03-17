@@ -1,7 +1,7 @@
 import { JsonPipe, NgComponentOutlet } from '@angular/common';
 import { Component, computed, effect, forwardRef, input, output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { BaseValidateProperty, SelectProperty } from '@hrms-server/model/property.z';
+import { BaseProperty, SelectProperty } from '@hrms-server/model/property.z';
 import { CheckboxDirective } from 'daisyui';
 import { Subscription } from 'rxjs';
 import { EmptyObject, Entity, entityUtils } from 'ui-kit';
@@ -14,56 +14,56 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
   template: `
     {{ form().value | json }}
     <form [formGroup]="form()">
-      <!-- <fieldset class="fieldset"> -->
-      @for (field of fields(); track $index) {
-        @let key = $any(field.key);
-        <label class="fieldset-label">{{ field.key }}</label>
-        @if (field.property.hooks?.details?.component; as component) {
-          <ng-container
-            [ngComponentOutlet]="component"
-            [ngComponentOutletInputs]="{
-              record: form().value,
-              formControl: form().controls[key],
-            }"
-          ></ng-container>
-        } @else {
-          @switch (field.property.type) {
-            @case ('boolean') {
-              <input type="checkbox" duiCheckbox [formControlName]="key" />
-            }
+      <fieldset class="fieldset">
+        @for (field of fields(); track $index) {
+          @let key = $any(field.key);
+          <label class="fieldset-label">{{ field.key }}</label>
+          @if (field.property.hooks?.details?.component; as component) {
+            <ng-container
+              [ngComponentOutlet]="component"
+              [ngComponentOutletInputs]="{
+                record: form().value,
+                formControl: form().controls[key],
+              }"
+            ></ng-container>
+          } @else {
+            @switch (field.property.type) {
+              @case ('boolean') {
+                <input type="checkbox" duiCheckbox [formControlName]="key" />
+              }
 
-            @case ('date') {
-              <input type="date" class="input" [formControlName]="key" />
-            }
+              @case ('date') {
+                <input type="date" class="input" [formControlName]="key" />
+              }
 
-            @case ('select') {
-              <select class="select" [formControlName]="key">
-                @for (option of asSelectProperty(field.property).options; track option) {
-                  <option [value]="option">{{ option }}</option>
-                }
-              </select>
-            }
+              @case ('select') {
+                <select class="select" [formControlName]="key">
+                  @for (option of asSelectProperty(field.property).options; track option) {
+                    <option [value]="option">{{ option }}</option>
+                  }
+                </select>
+              }
 
-            @case ('number') {
-              <input type="number" class="input" [formControlName]="key" />
-            }
+              @case ('number') {
+                <input type="number" class="input" [formControlName]="key" />
+              }
 
-            @case ('autocomplete') {
-              {{ key.slice(0, -2) + 'Name' }}
-              <app-autocomplete
-                [id]="$any(form().controls[key])"
-                [name]="$any(form().controls[key.slice(0, -2) + 'Name'])"
-                [property]="$any(field.property)"
-              />
-            }
+              @case ('autocomplete') {
+                {{ key.slice(0, -2) + 'Name' }}
+                <app-autocomplete
+                  [id]="$any(form().controls[key])"
+                  [name]="$any(form().controls[key.slice(0, -2) + 'Name'])"
+                  [property]="$any(field.property)"
+                />
+              }
 
-            @default {
-              <input [type]="field.property.type" class="input" [formControlName]="key" />
+              @default {
+                <input [type]="field.property.type" class="input" [formControlName]="key" />
+              }
             }
           }
         }
-      }
-      <!-- </fieldset> -->
+      </fieldset>
     </form>
     @if (form().invalid && form().touched) {
       <h3>Form Errors:</h3>
@@ -109,7 +109,7 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
 
   onChange = (value: T | null) => {};
 
-  asSelectProperty(prop: BaseValidateProperty): SelectProperty {
+  asSelectProperty(prop: BaseProperty): SelectProperty {
     return prop as unknown as SelectProperty;
   }
 
