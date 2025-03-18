@@ -1,5 +1,5 @@
-import { PropertyWithValidation } from '@hrms-server/model/property.z';
-import { Entity, generateEntity } from 'ui-kit';
+import { Property } from '@hrms-server/model/property.z';
+import { Entity, generateEntity, KeyProperty } from 'ui-kit';
 import { z } from 'zod';
 import { OptionsComponent } from './edit-entity-property/options/options.component';
 
@@ -32,68 +32,134 @@ const typeValidation = z.union([
   z.literal('number'),
   z.literal('text'),
 ]);
+export type propertyType = KeyProperty<Omit<Property, 'validation'>>;
 
-export const propertyWithValidationInfo: Entity<PropertyWithValidation> =
-  generateEntity<PropertyWithValidation>({
-    schema: z
-      .object({
-        type: typeValidation,
-        label: z.string(),
-        hooks: hookValidation,
-        entity: z.string().optional(),
-        options: z.array(z.string()).optional(),
-        length: z.number().optional(),
-        notNull: z.boolean().default(true).optional(),
-        min: z.number().optional(),
-        max: z.number().optional(),
-      })
-      .refine(
-        (data) => {
-          if (data.type === 'select' && !data.options) {
-            return false;
-          }
-          if (data.type === 'autocomplete' && !data.entity) {
-            return false;
-          }
-          return true;
+export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<propertyType>({
+  formChanged: (entity, value) => {
+    entity.properties['options' as keyof typeof entity.properties]!.hooks!.details!.hidden =
+      value.type !== 'select';
+    entity.properties['entity' as keyof typeof entity.properties]!.hooks!.details!.hidden =
+      value.type !== 'autocomplete';
+  },
+  schema: z.object({
+    type: typeValidation,
+    label: z.string(),
+    hooks: hookValidation,
+    entity: z.string().optional(),
+    options: z.array(z.string()).optional(),
+    length: z.number().optional(),
+    notNull: z.boolean().default(true).optional(),
+    min: z.number().optional(),
+    max: z.number().optional(),
+    key: z.string(),
+    // validation: z.any().optional()
+  }), //  add your schema here if you have one
+  entity: {
+    name: 'propertyWithValidations' as any,
+    label: 'Property With Validation',
+    properties: {
+      type: {
+        type: 'select',
+        label: 'Type',
+        options: [
+          'primary',
+          'textarea',
+          'autocomplete',
+          'date',
+          'select',
+          'boolean',
+          'json',
+          'number',
+          'text',
+        ],
+      },
+      label: {
+        type: 'text',
+        label: 'Label',
+      },
+      key: {
+        type: 'text',
+        label: 'Key',
+      },
+      options: {
+        type: 'text',
+        label: 'Options',
+        hooks: {
+          details: {
+            component: OptionsComponent,
+          },
+
+          list: {
+            hidden: true,
+          },
         },
-        {
-          message: 'Options are required when the type is select',
-          path: ['options'],
+      },
+      entity: {
+        type: 'text',
+        label: 'Entity',
+        hooks: {
+          list: {
+            hidden: true,
+          },
         },
-      ), //  add your schema here if you have one
-    entity: {
-      name: 'propertyWithValidations' as any,
-      label: 'Property With Validation',
-      properties: {
-        type: {
-          type: 'select',
-          label: 'Type',
-          options: [
-            'primary',
-            'textarea',
-            'autocomplete',
-            'date',
-            'select',
-            'boolean',
-            'json',
-            'number',
-            'text',
-          ],
+      },
+      min: {
+        type: 'number',
+        label: 'Min',
+        hooks: {
+          list: {
+            hidden: true,
+          },
         },
-        label: {
-          type: 'text',
-          label: 'Label',
+      },
+      max: {
+        type: 'number',
+        label: 'max',
+        hooks: {
+          list: {
+            hidden: true,
+          },
         },
-        options: {
-          type: 'text',
-          label: 'Options',
-          hooks: {
-            details: {
-              component: OptionsComponent,
-            },
+      },
+      length: {
+        type: 'number',
+        label: 'length',
+        hooks: {
+          list: {
+            hidden: true,
+          },
+        },
+      },
+      notNull: {
+        type: 'boolean',
+        label: 'no null',
+        hooks: {
+          list: {
+            hidden: true,
+          },
+        },
+      },
+      hooks: {
+        type: 'boolean',
+        label: 'no null',
+        hooks: {
+          list: {
+            hidden: true,
+          },
+          details: {
+            hidden: true,
+          },
+        },
+      },
+      validation: {
+        type: 'text',
+        label: 'Validation',
+        hooks: {
+          list: {
+            hidden: true,
           },
         },
       },
     },
-  });
+  },
+});

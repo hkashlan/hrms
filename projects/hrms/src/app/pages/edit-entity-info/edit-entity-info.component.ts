@@ -1,14 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, linkedSignal, Signal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, Signal } from '@angular/core';
 
+import { ActivatedRoute, Router } from '@angular/router';
 import { BaseProperty } from '@hrms-server/model/property.z';
-import { EmptyObject, Entity, entityUtils, KeyProperty } from 'ui-kit';
+import {
+  ActionButton,
+  DataGridComponent,
+  EmptyObject,
+  Entity,
+  entityUtils,
+  HeroIcons,
+} from 'ui-kit';
 import { EntityKeys } from '../../entities/indext';
-import { EditEntityPropertyComponent } from './edit-entity-property/edit-entity-property.component';
+import { propertyType, propertyWithValidationInfo } from './entity-info';
 
 @Component({
   selector: 'app-edit-entity-info',
-  imports: [CommonModule, EditEntityPropertyComponent],
+  imports: [CommonModule, DataGridComponent],
   templateUrl: './edit-entity-info.component.html',
   styleUrl: './edit-entity-info.component.scss',
 })
@@ -28,12 +36,30 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
 
   entityInfo = linkedSignal(entityUtils.getEntitySignal<T>(this.entity));
 
-  properties: Signal<KeyProperty<T>[]> = computed(() => {
+  propertyWithValidationInfo = propertyWithValidationInfo;
+
+  properties: Signal<propertyType[]> = computed(() => {
     const entityInfo = this.entityInfo();
-    return entityUtils.getKeyProperties(entityInfo);
+    return entityUtils.getKeyProperties(entityInfo) as propertyType[];
   });
 
-  selectProp = linkedSignal<KeyProperty<T>[]>(() => this.properties());
+  actions: ActionButton<any>[] = [
+    {
+      icon: HeroIcons.arrowDown,
+      action: (row, index) => this.downRow(index),
+    },
+    {
+      icon: HeroIcons.arrowUp,
+      action: (row, index) => this.upRow(index),
+    },
+    {
+      icon: HeroIcons.pencil,
+      action: (row) =>
+        inject(Router).navigate(['../detail', row.id], { relativeTo: inject(ActivatedRoute) }),
+    },
+  ];
+
+  selectProp = linkedSignal<propertyType[]>(() => this.properties());
   upRow(index: number) {
     const properties = this.properties();
     const [property] = properties.splice(index, 1);
@@ -45,10 +71,10 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
     this.upRow(index + 1);
   }
 
-  private updateEntityInfos(properties: KeyProperty<T>[]) {
+  private updateEntityInfos(properties: propertyType[]) {
     const entityInfos = this.entityInfo();
     entityInfos.properties = properties.reduce(
-      (acc, prop) => ({ ...acc, [prop.key]: prop.property }),
+      (acc, prop) => ({ ...acc, [prop.key]: prop }),
       {} as Entity<T>['properties'],
     );
     this.entityInfo.set(entityInfos);

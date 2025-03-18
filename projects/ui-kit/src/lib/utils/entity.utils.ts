@@ -1,14 +1,13 @@
 import { computed, Signal } from '@angular/core';
-import { BaseProperty } from '@hrms-server/model/property.z';
+import { Property } from '@hrms-server/model/property.z';
 import { Entity } from 'ui-kit';
 import { entityInfos, EntityKeys } from '../../../../hrms/src/app/entities/indext';
 
 export type EmptyObject = {};
 
-export interface KeyProperty<T extends {}> {
+export type KeyProperty<T extends {}> = Property & {
   key: keyof T;
-  property: BaseProperty;
-}
+};
 
 export const entityUtils = {
   getEntity: <T = any>(name: EntityKeys): Entity<T> => {
@@ -23,7 +22,7 @@ export const entityUtils = {
     return Object.keys(entity.properties).map((key) => {
       return {
         key: key as keyof T,
-        property: entity.properties[key as keyof typeof entity.properties],
+        ...(entity.properties[key as keyof typeof entity.properties] as Property),
       };
     });
   },

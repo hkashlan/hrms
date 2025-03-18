@@ -18,7 +18,7 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
         @for (field of fields(); track $index) {
           @let key = $any(field.key);
           <label class="fieldset-label">{{ field.key }}</label>
-          @if (field.property.hooks?.details?.component; as component) {
+          @if (field.hooks?.details?.component; as component) {
             <ng-container
               [ngComponentOutlet]="component"
               [ngComponentOutletInputs]="{
@@ -27,7 +27,7 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
               }"
             ></ng-container>
           } @else {
-            @switch (field.property.type) {
+            @switch (field.type) {
               @case ('boolean') {
                 <input type="checkbox" duiCheckbox [formControlName]="key" />
               }
@@ -38,7 +38,7 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 
               @case ('select') {
                 <select class="select" [formControlName]="key">
-                  @for (option of asSelectProperty(field.property).options; track option) {
+                  @for (option of asSelectProperty(field).options; track option) {
                     <option [value]="option">{{ option }}</option>
                   }
                 </select>
@@ -53,12 +53,12 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
                 <app-autocomplete
                   [id]="$any(form().controls[key])"
                   [name]="$any(form().controls[key.slice(0, -2) + 'Name'])"
-                  [property]="$any(field.property)"
+                  [property]="$any(field)"
                 />
               }
 
               @default {
-                <input [type]="field.property.type" class="input" [formControlName]="key" />
+                <input [type]="field.type" class="input" [formControlName]="key" />
               }
             }
           }
@@ -172,8 +172,6 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   private prepareFields() {
     return entityUtils
       .getKeyProperties<T>(this.entity())
-      .filter(
-        (keyProperty) => keyProperty.key !== 'id' && !keyProperty.property.hooks?.details?.hidden,
-      );
+      .filter((keyProperty) => keyProperty.key !== 'id' && !keyProperty.hooks?.details?.hidden);
   }
 }

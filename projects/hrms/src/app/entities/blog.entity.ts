@@ -20,7 +20,7 @@ export const blogInfo: Entity<Blog> = generateEntity<Blog>({
     label: 'blog description',
     properties: {
       id: {
-        type: 'text',
+        type: 'primary',
         label: 'ID',
       },
       name: {

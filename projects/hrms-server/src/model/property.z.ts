@@ -80,6 +80,7 @@ export const PropertyZ = z.union([
   SelectPropertyZ,
   BooleanPropertyZ,
   BaseBasePropertyZ,
+  InputPropertyZ,
 ]);
 export type Property = z.infer<typeof PropertyZ>;
 

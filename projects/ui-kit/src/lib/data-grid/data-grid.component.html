@@ -4,7 +4,7 @@
       <tr>
         @for (column of displayedColumns(); track column) {
           <th>
-            {{ column.property.label }}
+            {{ column.label }}
           </th>
         }
         @if (actions()?.length) {
@@ -14,8 +14,8 @@
       <tr>
         @for (column of displayedColumns(); track column) {
           <th class="relative">
-            @if (!column.property.hooks?.list?.noFilter) {
-              <lib-column-filter [key]="column.key" [type]="column.property.type" />
+            @if (!column.hooks?.list?.noFilter) {
+              <lib-column-filter [key]="column.key" [type]="column.type" />
             }
           </th>
         }
@@ -26,7 +26,7 @@
     </thead>
 
     <tbody>
-      @for (row of data(); track row) {
+      @for (row of data(); track row; let index = $index) {
         <tr class="hover:bg-base-300">
           @for (column of displayedColumns(); track column) {
             <td>{{ row[column.key] }}</td>
@@ -39,7 +39,7 @@
                   duiButton
                   [ghost]="true"
                   [responsive]="false"
-                  (click)="doAction(row, action)"
+                  (click)="doAction(row, index, action)"
                 >
                   @if (action.icon) {
                     <img [src]="action.icon" />

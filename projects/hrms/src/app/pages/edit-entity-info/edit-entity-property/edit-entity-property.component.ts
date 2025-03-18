@@ -72,7 +72,7 @@ export class EditEntityPropertyComponent {
 
     return {
       name: this.property().key,
-      label: this.property().property.label,
+      label: this.property().label,
       schema: z.object({
         name: nameProp.validation!,
         label: labelProp.validation!,

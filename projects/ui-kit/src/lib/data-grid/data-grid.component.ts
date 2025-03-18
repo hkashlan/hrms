@@ -20,13 +20,14 @@ export class DataGridComponent<T extends EmptyObject = EmptyObject> {
 
   injector: Injector = inject(Injector);
 
-  doAction(row: T, action: ActionButton<T>) {
-    runInInjectionContext(this.injector, () => action.action(row));
+  doAction(row: T, index: number, action: ActionButton<T>) {
+    runInInjectionContext(this.injector, () => action.action(row, index));
   }
 
   private prepareDisplayedColumns(): KeyProperty<T>[] {
-    return entityUtils
+    const retVal = entityUtils
       .getKeyProperties(this.entity())
-      .filter((keyProperty) => keyProperty.property.hooks?.list?.hidden !== true);
+      .filter((keyProperty) => keyProperty.hooks?.list?.hidden !== true);
+    return retVal;
   }
 }

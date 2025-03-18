@@ -9,7 +9,7 @@
   <legend class="fieldset-legend">description</legend>
   <input type="text" class="input" placeholder="entity name" [value]="entityInfo().name" />
 
-  <ul class="list bg-base-100 rounded-box shadow-md">
+  <!-- <ul class="list bg-base-100 rounded-box shadow-md">
     <li class="list-row">
       <div class="w-25 text-center text-xl">type</div>
       <div class="w-40 text-xl">name</div>
@@ -85,5 +85,6 @@
       </button>
       <div class="text-xl">Add new column For your table</div>
     </li>
-  </ul>
+  </ul> -->
 </fieldset>
+<lib-data-grid [entity]="propertyWithValidationInfo" [data]="properties()" [actions]="actions" />

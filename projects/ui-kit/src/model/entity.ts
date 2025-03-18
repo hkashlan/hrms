@@ -1,5 +1,5 @@
 import { EntityInfo } from '@hrms-server/model/entity.z';
-import { BaseProperty, Property } from '@hrms-server/model/property.z';
+import { Property } from '@hrms-server/model/property.z';
 import { ZodObject, ZodTypeAny } from 'zod';
 
 export interface Entity<T = any> {
@@ -7,8 +7,9 @@ export interface Entity<T = any> {
   label: string;
   schema?: ZodObject<ZodRawShape1<T>>;
   properties: {
-    [K in keyof T]: BaseProperty;
+    [K in keyof T]: Property;
   };
+  formChanged?: (value: T) => void;
 }
 
 export interface FormEntity {
@@ -32,6 +33,7 @@ type EnforceValidProperties<T> = Omit<EntityInfo<T>, 'properties'> & {
 export function generateEntity<T>(config: {
   entity: EnforceValidProperties<T>;
   schema: ZodObject<ZodRawShape1<T>>;
+  formChanged?: (entityInfo: Entity<T>, value: T) => void;
 }): Entity<T> {
   const entity: Entity<T> = config.entity as unknown as Entity<T>;
   entity.schema = config.schema;
@@ -39,7 +41,7 @@ export function generateEntity<T>(config: {
     entity.properties[key as keyof T] = {
       ...entity.properties[key as keyof T],
       validation: config.schema.shape[key as keyof T],
-    };
+    } as Property;
   });
   return entity;
 }
