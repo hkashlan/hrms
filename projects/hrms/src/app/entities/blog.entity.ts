@@ -8,7 +8,7 @@ const t: Property = {
   entity: 'users',
   hooks: {
     list: {
-      noFilter: true,
+      hideFilter: true,
     },
   },
 };
@@ -32,7 +32,7 @@ export const blogInfo: Entity<Blog> = generateEntity<Blog>({
         label: 'firstname',
         hooks: {
           list: {
-            noFilter: true,
+            hideFilter: true,
           },
         },
       },

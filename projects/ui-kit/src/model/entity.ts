@@ -21,17 +21,17 @@ export type ZodRawShape1<T> = {
   [K in keyof T]: ZodTypeAny;
 };
 
-type EnforceValidProperties<T> = Omit<EntityInfo<T>, 'properties'> & {
-  properties: {
-    [K in keyof T]: Property;
-  };
-  // & {
-  //   [K: string]: never;
-  // };
-};
+// type EnforceValidProperties<T> = Omit<EntityInfo<T>, 'properties'> & {
+//   properties: {
+//     [K in keyof T]: Property<T>;
+//   };
+//   // & {
+//   //   [K: string]: never;
+//   // };
+// };
 
 export function generateEntity<T>(config: {
-  entity: EnforceValidProperties<T>;
+  entity: EntityInfo<T>;
   schema: ZodObject<ZodRawShape1<T>>;
   formChanged?: (entityInfo: Entity<T>, value: T) => void;
 }): Entity<T> {
@@ -41,7 +41,7 @@ export function generateEntity<T>(config: {
     entity.properties[key as keyof T] = {
       ...entity.properties[key as keyof T],
       validation: config.schema.shape[key as keyof T],
-    } as Property;
+    } as Property<T>;
   });
   return entity;
 }

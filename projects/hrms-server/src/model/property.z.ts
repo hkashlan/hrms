@@ -18,82 +18,77 @@ export const PropertyTypeZ = z.enum([
 ]);
 export type PropertyType = z.infer<typeof PropertyTypeZ>;
 
-export const BasePropertyZ = z.object({
-  type: z.union([PropertyTypeZ, PropertyInputTypeZ]),
-  label: z.string(),
-  validation: z.instanceof(ZodType).optional(),
-  notNull: z.boolean().default(true).optional(),
-  hooks: z
-    .object({
-      details: z
-        .object({
-          hidden: z.boolean().optional(),
-          component: z.custom<Type<any>>().optional(),
-        })
-        .optional(),
-      list: z
-        .object({
-          hidden: z.boolean().optional(),
-          noFilter: z.boolean().optional(),
-          component: z.string().optional(),
-        })
-        .optional(),
-    })
-    .optional(),
-});
-export type BaseProperty = z.infer<typeof BasePropertyZ>;
+export const BasePropertyZ = <T>() =>
+  z.object({
+    type: z.union([PropertyTypeZ, PropertyInputTypeZ]),
+    label: z.string(),
+    validation: z.instanceof(ZodType).optional(),
+    notNull: z.boolean().default(true).optional(),
+    hooks: z
+      .object({
+        details: z
+          .object({
+            hidden: z.boolean().optional(),
+            component: z.custom<Type<any>>().optional(),
+          })
+          .optional(),
+        list: z
+          .object({
+            hidden: z.boolean().optional(),
+            hideFilter: z.boolean().optional(),
+            fn: z.function().args(z.custom<T>()).returns(z.string()).optional(),
+            component: z.string().optional(),
+          })
+          .optional(),
+      })
+      .optional(),
+  });
+export type BaseProperty<T = any> = z.infer<ReturnType<typeof BasePropertyZ<T>>>;
 
-export const BaseBasePropertyZ = BasePropertyZ.extend({
-  type: z.enum(['primary', 'textarea', 'date', 'json']).or(PropertyInputTypeZ),
-});
+export const BaseBasePropertyZ = <T>() =>
+  BasePropertyZ<T>().extend({
+    type: z.enum(['primary', 'textarea', 'date', 'json']).or(PropertyInputTypeZ),
+  });
 
-export type BaseBaseProperty = z.infer<typeof BaseBasePropertyZ>;
+export type BaseBaseProperty<T = any> = z.infer<ReturnType<typeof BaseBasePropertyZ<T>>>;
 
-export const InputPropertyZ = BasePropertyZ.extend({
-  type: PropertyInputTypeZ,
-  length: z.number().optional(),
+export const InputPropertyZ = <T>() =>
+  BasePropertyZ<T>().extend({
+    type: PropertyInputTypeZ,
+    length: z.number().optional(),
 
-  min: z.number().optional(),
-  max: z.number().optional(),
-});
-export type InputProperty = z.infer<typeof InputPropertyZ>;
+    min: z.number().optional(),
+    max: z.number().optional(),
+  });
+export type InputProperty<T = any> = z.infer<ReturnType<typeof InputPropertyZ<T>>>;
 
-export const AutoCompletePropertyZ = BasePropertyZ.extend({
-  type: z.literal('autocomplete'),
-  entity: z.literal<SchemaKey>(schemaKeys[0]),
-});
-export type AutoCompleteProperty = z.infer<typeof AutoCompletePropertyZ>;
+export const AutoCompletePropertyZ = <T>() =>
+  BasePropertyZ<T>().extend({
+    type: z.literal('autocomplete'),
+    entity: z.literal<SchemaKey>(schemaKeys[0]),
+  });
+export type AutoCompleteProperty<T = any> = z.infer<ReturnType<typeof AutoCompletePropertyZ<T>>>;
 
-export const SelectPropertyZ = BasePropertyZ.extend({
-  type: z.literal('select'),
-  options: z.array(z.string()),
-});
-export type SelectProperty = z.infer<typeof SelectPropertyZ>;
+export const SelectPropertyZ = <T>() =>
+  BasePropertyZ<T>().extend({
+    type: z.literal('select'),
+    options: z.array(z.string()),
+  });
+export type SelectProperty<T = any> = z.infer<ReturnType<typeof SelectPropertyZ<T>>>;
 
-export const BooleanPropertyZ = BasePropertyZ.extend({
-  type: z.literal('boolean'),
-});
-export type BooleanProperty = z.infer<typeof BooleanPropertyZ>;
+export const BooleanPropertyZ = <T>() =>
+  BasePropertyZ<T>().extend({
+    type: z.literal('boolean'),
+  });
+export type BooleanProperty<T = any> = z.infer<ReturnType<typeof BooleanPropertyZ<T>>>;
 
-export const PropertyZ = z.union([
-  AutoCompletePropertyZ,
-  SelectPropertyZ,
-  BooleanPropertyZ,
-  BaseBasePropertyZ,
-  InputPropertyZ,
-]);
-export type Property = z.infer<typeof PropertyZ>;
+export const PropertyZ = <T>() =>
+  z.union([
+    AutoCompletePropertyZ<T>(),
+    SelectPropertyZ<T>(),
+    BooleanPropertyZ<T>(),
+    BaseBasePropertyZ<T>(),
+    InputPropertyZ<T>(),
+  ]);
 
-// const AutoCompletePropertyWithValidationZ = AutoCompletePropertyZ.extend(ValidationSchema.shape);
-// export const SelectPropertyWithValidationZ = SelectPropertyZ.extend(ValidationSchema.shape);
-// const BooleanPropertyWithValidationZ = BooleanPropertyZ.extend(ValidationSchema.shape);
-// const BaseBasePropertyWithValidationZ = BaseBasePropertyZ.extend(ValidationSchema.shape);
-
-// export const PropertyWithValidationZ = z.union([
-//   AutoCompletePropertyWithValidationZ,
-//   SelectPropertyWithValidationZ,
-//   BooleanPropertyWithValidationZ,
-//   BaseBasePropertyWithValidationZ,
-// ]);
-
-// export type PropertyWithValidation = z.infer<typeof PropertyWithValidationZ>;
+export type Property<T = any> = z.infer<ReturnType<typeof PropertyZ<T>>>;

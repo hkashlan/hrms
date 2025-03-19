@@ -1,7 +1,19 @@
-import { Property } from '@hrms-server/model/property.z';
+import { BaseProperty, Property, SelectProperty } from '@hrms-server/model/property.z';
 import { Entity, generateEntity, KeyProperty } from 'ui-kit';
 import { z } from 'zod';
 import { OptionsComponent } from './edit-entity-property/options/options.component';
+
+const type2Color: Record<BaseProperty['type'], string> = {
+  primary: 'btn-primary',
+  number: 'btn-secondary',
+  select: 'btn-info',
+  boolean: 'btn-secondary',
+  text: 'btn-warning',
+  textarea: 'btn-warning',
+  date: 'btn-success',
+  autocomplete: 'btn-success',
+  json: 'btn-danger',
+};
 
 const hookValidation = z
   .object({
@@ -72,14 +84,30 @@ export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<p
           'number',
           'text',
         ],
-      },
+        hooks: {
+          list: {
+            fn: (x) => `<div class="btn btn-xs ${type2Color[x.type]}">${x.type}</div>`,
+            hideFilter: true,
+          },
+        },
+      } as SelectProperty<propertyType>,
       label: {
         type: 'text',
         label: 'Label',
+        hooks: {
+          list: {
+            hideFilter: true,
+          },
+        },
       },
       key: {
         type: 'text',
         label: 'Key',
+        hooks: {
+          list: {
+            hideFilter: true,
+          },
+        },
       },
       options: {
         type: 'text',
@@ -88,7 +116,6 @@ export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<p
           details: {
             component: OptionsComponent,
           },
-
           list: {
             hidden: true,
           },

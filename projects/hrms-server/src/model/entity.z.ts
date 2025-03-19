@@ -10,9 +10,9 @@ export const EntityInfoZ = <T>() =>
   z.object({
     name: z.literal<SchemaKey>(schemaKeys[0]),
     label: z.string(),
-    properties: z.record(z.string(), PropertyZ).transform((val) => {
+    properties: z.record(z.string(), PropertyZ<T>()).transform((val) => {
       // type assertion, to get correct type inference.
-      return val as { [K in keyof T]: Property };
+      return val as { [K in keyof T]: Property<T> };
     }),
   });
 
