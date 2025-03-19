@@ -48,10 +48,10 @@ export type propertyType = KeyProperty<Omit<Property, 'validation'>>;
 
 export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<propertyType>({
   formChanged: (entity, value) => {
-    entity.properties['options' as keyof typeof entity.properties]!.hooks!.details!.hidden =
-      value.type !== 'select';
-    entity.properties['entity' as keyof typeof entity.properties]!.hooks!.details!.hidden =
-      value.type !== 'autocomplete';
+    (entity.properties as Record<string, Property>)['options']!.hooks!.details!.hidden =
+      value?.type !== 'select';
+    (entity.properties as Record<string, Property>)['entity']!.hooks!.details!.hidden =
+      value?.type !== 'autocomplete';
   },
   schema: z.object({
     type: typeValidation,
@@ -128,6 +128,7 @@ export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<p
           list: {
             hidden: true,
           },
+          details: {},
         },
       },
       min: {

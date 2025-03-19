@@ -9,7 +9,7 @@ export interface Entity<T = any> {
   properties: {
     [K in keyof T]: Property;
   };
-  formChanged?: (value: T) => void;
+  formChanged?: (entity: Entity<T>, value: T | null | undefined) => void;
 }
 
 export interface FormEntity {
@@ -33,7 +33,7 @@ export type ZodRawShape1<T> = {
 export function generateEntity<T>(config: {
   entity: EntityInfo<T>;
   schema: ZodObject<ZodRawShape1<T>>;
-  formChanged?: (entityInfo: Entity<T>, value: T) => void;
+  formChanged?: (entityInfo: Entity<T>, value: T | null | undefined) => void;
 }): Entity<T> {
   const entity: Entity<T> = config.entity as unknown as Entity<T>;
   entity.schema = config.schema;
@@ -43,5 +43,8 @@ export function generateEntity<T>(config: {
       validation: config.schema.shape[key as keyof T],
     } as Property<T>;
   });
+  if (config.formChanged) {
+    entity.formChanged = (e, value) => config.formChanged!(e, value);
+  }
   return entity;
 }

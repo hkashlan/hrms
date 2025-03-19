@@ -88,3 +88,25 @@
   </ul> -->
 </fieldset>
 <lib-data-grid [entity]="propertyWithValidationInfo" [data]="properties()" [actions]="actions" />
+
+@if (editProperty) {
+  <dialog #editPropertyDlg class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box flex flex-col">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <h3 class="text-lg font-bold">Edit</h3>
+      <lib-dynamic-form
+        class="flex-1 overflow-y-auto"
+        [entity]="propertyWithValidationInfo"
+        [formControl]="editProperty"
+      />
+      <div class="modal-action">
+        <form method="dialog">
+          <!-- if there is a button in form, it will close the modal -->
+          <button class="btn">Close</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+}

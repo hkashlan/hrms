@@ -1,7 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, input, linkedSignal, Signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  input,
+  linkedSignal,
+  Signal,
+  viewChild,
+} from '@angular/core';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   ActionButton,
   DataGridComponent,
@@ -10,12 +18,13 @@ import {
   entityUtils,
   HeroIcons,
 } from 'ui-kit';
+import { DynamicFormComponent } from '../../../../../ui-kit/src/lib/form/form.component';
 import { EntityKeys } from '../../entities/indext';
 import { propertyType, propertyWithValidationInfo } from './entity-info';
 
 @Component({
   selector: 'app-edit-entity-info',
-  imports: [CommonModule, DataGridComponent],
+  imports: [CommonModule, DataGridComponent, DynamicFormComponent, ReactiveFormsModule],
   templateUrl: './edit-entity-info.component.html',
   styleUrl: './edit-entity-info.component.scss',
 })
@@ -25,13 +34,14 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
   entityInfo = linkedSignal(entityUtils.getEntitySignal<T>(this.entity));
 
   propertyWithValidationInfo = propertyWithValidationInfo;
+  dlg = viewChild<ElementRef<HTMLDialogElement>>('editPropertyDlg');
 
   properties: Signal<propertyType[]> = computed(() => {
     const entityInfo = this.entityInfo();
     return entityUtils.getKeyProperties(entityInfo) as propertyType[];
   });
 
-  actions: ActionButton<any>[] = [
+  actions: ActionButton<propertyType>[] = [
     {
       icon: HeroIcons.arrowDown,
       action: (row, index) => this.downRow(index),
@@ -42,12 +52,15 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
     },
     {
       icon: HeroIcons.pencil,
-      action: (row) =>
-        inject(Router).navigate(['../detail', row.id], { relativeTo: inject(ActivatedRoute) }),
+      action: (row) => {
+        this.editProperty.setValue(row);
+        this.dlg()?.nativeElement.showModal();
+      },
     },
   ];
 
   selectProp = linkedSignal<propertyType[]>(() => this.properties());
+  editProperty = new FormControl<propertyType | undefined>(undefined);
   upRow(index: number) {
     const properties = this.properties();
     const [property] = properties.splice(index, 1);

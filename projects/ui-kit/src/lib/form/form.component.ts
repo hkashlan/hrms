@@ -16,49 +16,51 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
     <form [formGroup]="form()">
       <fieldset class="fieldset">
         @for (field of fields(); track $index) {
-          @let key = $any(field.key);
-          <label class="fieldset-label">{{ field.key }}</label>
-          @if (field.hooks?.details?.component; as component) {
-            <ng-container
-              [ngComponentOutlet]="component"
-              [ngComponentOutletInputs]="{
-                record: form().value,
-                formControl: form().controls[key],
-              }"
-            ></ng-container>
-          } @else {
-            @switch (field.type) {
-              @case ('boolean') {
-                <input type="checkbox" duiCheckbox [formControlName]="key" />
-              }
+          @if (!field.hooks?.details?.hidden) {
+            @let key = $any(field.key);
+            <label class="fieldset-label">{{ field.key }}</label>
+            @if (field.hooks?.details?.component; as component) {
+              <ng-container
+                [ngComponentOutlet]="component"
+                [ngComponentOutletInputs]="{
+                  record: form().value,
+                  formControl: form().controls[key],
+                }"
+              ></ng-container>
+            } @else {
+              @switch (field.type) {
+                @case ('boolean') {
+                  <input type="checkbox" duiCheckbox [formControlName]="key" />
+                }
 
-              @case ('date') {
-                <input type="date" class="input" [formControlName]="key" />
-              }
+                @case ('date') {
+                  <input type="date" class="input" [formControlName]="key" />
+                }
 
-              @case ('select') {
-                <select class="select" [formControlName]="key">
-                  @for (option of asSelectProperty(field).options; track option) {
-                    <option [value]="option">{{ option }}</option>
-                  }
-                </select>
-              }
+                @case ('select') {
+                  <select class="select" [formControlName]="key">
+                    @for (option of asSelectProperty(field).options; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                  </select>
+                }
 
-              @case ('number') {
-                <input type="number" class="input" [formControlName]="key" />
-              }
+                @case ('number') {
+                  <input type="number" class="input" [formControlName]="key" />
+                }
 
-              @case ('autocomplete') {
-                {{ key.slice(0, -2) + 'Name' }}
-                <app-autocomplete
-                  [id]="$any(form().controls[key])"
-                  [name]="$any(form().controls[key.slice(0, -2) + 'Name'])"
-                  [property]="$any(field)"
-                />
-              }
+                @case ('autocomplete') {
+                  {{ key.slice(0, -2) + 'Name' }}
+                  <app-autocomplete
+                    [id]="$any(form().controls[key])"
+                    [name]="$any(form().controls[key.slice(0, -2) + 'Name'])"
+                    [property]="$any(field)"
+                  />
+                }
 
-              @default {
-                <input [type]="field.type" class="input" [formControlName]="key" />
+                @default {
+                  <input [type]="field.type" class="input" [formControlName]="key" />
+                }
               }
             }
           }
@@ -126,6 +128,7 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
         if (this.form().invalid) {
           this.onChange(null);
           this.entityChanged.emit(null);
+          this.entity().formChanged?.(this.entity(), value);
         } else {
           this.onChange(value);
           this.entityChanged.emit(value);
@@ -136,6 +139,7 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
 
   writeValue(obj: T): void {
     this.form().patchValue(obj as any);
+    this.entity().formChanged?.(this.entity(), obj);
   }
   registerOnChange(fn: DynamicFormComponent<T>['onChange']): void {
     this.onChange = fn;
@@ -172,6 +176,6 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
   private prepareFields() {
     return entityUtils
       .getKeyProperties<T>(this.entity())
-      .filter((keyProperty) => keyProperty.key !== 'id' && !keyProperty.hooks?.details?.hidden);
+      .filter((keyProperty) => keyProperty.key !== 'id');
   }
 }
