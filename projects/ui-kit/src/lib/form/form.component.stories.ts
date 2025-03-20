@@ -7,8 +7,13 @@ import { moduleMetadata } from '@storybook/angular';
 import { DynamicFormComponent, Entity } from 'ui-kit';
 import { z } from 'zod';
 
+enum Plural {
+  ONE = 'one',
+  OTHER = 'other',
+}
 interface Record {
   id: number;
+  type: Plural;
   name: string;
   email: string;
   options: string[];
@@ -51,12 +56,19 @@ const entity: Entity<Record> = {
     name: z.string(),
     email: z.string(),
     options: z.array(z.string()),
+    type: z.string(),
   }),
   properties: {
     id: {
       type: 'number',
       label: 'ID',
       validation: z.number().optional(),
+    },
+    type: {
+      type: 'select',
+      label: 'Type',
+      options: ['one', 'other'],
+      validation: z.string().optional(),
     },
     name: {
       type: 'text',
@@ -83,6 +95,15 @@ const entity: Entity<Record> = {
       },
       validation: z.array(z.string()).optional(),
     },
+  },
+  formChanged: (entityInfo, value) => {
+    if (value?.type === 'one') {
+      entityInfo.properties['email'].hooks!.details!.hidden = false;
+      entityInfo.properties['options'].hooks!.details!.hidden = true;
+    } else {
+      entityInfo.properties['email'].hooks!.details!.hidden = true;
+      entityInfo.properties['options'].hooks!.details!.hidden = false;
+    }
   },
 };
 

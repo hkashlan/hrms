@@ -48,10 +48,12 @@ export type propertyType = KeyProperty<Omit<Property, 'validation'>>;
 
 export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<propertyType>({
   formChanged: (entity, value) => {
-    (entity.properties as Record<string, Property>)['options']!.hooks!.details!.hidden =
-      value?.type !== 'select';
-    (entity.properties as Record<string, Property>)['entity']!.hooks!.details!.hidden =
-      value?.type !== 'autocomplete';
+    const properties = entity.properties as Record<string, Property>;
+    properties['options']!.hooks!.details!.hidden = value?.type !== 'select';
+    properties['entity']!.hooks!.details!.hidden = value?.type !== 'autocomplete';
+    properties['length']!.hooks!.details!.hidden = value?.type !== 'text';
+    properties['min']!.hooks!.details!.hidden = value?.type !== 'text';
+    properties['max']!.hooks!.details!.hidden = value?.type !== 'text';
   },
   schema: z.object({
     type: typeValidation,
@@ -109,9 +111,19 @@ export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<p
           },
         },
       },
+      notNull: {
+        type: 'boolean',
+        label: 'no null',
+        hooks: {
+          list: {
+            hidden: true,
+          },
+        },
+      },
       options: {
         type: 'text',
         label: 'Options',
+        notNull: false,
         hooks: {
           details: {
             component: OptionsComponent,
@@ -124,6 +136,7 @@ export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<p
       entity: {
         type: 'text',
         label: 'Entity',
+        notNull: false,
         hooks: {
           list: {
             hidden: true,
@@ -134,42 +147,44 @@ export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<p
       min: {
         type: 'number',
         label: 'Min',
+        notNull: false,
         hooks: {
           list: {
             hidden: true,
           },
+          details: {},
         },
       },
       max: {
         type: 'number',
         label: 'max',
+        notNull: false,
+
         hooks: {
           list: {
             hidden: true,
           },
+          details: {},
         },
       },
       length: {
         type: 'number',
         label: 'length',
+        notNull: false,
+
         hooks: {
           list: {
             hidden: true,
           },
+          details: {},
         },
       },
-      notNull: {
-        type: 'boolean',
-        label: 'no null',
-        hooks: {
-          list: {
-            hidden: true,
-          },
-        },
-      },
+
       hooks: {
         type: 'boolean',
         label: 'no null',
+        notNull: false,
+
         hooks: {
           list: {
             hidden: true,
@@ -182,8 +197,12 @@ export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<p
       validation: {
         type: 'text',
         label: 'Validation',
+        notNull: false,
         hooks: {
           list: {
+            hidden: true,
+          },
+          details: {
             hidden: true,
           },
         },
