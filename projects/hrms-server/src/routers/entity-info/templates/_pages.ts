@@ -40,7 +40,7 @@ function detailTemplate(schema: EntityInfo) {
 
   return `
 import { Component, input, numberAttribute } from '@angular/core';
-import { ${capitalized} } from '@hrms-server/db/schemas';
+import { ${capitalized} } from '@hrms-server/db/schemas/${schema.name}.table-info';
 import { DetailPageComponent, DetailPageConfig } from 'ui-kit';
 import { ${singular}Info } from '../../../../entities/${singular}.entity';
 import { trpc } from '../../../../trpc.client';

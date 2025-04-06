@@ -12,7 +12,7 @@ export async function router(schema: EntityInfo) {
 function routerTemplate(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
   return `
-import { ${singular}TableInfo } from '../../db/schemas/${schema.name}.schema';
+import { ${singular}TableInfo } from '@hrms-server/db/schemas/${schema.name}.table-info';
 import { t } from '../../trpc';
 import { curd } from '../../utils/route';
 

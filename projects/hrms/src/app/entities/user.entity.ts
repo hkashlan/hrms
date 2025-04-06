@@ -11,6 +11,12 @@ export const userInfo: Entity<User> = generateEntity<User>({
         type: 'primary',
         label: 'ID',
       },
+      name: {
+        type: 'text',
+        label: 'name',
+        notNull: true,
+        length: 255,
+      },
       age: {
         type: 'number',
         label: 'Age',
@@ -21,12 +27,6 @@ export const userInfo: Entity<User> = generateEntity<User>({
       username: {
         type: 'text',
         label: 'username',
-        notNull: true,
-        length: 255,
-      },
-      name: {
-        type: 'text',
-        label: 'name',
         notNull: true,
         length: 255,
       },

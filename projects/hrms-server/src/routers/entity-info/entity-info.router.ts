@@ -55,7 +55,7 @@ export const entityRouter = t.router({
       const fileExists = fs.existsSync(filePath);
       // console.log(input);
       // await rewriteUserSchema(input);
-      await schema(entityInto);
+      await schema(entityInto, fileExists);
       await entity(entityInto, fileExists);
       if (!fileExists) {
         await router(entityInto);

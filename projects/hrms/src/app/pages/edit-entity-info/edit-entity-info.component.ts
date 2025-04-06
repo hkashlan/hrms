@@ -48,8 +48,28 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
   propertyWithValidationInfo = propertyWithValidationInfo;
   entityInfosValidation = entityInfosValidation;
 
-  entity = input.required<EntityKeys>();
-  entityInfo = linkedSignal(entityUtils.getEntitySignal<T>(this.entity));
+  entity = input<EntityKeys>();
+  entityInfo = linkedSignal(() =>
+    this.entity()
+      ? entityUtils.getEntity<T>(this.entity()!)
+      : ({
+          name: '',
+          label: '',
+          properties: {
+            id: {
+              type: 'primary',
+              label: 'ID',
+            },
+            name: {
+              type: 'text',
+              label: 'name',
+              notNull: true,
+              length: 255,
+            },
+          },
+          schema: {},
+        } as unknown as Entity<T>),
+  );
 
   entityForm = new FormControl<entityType | null>(null, [Validators.required]);
   editProperty = new FormControl<(propertyType & { index?: number }) | undefined>(undefined, [
@@ -68,8 +88,8 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
     this.entityForm.valueChanges.pipe(takeUntilDestroyed()).subscribe((entity) => {
       this.entityInfo.update((entityInfo) => ({
         ...entityInfo,
-        name: entity!.name,
-        label: entity!.label,
+        name: entity?.name ?? '',
+        label: entity?.label ?? '',
       }));
     });
 
@@ -118,6 +138,7 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
     console.log('tt', tt);
     Object.values(tt.properties).forEach((property) => {
       delete (property as any).validation;
+      delete (property as any).key;
     });
     delete tt.schema;
     trpc.entity.save.mutate(tt).then(() => {

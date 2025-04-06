@@ -15,7 +15,7 @@ export function entityTemplate(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
 
   return `
-import { full${capitalized}Schema, ${capitalized} } from '@hrms-server/db/schemas/${schema.name}.schema';
+import { full${capitalized}Schema, ${capitalized} } from '@hrms-server/db/schemas/${schema.name}.table-info';
 import { Entity, generateEntity } from 'ui-kit';
 
 export const ${singular}Info: Entity<${capitalized}> = generateEntity<${capitalized}>({

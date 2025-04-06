@@ -13,16 +13,27 @@ const type2DBType = {
   select: 'pgEnum',
 };
 
-export async function schema(schema: EntityInfo) {
-  const content = schemaTemplate(schema);
+export async function schema(schema: EntityInfo, fileExists: boolean) {
   const filePath = drizzleFilePath(schema);
+  const content = schemaTemplate(schema);
   await writeFile(filePath, content);
-  await updateIndexTs(schema);
+
+  const fileTableInfoPath = drizzleTableInfo(schema);
+  const content2 = tableInfoTemplate(schema);
+  await writeFile(fileTableInfoPath, content2);
+  if (!fileExists) {
+    await updateIndexTs(schema);
+  }
 }
 
 export function drizzleFilePath(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
   return `projects/hrms-server/src/db/schemas/${singular}s.schema.ts`;
+}
+
+export function drizzleTableInfo(schema: EntityInfo) {
+  const { singular, capitalized } = entityUtils(schema);
+  return `projects/hrms-server/src/db/schemas/${singular}s.table-info.ts`;
 }
 
 /**
@@ -53,8 +64,27 @@ function schemaTemplate(schema: EntityInfo) {
   ${property}: ${type2DBType[propertyInfo.type as keyof typeof type2DBType]}('${property}'${length}${selectOptions})${suffix}${notNull},`;
   }
 
-  const { singular, capitalized } = entityUtils(schema);
+  return `
+import { boolean, date, integer, pgEnum, pgTable, text, varchar } from 'drizzle-orm/pg-core';
 
+export const ${schema.name} = pgTable('${schema.name}', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+
+  ${fields}
+});
+
+  `;
+}
+
+async function updateIndexTs(schema: EntityInfo) {
+  const trpcRouterPath = 'projects/hrms-server/src/db/schemas/index.ts';
+  const importStatement = `export * from './${schema.name}.schema';\n`;
+  const routerEntry = ``;
+  await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '');
+}
+
+function tableInfoTemplate(schema: EntityInfo) {
+  const { singular, capitalized } = entityUtils(schema);
   return `
 import { InferSelectModel } from 'drizzle-orm';
 import { boolean, date, integer, pgEnum, pgTable, text, varchar } from 'drizzle-orm/pg-core';
@@ -62,12 +92,8 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 import { DrizzleTableInfo } from '../../utils/drizzle-table-info';
 import { filterSchema } from '../createFilterSchema';
+import { ${schema.name} } from './${schema.name}.schema';
 
-export const ${schema.name} = pgTable('${schema.name}', {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-
-  ${fields}
-});
 export const insert${capitalized}Schema = createInsertSchema(${schema.name});
 
 export const select${capitalized}Schema = createSelectSchema(${schema.name});
@@ -90,13 +116,5 @@ export const ${singular}TableInfo: DrizzleTableInfo<
   updateValidation: update${capitalized}Schema,
 };
 
-
   `;
-}
-
-async function updateIndexTs(schema: EntityInfo) {
-  const trpcRouterPath = 'projects/hrms-server/src/db/schemas/index.ts';
-  const importStatement = `export * from './${schema.name}.schema';\n`;
-  const routerEntry = ``;
-  await addToFileBeforeEndingWith(trpcRouterPath, importStatement, routerEntry, '');
 }
