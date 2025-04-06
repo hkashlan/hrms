@@ -125,14 +125,18 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
         this.formSubscription.unsubscribe();
       }
       this.formSubscription = this.form().valueChanges.subscribe((value) => {
+        const cleanedValue: T = Object.fromEntries(
+          Object.entries(value).filter(([_, v]) => !!v),
+        ) as T;
+
         if (this.form().invalid) {
           this.onChange(null);
           this.entityChanged.emit(null);
         } else {
-          this.onChange(value);
-          this.entityChanged.emit(value);
+          this.onChange(cleanedValue);
+          this.entityChanged.emit(cleanedValue);
         }
-        this.entity().formChanged?.(this.entity(), value);
+        this.entity().formChanged?.(this.entity(), cleanedValue);
       });
     });
   }
