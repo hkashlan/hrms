@@ -1,12 +1,14 @@
 import { EntityInfo } from '@hrms-server/model/entity.z';
 import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
-export async function entity(schema: EntityInfo) {
+export async function entity(schema: EntityInfo, fileExists: boolean) {
   const { singular, capitalized } = entityUtils(schema);
   const content = entityTemplate(schema);
   const filePath = `projects/hrms/src/app/entities/${singular}.entity.ts`;
   await writeFile(filePath, content);
-  await updateEntityInfos(singular);
+  if (!fileExists) {
+    await updateEntityInfos(singular);
+  }
 }
 
 export function entityTemplate(schema: EntityInfo) {

@@ -1,6 +1,7 @@
 import { BaseProperty, Property, SelectProperty } from '@hrms-server/model/property.z';
-import { Entity, generateEntity, KeyProperty } from 'ui-kit';
+import { generateEntity, KeyProperty } from 'ui-kit';
 import { z } from 'zod';
+import { Entity } from './../../../../../ui-kit/src/model/entity';
 import { OptionsComponent } from './edit-entity-property/options/options.component';
 
 const type2Color: Record<BaseProperty['type'], string> = {
@@ -45,6 +46,32 @@ const typeValidation = z.union([
   z.literal('text'),
 ]);
 export type propertyType = KeyProperty<Omit<Property, 'validation'>>;
+
+export type entityType = {
+  name: string;
+  label: string;
+};
+
+export const entityInfosValidation: Entity<entityType> = generateEntity<entityType>({
+  schema: z.object({
+    name: z.string(),
+    label: z.string(),
+  }),
+  entity: {
+    name: 'entityInfos' as any,
+    label: 'Entity Info',
+    properties: {
+      name: {
+        type: 'text',
+        label: 'Name',
+      },
+      label: {
+        type: 'text',
+        label: 'Label',
+      },
+    },
+  },
+});
 
 export const propertyWithValidationInfo: Entity<propertyType> = generateEntity<propertyType>({
   formChanged: (entity, value) => {

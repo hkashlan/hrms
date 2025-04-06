@@ -1,93 +1,19 @@
-<p>edit-entity-info works!</p>
-<!-- {{ entity() }} -->
-<!-- {{ entityInfo() | json }} -->
-
-<fieldset class="fieldset bg-base-200 border border-base-300 p-4 rounded-box">
-  <legend class="fieldset-legend">Entity name</legend>
-  <input type="text" class="input" placeholder="entity name" />
-
-  <legend class="fieldset-legend">description</legend>
-  <input type="text" class="input" placeholder="entity name" [value]="entityInfo().name" />
-
-  <!-- <ul class="list bg-base-100 rounded-box shadow-md">
-    <li class="list-row">
-      <div class="w-25 text-center text-xl">type</div>
-      <div class="w-40 text-xl">name</div>
-      <div class="text-xl list-col-grow">name</div>
-      <div class="text-xl">action</div>
-    </li>
-
-    @for (keyProperty of properties(); track keyProperty; let index = $index) {
-      <li class="list-row">
-        <div class="text-xs btn w-25" [ngClass]="type2Color[keyProperty.property.type]">
-          {{ keyProperty.property.type }}
-        </div>
-        <div class="list-col w-40">
-          <div class="text-xl">{{ keyProperty.key }}</div>
-        </div>
-        <div class="list-col-grow">
-          <div class="text-xl">{{ keyProperty.property.label }}</div>
-        </div>
-        <div>
-          <button class="btn btn-ghost" (click)="upRow(index)">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m9 9 6-6m0 0 6 6m-6-6v12a6 6 0 0 1-12 0v-3"
-              />
-            </svg>
-          </button>
-          <button class="btn btn-ghost" (click)="downRow(index)">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m15 15-6 6m0 0-6-6m6 6V9a6 6 0 0 1 12 0v3"
-              />
-            </svg>
-          </button>
-          <app-edit-entity-property class="btn btn-square btn-ghost" [property]="keyProperty" />
-        </div>
-      </li>
-    }
-    <li class="list-row">
-      <button class="btn btn-outline w-25">
-        add
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-6"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
-      </button>
-      <div class="text-xl">Add new column For your table</div>
-    </li>
-  </ul> -->
-</fieldset>
+<lib-dynamic-form
+  class="flex-1 overflow-y-auto"
+  [entity]="entityInfosValidation"
+  [formControl]="entityForm"
+/>
+<button duiButton class="btn-circle" (click)="addProperty()">
+  <img [src]="icons.plusCircle" class="size-full" />
+</button>
 <lib-data-grid [entity]="propertyWithValidationInfo" [data]="properties()" [actions]="actions" />
+
+{{ entityForm.errors | json }}
+
+<button [duiButton]="'btn-primary'" [disabled]="entityForm.invalid" (click)="saveEntity()">
+  save
+</button>
+<button [duiButton]="'btn-secondary'">close</button>
 
 @if (editProperty) {
   <dialog #editPropertyDlg class="modal modal-bottom sm:modal-middle">
@@ -102,9 +28,16 @@
         [formControl]="editProperty"
       />
       <div class="modal-action">
+        <button
+          [duiButton]="'btn-primary'"
+          [disabled]="editProperty.invalid"
+          (click)="saveProperty()"
+        >
+          save
+        </button>
         <form method="dialog">
           <!-- if there is a button in form, it will close the modal -->
-          <button class="btn">Close</button>
+          <button [duiButton]="'btn-secondary'">close</button>
         </form>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Component, input, numberAttribute } from '@angular/core';
-import { User } from '@hrms-server/db/schemas/users.schema';
+import { User } from '@hrms-server/db/schemas/users.table-info';
 import { DetailPageComponent, DetailPageConfig } from 'ui-kit';
 import { userInfo } from '../../../../entities/user.entity';
 import { trpc } from '../../../../trpc.client';

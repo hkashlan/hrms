@@ -128,11 +128,11 @@ export class DynamicFormComponent<T extends EmptyObject = EmptyObject>
         if (this.form().invalid) {
           this.onChange(null);
           this.entityChanged.emit(null);
-          this.entity().formChanged?.(this.entity(), value);
         } else {
           this.onChange(value);
           this.entityChanged.emit(value);
         }
+        this.entity().formChanged?.(this.entity(), value);
       });
     });
   }

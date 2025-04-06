@@ -17,3 +17,7 @@ export const EntityInfoZ = <T>() =>
   });
 
 export type EntityInfo<T = {}> = z.infer<ReturnType<typeof EntityInfoZ<T>>>;
+
+export const entityInfoValidation = EntityInfoZ().extend({
+  name: z.string(),
+});

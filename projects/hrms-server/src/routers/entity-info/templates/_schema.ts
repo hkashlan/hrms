@@ -14,11 +14,15 @@ const type2DBType = {
 };
 
 export async function schema(schema: EntityInfo) {
-  const { singular, capitalized } = entityUtils(schema);
   const content = schemaTemplate(schema);
-  const filePath = `projects/hrms-server/src/db/schemas/${singular}s.schema.ts`;
+  const filePath = drizzleFilePath(schema);
   await writeFile(filePath, content);
   await updateIndexTs(schema);
+}
+
+export function drizzleFilePath(schema: EntityInfo) {
+  const { singular, capitalized } = entityUtils(schema);
+  return `projects/hrms-server/src/db/schemas/${singular}s.schema.ts`;
 }
 
 /**
