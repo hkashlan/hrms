@@ -1,19 +1,21 @@
-import { EntityWithValidation } from '@hrms-server/model/entity.z';
+import { EntityInfo } from '@hrms-server/model/entity.z';
 import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
-export async function entity(schema: EntityWithValidation) {
+export async function entity(schema: EntityInfo, fileExists: boolean) {
   const { singular, capitalized } = entityUtils(schema);
   const content = entityTemplate(schema);
   const filePath = `projects/hrms/src/app/entities/${singular}.entity.ts`;
   await writeFile(filePath, content);
-  await updateEntityInfos(singular);
+  if (!fileExists) {
+    await updateEntityInfos(singular);
+  }
 }
 
-export function entityTemplate(schema: EntityWithValidation) {
+export function entityTemplate(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
 
   return `
-import { full${capitalized}Schema, ${capitalized} } from '@hrms-server/db/schemas/${schema.name}.schema';
+import { full${capitalized}Schema, ${capitalized} } from '@hrms-server/db/schemas/${schema.name}.table-info';
 import { Entity, generateEntity } from 'ui-kit';
 
 export const ${singular}Info: Entity<${capitalized}> = generateEntity<${capitalized}>({

@@ -1,39 +1,103 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, linkedSignal, Signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  ElementRef,
+  input,
+  linkedSignal,
+  Signal,
+  viewChild,
+} from '@angular/core';
 
-import { BaseProperty } from '@hrms-server/model/property.z';
-import { EmptyObject, Entity, entityUtils, KeyProperty } from 'ui-kit';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonDirective } from 'daisyui';
+import {
+  ActionButton,
+  DataGridComponent,
+  EmptyObject,
+  Entity,
+  entityUtils,
+  HeroIcons,
+} from 'ui-kit';
+import { DynamicFormComponent } from '../../../../../ui-kit/src/lib/form/form.component';
 import { EntityKeys } from '../../entities/indext';
-import { EditEntityPropertyComponent } from './edit-entity-property/edit-entity-property.component';
+import { trpc } from '../../trpc.client';
+import {
+  entityInfosValidation,
+  entityType,
+  propertyType,
+  propertyWithValidationInfo,
+} from './entity-info';
 
 @Component({
   selector: 'app-edit-entity-info',
-  imports: [CommonModule, EditEntityPropertyComponent],
+  imports: [
+    CommonModule,
+    DataGridComponent,
+    DynamicFormComponent,
+    ReactiveFormsModule,
+    ButtonDirective,
+  ],
   templateUrl: './edit-entity-info.component.html',
   styleUrl: './edit-entity-info.component.scss',
 })
 export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
-  type2Color: Record<BaseProperty['type'], string> = {
-    primary: 'btn-primary',
-    number: 'btn-secondary',
-    select: 'btn-info',
-    boolean: 'btn-secondary',
-    text: 'btn-warning',
-    textarea: 'btn-warning',
-    date: 'btn-success',
-    autocomplete: 'btn-success',
-    json: 'btn-danger',
-  };
-  entity = input.required<EntityKeys>();
+  icons = HeroIcons;
+  propertyWithValidationInfo = propertyWithValidationInfo;
+  entityInfosValidation = entityInfosValidation;
 
-  entityInfo = linkedSignal(entityUtils.getEntitySignal<T>(this.entity));
+  entity = input<EntityKeys>();
+  entityInfo = linkedSignal(() =>
+    this.entity()
+      ? entityUtils.getEntity<T>(this.entity()!)
+      : ({
+          name: '',
+          label: '',
+          properties: {
+            id: {
+              type: 'primary',
+              label: 'ID',
+            },
+            name: {
+              type: 'text',
+              label: 'name',
+              notNull: true,
+              length: 255,
+            },
+          },
+          schema: {},
+        } as unknown as Entity<T>),
+  );
 
-  properties: Signal<KeyProperty<T>[]> = computed(() => {
-    const entityInfo = this.entityInfo();
-    return entityUtils.getKeyProperties(entityInfo);
-  });
+  entityForm = new FormControl<entityType | null>(null, [Validators.required]);
+  editProperty = new FormControl<(propertyType & { index?: number }) | undefined>(undefined, [
+    Validators.required,
+  ]);
 
-  selectProp = linkedSignal<KeyProperty<T>[]>(() => this.properties());
+  dlg = viewChild<ElementRef<HTMLDialogElement>>('editPropertyDlg');
+
+  properties: Signal<propertyType[]> = computed(
+    () => entityUtils.getKeyProperties(this.entityInfo()) as propertyType[],
+  );
+
+  actions: ActionButton<propertyType>[] = this.initializeActionButtons();
+
+  constructor() {
+    this.entityForm.valueChanges.pipe(takeUntilDestroyed()).subscribe((entity) => {
+      this.entityInfo.update((entityInfo) => ({
+        ...entityInfo,
+        name: entity?.name ?? '',
+        label: entity?.label ?? '',
+      }));
+    });
+
+    afterNextRender(() => {
+      this.entityForm.setValue({ name: this.entityInfo().name, label: this.entityInfo().label });
+    });
+  }
+
   upRow(index: number) {
     const properties = this.properties();
     const [property] = properties.splice(index, 1);
@@ -45,12 +109,74 @@ export class EditEntityInfoComponent<T extends EmptyObject = EmptyObject> {
     this.upRow(index + 1);
   }
 
-  private updateEntityInfos(properties: KeyProperty<T>[]) {
+  addProperty() {
+    this.showDialog({
+      type: 'text',
+      key: '' as any,
+      label: '',
+    });
+  }
+
+  saveProperty() {
+    const { index, ...property } = this.editProperty.value || {};
+    if (!property) {
+      return;
+    }
+    const properties = this.properties();
+    if (index !== undefined) {
+      properties[index] = { ...properties[index], ...property };
+    } else {
+      properties.push(property as propertyType);
+    }
+    this.updateEntityInfos(properties);
+    this.editProperty.setValue(undefined);
+    this.dlg()?.nativeElement.close();
+  }
+
+  saveEntity() {
+    const tt = JSON.parse(JSON.stringify(this.entityInfo()));
+    console.log('tt', tt);
+    Object.values(tt.properties).forEach((property) => {
+      delete (property as any).validation;
+      delete (property as any).key;
+    });
+    delete tt.schema;
+    trpc.entity.save.mutate(tt).then(() => {
+      this.entityInfo.update((entityInfo) => ({
+        ...entityInfo,
+        name: this.entityForm.value!.name,
+        label: this.entityForm.value!.label,
+      }));
+    });
+  }
+
+  private updateEntityInfos(properties: propertyType[]) {
     const entityInfos = this.entityInfo();
     entityInfos.properties = properties.reduce(
-      (acc, prop) => ({ ...acc, [prop.key]: prop.property }),
+      (acc, prop) => ({ ...acc, [prop.key]: prop }),
       {} as Entity<T>['properties'],
     );
     this.entityInfo.set(entityInfos);
+  }
+
+  private showDialog(row: propertyType = {} as propertyType, index?: number) {
+    this.editProperty.setValue({ ...row, index });
+    this.dlg()?.nativeElement.showModal();
+  }
+  private initializeActionButtons(): ActionButton<propertyType>[] {
+    return [
+      {
+        icon: HeroIcons.arrowDown,
+        action: (row, index) => this.downRow(index),
+      },
+      {
+        icon: HeroIcons.arrowUp,
+        action: (_row, index) => this.upRow(index),
+      },
+      {
+        icon: HeroIcons.pencil,
+        action: (row, index) => this.showDialog(row, index),
+      },
+    ];
   }
 }

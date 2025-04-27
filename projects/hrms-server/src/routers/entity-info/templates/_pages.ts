@@ -1,7 +1,7 @@
-import { EntityWithValidation } from '@hrms-server/model/entity.z';
+import { EntityInfo } from '@hrms-server/model/entity.z';
 import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
-export async function pages(schema: EntityWithValidation) {
+export async function pages(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
   const name = singular;
   const listContent = listTemplate(schema);
@@ -13,7 +13,7 @@ export async function pages(schema: EntityWithValidation) {
   await updateEntityInfos(schema);
 }
 
-function listTemplate(schema: EntityWithValidation) {
+function listTemplate(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
 
   return `
@@ -35,12 +35,12 @@ export class ${capitalized}ListComponent {
   `;
 }
 
-function detailTemplate(schema: EntityWithValidation) {
+function detailTemplate(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
 
   return `
 import { Component, input, numberAttribute } from '@angular/core';
-import { ${capitalized} } from '@hrms-server/db/schemas';
+import { ${capitalized} } from '@hrms-server/db/schemas/${schema.name}.table-info';
 import { DetailPageComponent, DetailPageConfig } from 'ui-kit';
 import { ${singular}Info } from '../../../../entities/${singular}.entity';
 import { trpc } from '../../../../trpc.client';
@@ -64,7 +64,7 @@ export class ${capitalized}DetailComponent {
   `;
 }
 
-async function updateEntityInfos(schema: EntityWithValidation) {
+async function updateEntityInfos(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
   const trpcRouterPath = 'projects/hrms/src/app/pages/entities/routes.ts';
   const importStatement = `

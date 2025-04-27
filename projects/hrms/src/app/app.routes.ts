@@ -19,6 +19,10 @@ export const routes: Routes = [
     component: DaisyuiComponent,
   },
   {
+    path: 'edit-entity',
+    component: EditEntityInfoComponent,
+  },
+  {
     path: 'edit-entity/:entity',
     component: EditEntityInfoComponent,
   },

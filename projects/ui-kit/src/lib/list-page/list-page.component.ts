@@ -1,4 +1,4 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, input, isDevMode } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Entity } from '../../model/entity';
 import { HeroIcons } from '../../model/icons';
@@ -12,14 +12,22 @@ import { curdActions } from '../utils/generic-grid-actions';
   template: `
     <div class="flex justify-between items-center mb-4 bg-primary text-white p-4">
       <h1 class="text-2xl font-bold">{{ entity().label }} management</h1>
-      <button class="btn btn-circle" [routerLink]="'../detail'">
-        <img [src]="icons.plusCircle" class="size-full" />
-      </button>
+      <div class="flex gap-2">
+        @if (isDevMode) {
+          <button class="btn btn-circle" [routerLink]="'../../edit-entity/' + entity().name">
+            <img [src]="icons.queueList" class="size-full" />
+          </button>
+        }
+        <button class="btn btn-circle" [routerLink]="'../detail'">
+          <img [src]="icons.plusCircle" class="size-full" />
+        </button>
+      </div>
     </div>
     <lib-data-grid [entity]="entity()" [data]="data.value() ?? []" [actions]="actions" />
   `,
 })
 export class ListPageComponent<T> {
+  isDevMode = isDevMode();
   icons = HeroIcons;
   entity = input.required<Entity<T>>();
   fn = input.required<(x: any) => Promise<T[]>>();

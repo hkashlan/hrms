@@ -2,12 +2,13 @@ import { Component, computed, inject, Injector, input, runInInjectionContext } f
 import { ButtonDirective } from 'daisyui';
 import { EmptyObject, entityUtils, KeyProperty } from 'ui-kit';
 import { Entity } from '../../model/entity';
+import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
 import { ColumnFilterComponent } from './column-filter/column-filter.component';
 import { ActionButton } from './data-grid';
 
 @Component({
   selector: 'lib-data-grid',
-  imports: [ColumnFilterComponent, ButtonDirective],
+  imports: [ColumnFilterComponent, ButtonDirective, SafeHtmlPipe],
   templateUrl: './data-grid.component.html',
   styleUrl: './data-grid.component.css',
 })
@@ -17,16 +18,20 @@ export class DataGridComponent<T extends EmptyObject = EmptyObject> {
   actions = input<ActionButton<T>[]>();
 
   displayedColumns = computed(() => this.prepareDisplayedColumns());
+  showFilter = computed(() =>
+    this.displayedColumns().some((column) => column.hooks?.list?.hideFilter !== true),
+  );
 
   injector: Injector = inject(Injector);
 
-  doAction(row: T, action: ActionButton<T>) {
-    runInInjectionContext(this.injector, () => action.action(row));
+  doAction(row: T, index: number, action: ActionButton<T>) {
+    runInInjectionContext(this.injector, () => action.action(row, index));
   }
 
   private prepareDisplayedColumns(): KeyProperty<T>[] {
-    return entityUtils
+    const retVal = entityUtils
       .getKeyProperties(this.entity())
-      .filter((keyProperty) => keyProperty.property.hooks?.list?.hidden !== true);
+      .filter((keyProperty) => keyProperty.hooks?.list?.hidden !== true);
+    return retVal;
   }
 }

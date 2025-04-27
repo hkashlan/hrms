@@ -22,6 +22,7 @@ export function zodToAngularForm(schema?: ZodObject<any>): FormGroup {
     // Handle optional fields
     if (zodField instanceof ZodOptional) {
       isOptional = true;
+      isNullable = true;
       zodField = zodField._def.innerType; // Extract the inner type
     }
 

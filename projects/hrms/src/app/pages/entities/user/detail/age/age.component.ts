@@ -1,6 +1,6 @@
 import { Component, forwardRef, input } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { User } from '@hrms-server/db/schemas/users.schema';
+import { User } from '@hrms-server/db/schemas/users.table-info';
 import { IDetailComponent } from './../../../../../../../../hrms-server/src/model/icomponent';
 
 @Component({

@@ -21,7 +21,7 @@ export class AppComponent {
     },
     {
       label: 'edit gui',
-      route: './edit-entity/user',
+      route: './edit-entity/users',
     },
   ];
 

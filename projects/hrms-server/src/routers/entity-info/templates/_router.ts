@@ -1,7 +1,7 @@
-import { EntityWithValidation } from '@hrms-server/model/entity.z';
+import { EntityInfo } from '@hrms-server/model/entity.z';
 import { addToFileBeforeEndingWith, entityUtils, writeFile } from './_utils';
 
-export async function router(schema: EntityWithValidation) {
+export async function router(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
   const content = routerTemplate(schema);
   const filePath = `projects/hrms-server/src/routers/entities/${singular}.router.ts`;
@@ -9,10 +9,10 @@ export async function router(schema: EntityWithValidation) {
   await updateTrpcRouter(singular);
 }
 
-function routerTemplate(schema: EntityWithValidation) {
+function routerTemplate(schema: EntityInfo) {
   const { singular, capitalized } = entityUtils(schema);
   return `
-import { ${singular}TableInfo } from '../../db/schemas/${schema.name}.schema';
+import { ${singular}TableInfo } from '@hrms-server/db/schemas/${schema.name}.table-info';
 import { t } from '../../trpc';
 import { curd } from '../../utils/route';
 
